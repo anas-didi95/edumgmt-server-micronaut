@@ -1,5 +1,5 @@
 /* (C) 2024 */
-package com.anasdidi;
+package com.anasdidi.edumgmt;
 
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;

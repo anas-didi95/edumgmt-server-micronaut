@@ -5,8 +5,8 @@ plugins {
     id("com.diffplug.spotless") version '6.25.0'
 }
 
-version = "0.1"
-group = "com.anasdidi"
+version = "0.1.0"
+group = "com.anasdidi.edumgmt"
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ dependencies {
 
 
 application {
-    mainClass = "com.anasdidi.Application"
+    mainClass = "com.anasdidi.edumgmt.Application"
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
