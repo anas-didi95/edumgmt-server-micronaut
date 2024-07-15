@@ -73,6 +73,6 @@ spotless {
     cleanthat()
     googleJavaFormat()
     formatAnnotations()
-    licenseHeader '/* (C) $YEAR */'
+    licenseHeader '/* (C) $YEAR Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */'
   }
 }

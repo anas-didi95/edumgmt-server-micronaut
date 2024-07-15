@@ -1,4 +1,4 @@
-/* (C) 2024 */
+/* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt;
 
 import io.micronaut.http.annotation.*;
