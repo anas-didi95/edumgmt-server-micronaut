@@ -20,6 +20,7 @@ dependencies {
     compileOnly("io.micronaut:micronaut-http-client")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("org.yaml:snakeyaml")
     testImplementation("io.micronaut:micronaut-http-client")
 }
 
@@ -39,7 +40,7 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("com.anasdidi.*")
+        annotations("com.anasdidi.edumgmt.*")
     }
     aot {
     // Please review carefully the optimizations enabled below

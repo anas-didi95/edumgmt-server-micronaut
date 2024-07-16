@@ -18,10 +18,11 @@ features:
     micronaut-http-validation,
     netty-server,
     openapi,
-    properties,
     readme,
     serialization-jackson,
     shade,
     static-resources,
     swagger-ui,
+    yaml,
+    yaml-build,
   ]
