@@ -28,7 +28,11 @@
       "extensions": [
         "donjayamanne.githistory",
         "redhat.vscode-xml",
-        "redhat.vscode-yaml"
+        "redhat.vscode-yaml",
+        "vscjava.vscode-gradle",
+        "oracle-labs-graalvm.graal-cloud-native-pack",
+        "ASF.apache-netbeans-java",
+        "richardwillis.vscode-spotless-gradle"
       ]
     }
   }
