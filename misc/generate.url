@@ -1,1 +1,1 @@
-https://micronaut.io/launch?type=DEFAULT&name=edumgmt&package=com.anasdidi.edumgmt&javaVersion=JDK_21&lang=JAVA&build=GRADLE&test=JUNIT&features=openapi&features=swagger-ui&features=graalvm&version=4.5.0
+https://micronaut.io/launch?type=DEFAULT&name=edumgmt&package=com.anasdidi.edumgmt&javaVersion=JDK_21&lang=JAVA&build=GRADLE&test=JUNIT&features=openapi&features=swagger-ui&features=graalvm&features=yaml&version=4.5.0
