@@ -8,8 +8,11 @@
 name: Java CI with Gradle
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main", "dev"]
+    # Publish semver tags as releases.
+    tags: ["v*.*.*"]
   pull_request:
     branches: ["main", "dev"]
 
