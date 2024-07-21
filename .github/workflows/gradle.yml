@@ -21,7 +21,7 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  IS_PUSH_IMAGE: ${{ github.event_name != "pull_request" }}
+  IS_PUSH_IMAGE: ${{ github.event_name != 'pull_request' }}
 
 jobs:
   build:
