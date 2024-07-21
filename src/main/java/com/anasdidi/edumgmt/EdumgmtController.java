@@ -3,7 +3,7 @@ package com.anasdidi.edumgmt;
 
 import io.micronaut.http.annotation.*;
 
-@Controller("/edumgmt")
+@Controller("/helloworld")
 public class EdumgmtController {
 
   @Get(uri = "/", produces = "text/plain")

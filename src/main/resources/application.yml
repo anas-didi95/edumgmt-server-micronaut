@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: edumgmt
+  server:
+    context-path: /${micronaut.application.name}
   router:
     static-resources:
       swagger:
