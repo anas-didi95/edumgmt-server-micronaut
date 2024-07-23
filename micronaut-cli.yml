@@ -6,11 +6,15 @@ buildTool: gradle
 features:
   [
     app-name,
+    data,
+    data-jpa,
     graalvm,
     gradle,
+    h2,
     http-client-test,
     java,
     java-application,
+    jdbc-hikari,
     junit,
     logback,
     micronaut-aot,
