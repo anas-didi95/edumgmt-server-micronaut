@@ -8,3 +8,13 @@ services:
       driver: local
     volumes:
       - ".:/home/vscode/workspace:z"
+
+  db:
+    image: oscarfonts/h2:2.1.210
+    restart: always
+    logging:
+      driver: local
+    environment:
+      - H2_OPTIONS=-ifNotExists
+    volumes:
+      - ".h2:/opt/h2-data"
