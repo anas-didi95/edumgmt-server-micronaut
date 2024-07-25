@@ -8,6 +8,7 @@ services:
       driver: local
     volumes:
       - ".:/home/vscode/workspace:z"
+      - ".gradle-cache:/home/vscode/.gradle:z"
 
   db:
     image: oscarfonts/h2:2.1.210

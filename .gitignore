@@ -1,4 +1,5 @@
 .h2/
+.gradle-cache/
 
 # Compiled class file
 *.class
