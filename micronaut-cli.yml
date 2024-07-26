@@ -16,6 +16,7 @@ features:
     java-application,
     jdbc-hikari,
     junit,
+    junit-params,
     logback,
     micronaut-aot,
     micronaut-build,

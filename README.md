@@ -1,8 +1,8 @@
-## Micronaut 4.5.0 Documentation
+## Micronaut 4.5.1 Documentation
 
-- [User Guide](https://docs.micronaut.io/4.5.0/guide/index.html)
-- [API Reference](https://docs.micronaut.io/4.5.0/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/4.5.0/guide/configurationreference.html)
+- [User Guide](https://docs.micronaut.io/4.5.1/guide/index.html)
+- [API Reference](https://docs.micronaut.io/4.5.1/api/index.html)
+- [Configuration Reference](https://docs.micronaut.io/4.5.1/guide/configurationreference.html)
 - [Micronaut Guides](https://guides.micronaut.io/index.html)
 ---
 
@@ -14,11 +14,11 @@
 - [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
 
 
-## Feature swagger-ui documentation
+## Feature openapi documentation
 
-- [Micronaut Swagger UI documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
+- [Micronaut OpenAPI Support documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
 
-- [https://swagger.io/tools/swagger-ui/](https://swagger.io/tools/swagger-ui/)
+- [https://www.openapis.org](https://www.openapis.org)
 
 
 ## Feature micronaut-aot documentation
@@ -26,13 +26,18 @@
 - [Micronaut AOT documentation](https://micronaut-projects.github.io/micronaut-aot/latest/guide/)
 
 
+## Feature swagger-ui documentation
+
+- [Micronaut Swagger UI documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
+
+- [https://swagger.io/tools/swagger-ui/](https://swagger.io/tools/swagger-ui/)
+
+
 ## Feature jdbc-hikari documentation
 
 - [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
 
 
-## Feature openapi documentation
+## Feature junit-params documentation
 
-- [Micronaut OpenAPI Support documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
-
-- [https://www.openapis.org](https://www.openapis.org)
+- [https://junit.org/junit5/docs/current/user-guide/#writing-tests-parameterized-tests](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parameterized-tests)
