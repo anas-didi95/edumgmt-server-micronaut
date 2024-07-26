@@ -14,6 +14,11 @@
 - [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
 
 
+## Feature mockito documentation
+
+- [https://site.mockito.org](https://site.mockito.org)
+
+
 ## Feature openapi documentation
 
 - [Micronaut OpenAPI Support documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
