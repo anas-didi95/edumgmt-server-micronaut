@@ -9,6 +9,7 @@ services:
     volumes:
       - ".:/home/vscode/workspace:z"
       - ".gradle-cache:/home/vscode/.gradle:z"
+      - ".vscode-server:/home/vscode/.vscode-server:z"
 
   db:
     image: oscarfonts/h2:2.1.210
