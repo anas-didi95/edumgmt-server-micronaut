@@ -1,6 +1,12 @@
-jpa:
+datasources:
   default:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: none
+    url: jdbc:h2:mem:testDb
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+    dialect: H2
+
+liquibase:
+  datasources:
+    default:
+      drop-first: true

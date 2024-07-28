@@ -28,6 +28,7 @@ public class StudentService implements IStudentService {
   @Override
   public UUID createStudent(CreateStudentDTO dto) {
     Student entity = studentMapper.toEntity(dto);
+    entity.setName(entity.getName().toUpperCase());
     return studentRepository.save(entity).getId();
   }
 
