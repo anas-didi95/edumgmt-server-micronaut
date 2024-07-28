@@ -7,6 +7,8 @@ import com.anasdidi.edumgmt.student.service.StudentService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import jakarta.inject.Inject;
 import java.util.UUID;
@@ -26,11 +28,24 @@ class StudentController implements IStudentController {
 
   @Post
   HttpResponse<ViewStudentDTO> createStudent(@Body CreateStudentDTO reqBody) {
-    logger.debug("[createStudent] reqBody={}", reqBody);
+    logger.trace("[createStudent] reqBody={}", reqBody);
+
     UUID id = studentService.createStudent(reqBody);
-    logger.debug("[createStudent] id={}", id);
+    logger.trace("[createStudent] id={}", id);
+
     ViewStudentDTO resBody = studentService.viewStudent(id);
-    logger.debug("[createStudent] resBody={}", resBody);
+    logger.trace("[createStudent] resBody={}", resBody);
+
     return HttpResponse.created(resBody);
+  }
+
+  @Get("/{id}")
+  HttpResponse<ViewStudentDTO> viewStudent(@PathVariable UUID id) {
+    logger.trace("[viewStudent] id={}", id);
+
+    ViewStudentDTO resBody = studentService.viewStudent(id);
+    logger.trace("[viewStudent] resBody={}", resBody);
+
+    return HttpResponse.ok(resBody);
   }
 }

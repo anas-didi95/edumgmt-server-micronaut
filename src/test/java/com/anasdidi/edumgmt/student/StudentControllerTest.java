@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
+import com.anasdidi.edumgmt.student.entity.Student;
+import com.anasdidi.edumgmt.student.repository.StudentRepository;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -19,7 +21,7 @@ import java.io.InputStream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-@MicronautTest
+@MicronautTest(transactional = false)
 public class StudentControllerTest {
 
   @Inject
@@ -27,6 +29,7 @@ public class StudentControllerTest {
   private HttpClient httpClient;
 
   @Inject private JsonMapper jsonMapper;
+  @Inject private StudentRepository studentRepository;
 
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
@@ -47,6 +50,28 @@ public class StudentControllerTest {
     assertNotNull(resBody.id());
     assertEquals(0, resBody.version());
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createStudent-input.json"})
+  void testViewStudentSuccess(String file) {
+    Student entity = null;
+
+    try (InputStream is = getFile(file)) {
+      entity = jsonMapper.readValue(is, Student.class);
+      entity = studentRepository.save(entity);
+    } catch (Exception e) {
+      fail(e);
+    }
+
+    HttpResponse<ViewStudentDTO> response =
+        httpClient
+            .toBlocking()
+            .exchange(HttpRequest.GET("/" + entity.getId()), ViewStudentDTO.class);
+    assertEquals(HttpStatus.OK, response.status());
+    assertEquals(entity.getId(), response.body().id());
+
+    studentRepository.delete(entity);
   }
 
   private InputStream getFile(String fileName) {
