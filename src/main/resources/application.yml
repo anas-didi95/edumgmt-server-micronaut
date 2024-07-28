@@ -30,4 +30,4 @@ jpa:
 liquibase:
   datasources:
     default:
-      change-log: classpath:/db/db-changelog-main.yml
+      change-log: classpath:/db/db.changelog-main.yml
