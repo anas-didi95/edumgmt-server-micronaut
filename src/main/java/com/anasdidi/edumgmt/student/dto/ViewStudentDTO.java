@@ -5,4 +5,4 @@ import io.micronaut.serde.annotation.Serdeable;
 import java.util.UUID;
 
 @Serdeable
-public record ViewStudentDTO(UUID id, String name) implements IStudentDTO {}
+public record ViewStudentDTO(UUID id, String name, Integer version) implements IStudentDTO {}

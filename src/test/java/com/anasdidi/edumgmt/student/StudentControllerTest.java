@@ -3,6 +3,7 @@ package com.anasdidi.edumgmt.student;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
@@ -15,7 +16,6 @@ import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -36,7 +36,7 @@ public class StudentControllerTest {
     try (InputStream iFile = getFile(input)) {
       reqBody = jsonMapper.readValue(iFile, CreateStudentDTO.class);
     } catch (Exception e) {
-      Assertions.fail(e);
+      fail(e);
     }
 
     HttpResponse<ViewStudentDTO> response =
@@ -45,6 +45,7 @@ public class StudentControllerTest {
 
     ViewStudentDTO resBody = response.body();
     assertNotNull(resBody.id());
+    assertEquals(0, resBody.version());
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
   }
 
