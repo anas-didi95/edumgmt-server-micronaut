@@ -22,7 +22,6 @@ features:
     micronaut-aot,
     micronaut-build,
     micronaut-http-validation,
-    mockito,
     netty-server,
     openapi,
     readme,
