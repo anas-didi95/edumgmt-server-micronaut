@@ -17,6 +17,7 @@ features:
     jdbc-hikari,
     junit,
     junit-params,
+    liquibase,
     logback,
     micronaut-aot,
     micronaut-build,
