@@ -2,6 +2,7 @@
 package com.anasdidi.edumgmt.student.controller;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
+import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.service.StudentService;
 import io.micronaut.http.HttpResponse;
@@ -10,6 +11,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
 import jakarta.inject.Inject;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -46,6 +48,15 @@ class StudentController implements IStudentController {
     ViewStudentDTO resBody = studentService.viewStudent(id);
     logger.trace("[viewStudent] resBody={}", resBody);
 
+    return HttpResponse.ok(resBody);
+  }
+
+  @Put("/{id}")
+  HttpResponse<ViewStudentDTO> updateStudent(
+      @PathVariable UUID id, @Body UpdateStudentDTO reqBody) {
+    logger.trace("[updateStudent] id={}, reqBody={}", id, reqBody);
+    UUID update = studentService.updateStudent(id, reqBody);
+    ViewStudentDTO resBody = studentService.viewStudent(update);
     return HttpResponse.ok(resBody);
   }
 }

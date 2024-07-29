@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
+import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.entity.Student;
 import com.anasdidi.edumgmt.student.repository.StudentRepository;
@@ -18,6 +19,7 @@ import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -30,6 +32,11 @@ public class StudentControllerTest {
 
   @Inject private JsonMapper jsonMapper;
   @Inject private StudentRepository studentRepository;
+
+  @BeforeEach
+  void setupUp() {
+    studentRepository.deleteAll();
+  }
 
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
@@ -70,8 +77,29 @@ public class StudentControllerTest {
             .exchange(HttpRequest.GET("/" + entity.getId()), ViewStudentDTO.class);
     assertEquals(HttpStatus.OK, response.status());
     assertEquals(entity.getId(), response.body().id());
+  }
 
-    studentRepository.delete(entity);
+  @ParameterizedTest
+  @CsvSource({"createStudent-input.json"})
+  void testUpdateStudentSuccess(String file) {
+    Student entity = null;
+
+    try (InputStream is = getFile(file)) {
+      entity = jsonMapper.readValue(is, Student.class);
+      entity = studentRepository.save(entity);
+    } catch (Exception e) {
+      fail(e);
+    }
+
+    String newName = "" + System.currentTimeMillis();
+    UpdateStudentDTO reqBody = new UpdateStudentDTO(entity.getId(), newName, 0);
+    HttpResponse<ViewStudentDTO> response =
+        httpClient
+            .toBlocking()
+            .exchange(HttpRequest.PUT("/" + entity.getId(), reqBody), ViewStudentDTO.class);
+    assertEquals(HttpStatus.OK, response.status());
+    assertEquals(1, response.body().version());
+    assertEquals(newName, response.body().name());
   }
 
   private InputStream getFile(String fileName) {
