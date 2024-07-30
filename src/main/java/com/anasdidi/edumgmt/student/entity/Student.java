@@ -24,6 +24,9 @@ public class Student {
   @Column(name = "NM")
   private String name;
 
+  @Column(name = "IS_DEL")
+  private Boolean isDeleted;
+
   @Version
   @Column(name = "VER")
   private Integer version;
@@ -42,6 +45,14 @@ public class Student {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Boolean getIsDeleted() {
+    return isDeleted;
+  }
+
+  public void setIsDeleted(Boolean isDeleted) {
+    this.isDeleted = isDeleted;
   }
 
   public Integer getVersion() {

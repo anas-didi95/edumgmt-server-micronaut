@@ -56,6 +56,7 @@ public class StudentControllerTest {
     ViewStudentDTO resBody = response.body();
     assertNotNull(resBody.id());
     assertEquals(0, resBody.version());
+    assertEquals(false, resBody.isDeleted());
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
   }
 
