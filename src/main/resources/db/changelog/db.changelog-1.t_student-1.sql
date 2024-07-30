@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset anas:0.1.0-1
+--changeset anas:1.t_student-1-1
 CREATE TABLE PUBLIC.T_STUDENT (
 	ID UUID NOT NULL,
 	NM CHARACTER VARYING NOT NULL,
