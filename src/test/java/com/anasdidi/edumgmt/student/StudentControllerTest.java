@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
+import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.entity.Student;
@@ -101,6 +102,30 @@ public class StudentControllerTest {
     assertEquals(HttpStatus.OK, response.status());
     assertEquals(1, response.body().version());
     assertEquals(newName, response.body().name());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createStudent-input.json"})
+  void testDeleteStudentSuccess(String file) {
+    Student entity = null;
+
+    try (InputStream is = getFile(file)) {
+      entity = jsonMapper.readValue(is, Student.class);
+      entity = studentRepository.save(entity);
+    } catch (Exception e) {
+      fail(e);
+    }
+
+    DeleteStudentDTO reqBody = new DeleteStudentDTO(entity.getId(), 0);
+    HttpResponse<Void> response =
+        httpClient
+            .toBlocking()
+            .exchange(HttpRequest.DELETE("/" + entity.getId(), reqBody), Void.class);
+    assertEquals(HttpStatus.NO_CONTENT, response.status());
+
+    entity = studentRepository.findById(entity.getId()).get();
+    assertEquals(1, entity.getVersion());
+    assertEquals(true, entity.getIsDeleted());
   }
 
   private InputStream getFile(String fileName) {

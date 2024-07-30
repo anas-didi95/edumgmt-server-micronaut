@@ -2,6 +2,7 @@
 package com.anasdidi.edumgmt.student.service;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
+import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.entity.Student;
@@ -59,5 +60,23 @@ public class StudentService implements IStudentService {
 
     entity.setName(dto.name());
     return studentRepository.save(entity).getId();
+  }
+
+  @Override
+  public void deleteStudent(UUID id, DeleteStudentDTO dto) {
+    Optional<Student> result = studentRepository.findById(id);
+    if (result.isEmpty()) {
+      // TODO: No record found error
+      return;
+    }
+
+    Student entity = result.get();
+    if (!entity.getId().equals(dto.id()) && !entity.getVersion().equals(dto.version())) {
+      // TODO: Record not matched error
+      return;
+    }
+
+    entity.setIsDeleted(true);
+    studentRepository.save(entity);
   }
 }

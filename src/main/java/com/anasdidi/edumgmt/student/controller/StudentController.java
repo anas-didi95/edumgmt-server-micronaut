@@ -2,12 +2,14 @@
 package com.anasdidi.edumgmt.student.controller;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
+import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.service.StudentService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
@@ -58,5 +60,11 @@ class StudentController implements IStudentController {
     UUID update = studentService.updateStudent(id, reqBody);
     ViewStudentDTO resBody = studentService.viewStudent(update);
     return HttpResponse.ok(resBody);
+  }
+
+  @Delete("/{id}")
+  HttpResponse<Void> deleteStudent(@PathVariable UUID id, @Body DeleteStudentDTO reqBody) {
+    studentService.deleteStudent(id, reqBody);
+    return HttpResponse.noContent();
   }
 }
