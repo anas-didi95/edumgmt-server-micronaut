@@ -8,14 +8,12 @@ public abstract class BaseError extends RuntimeException {
   public abstract ErrorCode getError();
 
   public enum ErrorCode {
-    RECORD_NOT_FOUND("E001", "Record not found!");
+    RECORD_NOT_FOUND("E001");
 
     public final String code;
-    public final String message;
 
-    private ErrorCode(String code, String message) {
+    private ErrorCode(String code) {
       this.code = code;
-      this.message = message;
     }
   }
 }

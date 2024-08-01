@@ -3,6 +3,7 @@ package com.anasdidi.edumgmt.exception;
 
 import com.anasdidi.edumgmt.exception.error.BaseError.ErrorCode;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
+import io.micronaut.context.LocalizedMessageSource;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.http.HttpResponse;
@@ -19,23 +20,31 @@ import java.util.List;
 public class ExceptionHandlerFactory {
 
   private final ErrorResponseProcessor<?> processor;
+  private final LocalizedMessageSource messageSource;
 
   @Inject
-  public ExceptionHandlerFactory(ErrorResponseProcessor<?> processor) {
+  public ExceptionHandlerFactory(
+      ErrorResponseProcessor<?> processor, LocalizedMessageSource messageSource) {
     this.processor = processor;
+    this.messageSource = messageSource;
   }
 
   @Singleton
   @Requires(classes = {RecordNotFoundError.class, ExceptionHandler.class})
   ExceptionHandler<RecordNotFoundError, HttpResponse<?>> recordNotFoundError() {
     return (request, exception) -> {
+      HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
       ErrorCode error = exception.getError();
-      List<String> messageList = Arrays.asList(error.code, error.message);
-      String message = error.message;
+      String message = getMessage(error, httpStatus);
+      List<String> messageList = Arrays.asList(error.code, message);
 
       return processor.processResponse(
           ErrorContext.builder(request).cause(exception).errorMessages(messageList).build(),
           HttpResponse.status(HttpStatus.BAD_REQUEST, message));
     };
+  }
+
+  private String getMessage(ErrorCode error, HttpStatus httpStatus) {
+    return messageSource.getMessageOrDefault("error." + error.code, httpStatus.getReason());
   }
 }
