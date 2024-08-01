@@ -1,6 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.exception;
 
+import com.anasdidi.edumgmt.exception.error.BaseError.ErrorCode;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
@@ -11,6 +12,8 @@ import io.micronaut.http.server.exceptions.response.ErrorContext;
 import io.micronaut.http.server.exceptions.response.ErrorResponseProcessor;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.util.Arrays;
+import java.util.List;
 
 @Factory
 public class ExceptionHandlerFactory {
@@ -26,9 +29,12 @@ public class ExceptionHandlerFactory {
   @Requires(classes = {RecordNotFoundError.class, ExceptionHandler.class})
   ExceptionHandler<RecordNotFoundError, HttpResponse<?>> recordNotFoundError() {
     return (request, exception) -> {
-      String message = "Record not found!";
+      ErrorCode error = exception.getError();
+      List<String> messageList = Arrays.asList(error.code, error.message);
+      String message = error.message;
+
       return processor.processResponse(
-          ErrorContext.builder(request).cause(exception).errorMessage(message).build(),
+          ErrorContext.builder(request).cause(exception).errorMessages(messageList).build(),
           HttpResponse.status(HttpStatus.BAD_REQUEST, message));
     };
   }
