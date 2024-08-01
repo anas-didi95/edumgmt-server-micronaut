@@ -1,10 +1,10 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.exception.error;
 
-public class RecordNotFoundError extends BaseError {
+public final class RecordNotFoundError extends BaseError {
 
-  @Override
-  public ErrorCode getError() {
-    return ErrorCode.RECORD_NOT_FOUND;
+  public RecordNotFoundError(String methodName, String field, Object value) {
+    super(
+        ErrorCode.RECORD_NOT_FOUND, methodName, "Record not found! %s=%s".formatted(field, value));
   }
 }

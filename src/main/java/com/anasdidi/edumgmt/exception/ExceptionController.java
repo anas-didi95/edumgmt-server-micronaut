@@ -13,6 +13,6 @@ public class ExceptionController {
 
   @Get("/recordNotFoundError")
   HttpResponse<Void> recordNotFoundError() {
-    throw new RecordNotFoundError();
+    throw new RecordNotFoundError("1", "2", "3");
   }
 }

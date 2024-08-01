@@ -3,9 +3,14 @@ package com.anasdidi.edumgmt.exception.error;
 
 public abstract class BaseError extends RuntimeException {
 
-  protected ErrorCode errorCode;
+  public final ErrorCode error;
+  public final String logMessage;
 
-  public abstract ErrorCode getError();
+  public BaseError(ErrorCode error, String logTag, String logMessage) {
+    super(error.code);
+    this.error = error;
+    this.logMessage = "[%s] %s".formatted(logTag, logMessage);
+  }
 
   public enum ErrorCode {
     RECORD_NOT_FOUND("E001");

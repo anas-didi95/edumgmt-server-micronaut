@@ -34,7 +34,7 @@ public class ExceptionHandlerFactory {
   ExceptionHandler<RecordNotFoundError, HttpResponse<?>> recordNotFoundError() {
     return (request, exception) -> {
       HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-      ErrorCode error = exception.getError();
+      ErrorCode error = exception.error;
       String message = getMessage(error, httpStatus);
       List<String> messageList = Arrays.asList(error.code, message);
 
