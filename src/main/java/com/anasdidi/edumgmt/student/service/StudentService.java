@@ -2,6 +2,7 @@
 package com.anasdidi.edumgmt.student.service;
 
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
+import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
@@ -60,9 +61,12 @@ public class StudentService implements IStudentService {
     }
 
     Student entity = result.get();
-    if (!entity.getId().equals(dto.id()) || !entity.getVersion().equals(dto.version())) {
-      // TODO: Record not matched error
-      return null;
+    boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
+    if (!matched[0] || !matched[1]) {
+      RecordNotMatchedError error =
+          new RecordNotMatchedError("updateStudent", matched[0], matched[1]);
+      logger.debug(error.logMessage, error);
+      throw error;
     }
 
     entity.setName(dto.name());
@@ -79,12 +83,21 @@ public class StudentService implements IStudentService {
     }
 
     Student entity = result.get();
-    if (!entity.getId().equals(dto.id()) && !entity.getVersion().equals(dto.version())) {
-      // TODO: Record not matched error
-      return;
+    boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
+    if (!matched[0] || !matched[1]) {
+      RecordNotMatchedError error =
+          new RecordNotMatchedError("updateStudent", matched[0], matched[1]);
+      logger.debug(error.logMessage, error);
+      throw error;
     }
 
     entity.setIsDeleted(true);
     studentRepository.save(entity);
+  }
+
+  private boolean[] checkRecordMatched(Student entity, UUID id, Integer version) {
+    boolean idMatched = entity.getId().compareTo(id) == 0;
+    boolean versionMatched = entity.getVersion().compareTo(version) == 0;
+    return new boolean[] {idMatched, versionMatched};
   }
 }
