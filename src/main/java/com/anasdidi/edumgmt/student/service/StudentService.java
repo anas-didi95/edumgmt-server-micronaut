@@ -12,6 +12,7 @@ import com.anasdidi.edumgmt.student.repository.StudentRepository;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ public class StudentService implements IStudentService {
   public ViewStudentDTO viewStudent(UUID id) {
     Optional<Student> result = studentRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("viewStudent", "id", id);
+      RecordNotFoundError error = new RecordNotFoundError("viewStudent", Map.of("id", id));
       logger.debug(error.logMessage, error);
       throw error;
     }
@@ -53,7 +54,7 @@ public class StudentService implements IStudentService {
   public UUID updateStudent(UUID id, UpdateStudentDTO dto) {
     Optional<Student> result = studentRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("updateStudent", "id", id);
+      RecordNotFoundError error = new RecordNotFoundError("updateStudent", Map.of("id", id));
       logger.debug(error.logMessage, error);
       throw error;
     }
@@ -72,7 +73,7 @@ public class StudentService implements IStudentService {
   public void deleteStudent(UUID id, DeleteStudentDTO dto) {
     Optional<Student> result = studentRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("deleteStudent", "id", id);
+      RecordNotFoundError error = new RecordNotFoundError("deleteStudent", Map.of("id", id));
       logger.debug(error.logMessage, error);
       throw error;
     }

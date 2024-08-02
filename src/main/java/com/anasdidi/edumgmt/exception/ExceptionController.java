@@ -7,6 +7,7 @@ import io.micronaut.context.annotation.Requires;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import java.util.Map;
 
 @Controller("/exception")
 @Requires(env = "test-exception")
@@ -14,7 +15,7 @@ public class ExceptionController {
 
   @Get("/recordNotFoundError")
   HttpResponse<Void> recordNotFoundError() {
-    throw new RecordNotFoundError("1", "2", "3");
+    throw new RecordNotFoundError("methodName", Map.of());
   }
 
   @Get("/recordNotMatchedError")
