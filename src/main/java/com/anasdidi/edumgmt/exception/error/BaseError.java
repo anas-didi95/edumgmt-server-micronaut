@@ -13,7 +13,8 @@ public abstract class BaseError extends RuntimeException {
   }
 
   public enum ErrorCode {
-    RECORD_NOT_FOUND("E001");
+    RECORD_NOT_FOUND("E001"),
+    RECORD_NOT_MATCHED("E002");
 
     public final String code;
 

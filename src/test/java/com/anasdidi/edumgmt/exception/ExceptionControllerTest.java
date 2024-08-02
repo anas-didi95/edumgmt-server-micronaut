@@ -28,4 +28,14 @@ public class ExceptionControllerTest {
       assertEquals("Record not found!", e.getLocalizedMessage());
     }
   }
+
+  @Test
+  void testRecordNotMatchedError() {
+    try {
+      httpClient.toBlocking().exchange(HttpRequest.GET("/recordNotMatchedError"));
+    } catch (HttpClientResponseException e) {
+      assertEquals(HttpStatus.BAD_REQUEST, e.getStatus());
+      assertEquals("Record not matched!", e.getLocalizedMessage());
+    }
+  }
 }
