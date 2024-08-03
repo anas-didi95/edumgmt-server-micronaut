@@ -3,6 +3,7 @@ package com.anasdidi.edumgmt.student;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
@@ -56,6 +57,8 @@ public class StudentControllerTest {
 
     ViewStudentDTO resBody = response.body();
     assertNotNull(resBody.id());
+    assertNotNull(resBody.createdDate());
+    assertEquals(resBody.createdDate(), resBody.updatedDate());
     assertEquals(0, resBody.version());
     assertEquals(false, resBody.isDeleted());
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
@@ -100,8 +103,11 @@ public class StudentControllerTest {
             .toBlocking()
             .exchange(HttpRequest.PUT("/" + entity.getId(), reqBody), ViewStudentDTO.class);
     assertEquals(HttpStatus.OK, response.status());
-    assertEquals(1, response.body().version());
-    assertEquals(newName, response.body().name());
+
+    ViewStudentDTO resBody = response.body();
+    assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
+    assertEquals(1, resBody.version());
+    assertEquals(newName, resBody.name());
   }
 
   @ParameterizedTest
@@ -124,6 +130,7 @@ public class StudentControllerTest {
     assertEquals(HttpStatus.NO_CONTENT, response.status());
 
     entity = studentRepository.findById(entity.getId()).get();
+    assertTrue(entity.getUpdatedDate().compareTo(entity.getCreatedDate()) > 0);
     assertEquals(1, entity.getVersion());
     assertEquals(true, entity.getIsDeleted());
   }

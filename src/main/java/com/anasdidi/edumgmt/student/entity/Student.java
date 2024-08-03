@@ -1,6 +1,8 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.student.entity;
 
+import io.micronaut.data.annotation.DateCreated;
+import io.micronaut.data.annotation.DateUpdated;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import java.time.Instant;
 import java.util.UUID;
 
 @Serdeable
@@ -30,6 +33,14 @@ public class Student {
   @Version
   @Column(name = "VER")
   private Integer version;
+
+  @DateCreated
+  @Column(name = "CREATE_DT")
+  private Instant createdDate;
+
+  @DateUpdated
+  @Column(name = "UPDATE_DT")
+  private Instant updatedDate;
 
   public UUID getId() {
     return id;
@@ -61,5 +72,21 @@ public class Student {
 
   public void setVersion(Integer version) {
     this.version = version;
+  }
+
+  public Instant getCreatedDate() {
+    return createdDate;
+  }
+
+  public void setCreatedDate(Instant createdDate) {
+    this.createdDate = createdDate;
+  }
+
+  public Instant getUpdatedDate() {
+    return updatedDate;
+  }
+
+  public void setUpdatedDate(Instant updatedDate) {
+    this.updatedDate = updatedDate;
   }
 }
