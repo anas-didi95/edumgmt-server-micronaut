@@ -57,7 +57,9 @@ public class StudentControllerTest {
 
     ViewStudentDTO resBody = response.body();
     assertNotNull(resBody.id());
+    assertNotNull(resBody.createdBy());
     assertNotNull(resBody.createdDate());
+    assertEquals(resBody.createdBy(), resBody.updatedBy());
     assertEquals(resBody.createdDate(), resBody.updatedDate());
     assertEquals(0, resBody.version());
     assertEquals(false, resBody.isDeleted());
@@ -105,6 +107,7 @@ public class StudentControllerTest {
     assertEquals(HttpStatus.OK, response.status());
 
     ViewStudentDTO resBody = response.body();
+    assertNotNull(resBody.updatedBy());
     assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
     assertEquals(1, resBody.version());
     assertEquals(newName, resBody.name());
@@ -130,6 +133,7 @@ public class StudentControllerTest {
     assertEquals(HttpStatus.NO_CONTENT, response.status());
 
     entity = studentRepository.findById(entity.getId()).get();
+    assertNotNull(entity.getUpdatedBy());
     assertTrue(entity.getUpdatedDate().compareTo(entity.getCreatedDate()) > 0);
     assertEquals(1, entity.getVersion());
     assertEquals(true, entity.getIsDeleted());

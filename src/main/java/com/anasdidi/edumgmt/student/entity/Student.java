@@ -34,9 +34,15 @@ public class Student {
   @Column(name = "VER")
   private Integer version;
 
+  @Column(name = "CREATE_BY")
+  private String createdBy;
+
   @DateCreated
   @Column(name = "CREATE_DT")
   private Instant createdDate;
+
+  @Column(name = "UPDATE_BY")
+  private String updatedBy;
 
   @DateUpdated
   @Column(name = "UPDATE_DT")
@@ -74,12 +80,28 @@ public class Student {
     this.version = version;
   }
 
+  public String getCreatedBy() {
+    return createdBy;
+  }
+
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
+
   public Instant getCreatedDate() {
     return createdDate;
   }
 
   public void setCreatedDate(Instant createdDate) {
     this.createdDate = createdDate;
+  }
+
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
+
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
   }
 
   public Instant getUpdatedDate() {

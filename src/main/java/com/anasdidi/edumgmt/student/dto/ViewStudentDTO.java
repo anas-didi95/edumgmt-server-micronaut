@@ -11,6 +11,8 @@ public record ViewStudentDTO(
     String name,
     Boolean isDeleted,
     Integer version,
+    String createdBy,
     Instant createdDate,
+    String updatedBy,
     Instant updatedDate)
     implements IStudentDTO {}
