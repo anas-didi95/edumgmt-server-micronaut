@@ -1,5 +1,5 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
-package com.anasdidi.edumgmt.exception;
+package com.anasdidi.edumgmt.exception.controller;
 
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Controller("/exception")
 @Requires(env = "test-exception")
-public class ExceptionController {
+class ExceptionController {
 
   @Get("/recordNotFoundError")
   HttpResponse<Void> recordNotFoundError() {

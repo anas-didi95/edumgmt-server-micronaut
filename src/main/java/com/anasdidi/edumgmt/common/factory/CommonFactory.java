@@ -1,5 +1,5 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
-package com.anasdidi.edumgmt;
+package com.anasdidi.edumgmt.common.factory;
 
 import com.anasdidi.edumgmt.student.entity.Student;
 import io.micronaut.context.MessageSource;
@@ -12,10 +12,10 @@ import io.micronaut.data.event.listeners.PrePersistEventListener;
 import jakarta.inject.Singleton;
 
 @Factory
-public class EdumgmtFactory {
+class CommonFactory {
 
   @Singleton
-  public MessageSource messageSource() {
+  MessageSource messageSource() {
     return new ResourceBundleMessageSource("i18n.messages");
   }
 

@@ -1,5 +1,5 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
-package com.anasdidi.edumgmt.student;
+package com.anasdidi.edumgmt.student.factory;
 
 import com.anasdidi.edumgmt.student.entity.Student;
 import io.micronaut.context.annotation.Factory;
@@ -10,7 +10,7 @@ import io.micronaut.data.event.listeners.PrePersistEventListener;
 import jakarta.inject.Singleton;
 
 @Factory
-public class StudentFactory {
+class StudentFactory {
 
   @Singleton
   PrePersistEventListener<Student> prePresistStudent() {

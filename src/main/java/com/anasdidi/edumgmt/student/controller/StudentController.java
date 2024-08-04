@@ -31,7 +31,7 @@ class StudentController implements IStudentController {
   }
 
   @Post
-  HttpResponse<ViewStudentDTO> createStudent(@Body CreateStudentDTO reqBody) {
+  public HttpResponse<ViewStudentDTO> createStudent(@Body CreateStudentDTO reqBody) {
     logger.trace("[createStudent] reqBody={}", reqBody);
 
     UUID id = studentService.createStudent(reqBody);
@@ -44,7 +44,7 @@ class StudentController implements IStudentController {
   }
 
   @Get("/{id}")
-  HttpResponse<ViewStudentDTO> viewStudent(@PathVariable UUID id) {
+  public HttpResponse<ViewStudentDTO> viewStudent(@PathVariable UUID id) {
     logger.trace("[viewStudent] id={}", id);
 
     ViewStudentDTO resBody = studentService.viewStudent(id);
@@ -54,7 +54,7 @@ class StudentController implements IStudentController {
   }
 
   @Put("/{id}")
-  HttpResponse<ViewStudentDTO> updateStudent(
+  public HttpResponse<ViewStudentDTO> updateStudent(
       @PathVariable UUID id, @Body UpdateStudentDTO reqBody) {
     logger.trace("[updateStudent] id={}, reqBody={}", id, reqBody);
     UUID update = studentService.updateStudent(id, reqBody);
@@ -63,7 +63,7 @@ class StudentController implements IStudentController {
   }
 
   @Delete("/{id}")
-  HttpResponse<Void> deleteStudent(@PathVariable UUID id, @Body DeleteStudentDTO reqBody) {
+  public HttpResponse<Void> deleteStudent(@PathVariable UUID id, @Body DeleteStudentDTO reqBody) {
     studentService.deleteStudent(id, reqBody);
     return HttpResponse.noContent();
   }

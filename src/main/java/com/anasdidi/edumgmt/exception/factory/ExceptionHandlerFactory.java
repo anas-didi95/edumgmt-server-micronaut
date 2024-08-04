@@ -1,9 +1,9 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
-package com.anasdidi.edumgmt.exception;
+package com.anasdidi.edumgmt.exception.factory;
 
-import com.anasdidi.edumgmt.exception.error.BaseError.ErrorCode;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
+import com.anasdidi.edumgmt.exception.util.ErrorCode;
 import io.micronaut.context.LocalizedMessageSource;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
@@ -18,13 +18,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @Factory
-public class ExceptionHandlerFactory {
+class ExceptionHandlerFactory {
 
   private final ErrorResponseProcessor<?> processor;
   private final LocalizedMessageSource messageSource;
 
   @Inject
-  public ExceptionHandlerFactory(
+  ExceptionHandlerFactory(
       ErrorResponseProcessor<?> processor, LocalizedMessageSource messageSource) {
     this.processor = processor;
     this.messageSource = messageSource;
