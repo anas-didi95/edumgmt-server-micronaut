@@ -7,10 +7,12 @@ import io.micronaut.context.annotation.Requires;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.swagger.v3.oas.annotations.Hidden;
 import java.util.Map;
 
 @Controller("/exception")
 @Requires(env = "test-exception")
+@Hidden
 class ExceptionController {
 
   @Get("/recordNotFoundError")
