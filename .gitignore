@@ -1,3 +1,7 @@
+.h2/
+.gradle-cache/
+.vscode-server/
+
 # Compiled class file
 *.class
 
