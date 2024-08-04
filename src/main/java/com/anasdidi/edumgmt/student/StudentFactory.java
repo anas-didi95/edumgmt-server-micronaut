@@ -1,10 +1,8 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
-package com.anasdidi.edumgmt;
+package com.anasdidi.edumgmt.student;
 
 import com.anasdidi.edumgmt.student.entity.Student;
-import io.micronaut.context.MessageSource;
 import io.micronaut.context.annotation.Factory;
-import io.micronaut.context.i18n.ResourceBundleMessageSource;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.beans.BeanWrapper;
 import io.micronaut.data.event.EntityEventContext;
@@ -12,16 +10,10 @@ import io.micronaut.data.event.listeners.PrePersistEventListener;
 import jakarta.inject.Singleton;
 
 @Factory
-public class EdumgmtFactory {
+public class StudentFactory {
 
   @Singleton
-  public MessageSource messageSource() {
-    return new ResourceBundleMessageSource("i18n.messages");
-  }
-
-  @Singleton
-  PrePersistEventListener<Student> prePresistEntity() {
-    String userId = "SYSTEM";
+  PrePersistEventListener<Student> prePresistStudent() {
     return new PrePersistEventListener<Student>() {
 
       @Override
@@ -34,13 +26,9 @@ public class EdumgmtFactory {
         Student entity = context.getEntity();
         BeanWrapper<Student> bean = BeanWrapper.getWrapper(entity);
 
-        if (entity.getCreatedBy() == null) {
-          context.setProperty(
-              bean.getIntrospection().getRequiredProperty("createdBy", String.class), userId);
-        }
         context.setProperty(
-            bean.getIntrospection().getRequiredProperty("updatedBy", String.class), userId);
-
+            bean.getIntrospection().getRequiredProperty("name", String.class),
+            entity.getName().toUpperCase());
         return true;
       }
     };
