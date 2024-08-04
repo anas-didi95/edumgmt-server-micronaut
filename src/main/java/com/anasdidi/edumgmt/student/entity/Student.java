@@ -24,6 +24,9 @@ public class Student {
   @Column(name = "ID")
   private UUID id;
 
+  @Column(name = "IC_NO")
+  private String icNo;
+
   @Column(name = "NM")
   private String name;
 
@@ -54,6 +57,14 @@ public class Student {
 
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  public String getIcNo() {
+    return icNo;
+  }
+
+  public void setIcNo(String icNo) {
+    this.icNo = icNo;
   }
 
   public String getName() {

@@ -70,6 +70,7 @@ public class StudentService implements IStudentService {
     }
 
     entity.setName(dto.name());
+    entity.setIcNo(dto.icNo());
     return studentRepository.save(entity).getId();
   }
 
@@ -86,7 +87,7 @@ public class StudentService implements IStudentService {
     boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
     if (!matched[0] || !matched[1]) {
       RecordNotMatchedError error =
-          new RecordNotMatchedError("updateStudent", matched[0], matched[1]);
+          new RecordNotMatchedError("deleteStudent", matched[0], matched[1]);
       logger.debug(error.logMessage, error);
       throw error;
     }

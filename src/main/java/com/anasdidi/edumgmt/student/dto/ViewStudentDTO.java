@@ -8,6 +8,7 @@ import java.util.UUID;
 @Serdeable
 public record ViewStudentDTO(
     UUID id,
+    String icNo,
     String name,
     Boolean isDeleted,
     Integer version,
