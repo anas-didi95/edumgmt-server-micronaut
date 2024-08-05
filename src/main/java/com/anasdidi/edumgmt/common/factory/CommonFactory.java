@@ -1,8 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.common.factory;
 
-import com.anasdidi.edumgmt.attendance.entity.Attendance;
-import com.anasdidi.edumgmt.student.entity.Student;
+import com.anasdidi.edumgmt.common.entity.BaseEntity;
 import io.micronaut.context.MessageSource;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.i18n.ResourceBundleMessageSource;
@@ -21,46 +20,19 @@ class CommonFactory {
   }
 
   @Singleton
-  PrePersistEventListener<Student> prePresistEntity() {
+  PrePersistEventListener<BaseEntity> prePresistEntity() {
     String userId = "SYSTEM";
-    return new PrePersistEventListener<Student>() {
+    return new PrePersistEventListener<BaseEntity>() {
 
       @Override
-      public boolean prePersist(@NonNull Student entity) {
+      public boolean prePersist(@NonNull BaseEntity entity) {
         throw new UnsupportedOperationException("Unimplemented method 'prePersist'");
       }
 
       @Override
-      public boolean prePersist(@NonNull EntityEventContext<Student> context) {
-        Student entity = context.getEntity();
-        BeanWrapper<Student> bean = BeanWrapper.getWrapper(entity);
-
-        if (entity.getCreatedBy() == null) {
-          context.setProperty(
-              bean.getIntrospection().getRequiredProperty("createdBy", String.class), userId);
-        }
-        context.setProperty(
-            bean.getIntrospection().getRequiredProperty("updatedBy", String.class), userId);
-
-        return true;
-      }
-    };
-  }
-
-  @Singleton
-  PrePersistEventListener<Attendance> prePresistEntity2() {
-    String userId = "SYSTEM";
-    return new PrePersistEventListener<Attendance>() {
-
-      @Override
-      public boolean prePersist(@NonNull Attendance entity) {
-        throw new UnsupportedOperationException("Unimplemented method 'prePersist'");
-      }
-
-      @Override
-      public boolean prePersist(@NonNull EntityEventContext<Attendance> context) {
-        Attendance entity = context.getEntity();
-        BeanWrapper<Attendance> bean = BeanWrapper.getWrapper(entity);
+      public boolean prePersist(@NonNull EntityEventContext<BaseEntity> context) {
+        BaseEntity entity = context.getEntity();
+        BeanWrapper<BaseEntity> bean = BeanWrapper.getWrapper(entity);
 
         if (entity.getCreatedBy() == null) {
           context.setProperty(
