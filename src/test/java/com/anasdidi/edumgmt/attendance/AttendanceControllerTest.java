@@ -7,7 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceDTO;
+import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
+import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
+import com.anasdidi.edumgmt.attendance.entity.Attendance;
+import com.anasdidi.edumgmt.attendance.repository.AttendanceRepository;
+import com.anasdidi.edumgmt.student.entity.Student;
+import com.anasdidi.edumgmt.student.repository.StudentRepository;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -17,6 +23,7 @@ import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -28,6 +35,14 @@ public class AttendanceControllerTest {
   private HttpClient httpClient;
 
   @Inject private JsonMapper jsonMapper;
+  @Inject private AttendanceRepository attendanceRepository;
+  @Inject private StudentRepository studentRepository;
+
+  @BeforeEach
+  void beforeEach() {
+    attendanceRepository.deleteAll();
+    studentRepository.deleteAll();
+  }
 
   @ParameterizedTest
   @CsvSource({"createAttendance-input.json"})
@@ -53,6 +68,34 @@ public class AttendanceControllerTest {
     assertEquals(0, resBody.version());
     assertEquals(false, resBody.isDeleted());
     assertTrue(resBody.date().compareTo(reqBody.date()) == 0);
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createAttendance-input.json,createStudent-input.json"})
+  void testCreateAttendanceStudentSuccess(String s1, String s2) {
+    Attendance attendance = null;
+    Student student = null;
+
+    try (InputStream i1 = getFile(s1);
+        InputStream i2 = getFile(s2)) {
+      attendance = attendanceRepository.save(jsonMapper.readValue(i1, Attendance.class));
+      student = studentRepository.save(jsonMapper.readValue(i2, Student.class));
+    } catch (Exception e) {
+      fail(e);
+    }
+
+    CreateAttendanceStudentDTO reqBody = new CreateAttendanceStudentDTO(student.getId());
+    HttpResponse<ViewAttendanceStudentDTO> response =
+        httpClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.POST("/" + attendance.getId(), reqBody),
+                ViewAttendanceStudentDTO.class);
+    assertEquals(HttpStatus.OK, response.status());
+
+    ViewAttendanceStudentDTO resBody = response.body();
+    assertEquals(attendance.getDate(), resBody.date());
+    assertEquals(student.getName(), resBody.studentName());
   }
 
   private InputStream getFile(String fileName) {
