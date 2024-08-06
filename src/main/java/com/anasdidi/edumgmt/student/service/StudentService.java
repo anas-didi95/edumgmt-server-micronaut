@@ -21,14 +21,14 @@ import org.slf4j.LoggerFactory;
 
 @Singleton
 @Transactional
-public class StudentService implements IStudentService {
+class StudentService implements IStudentService {
 
   private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
   private final StudentRepository studentRepository;
   private final StudentMapper studentMapper;
 
   @Inject
-  public StudentService(StudentRepository studentRepository, StudentMapper studentMapper) {
+  StudentService(StudentRepository studentRepository, StudentMapper studentMapper) {
     this.studentRepository = studentRepository;
     this.studentMapper = studentMapper;
   }

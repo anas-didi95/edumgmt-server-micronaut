@@ -7,7 +7,7 @@ import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import java.util.UUID;
 
-interface IStudentService {
+public interface IStudentService {
 
   UUID createStudent(CreateStudentDTO dto);
 
