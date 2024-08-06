@@ -12,6 +12,7 @@ import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.entity.Attendance;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceRepository;
+import com.anasdidi.edumgmt.attendance.repository.AttendanceStudentRepository;
 import com.anasdidi.edumgmt.student.entity.Student;
 import com.anasdidi.edumgmt.student.repository.StudentRepository;
 import io.micronaut.http.HttpRequest;
@@ -37,11 +38,13 @@ public class AttendanceControllerTest {
   @Inject private JsonMapper jsonMapper;
   @Inject private AttendanceRepository attendanceRepository;
   @Inject private StudentRepository studentRepository;
+  @Inject private AttendanceStudentRepository attendanceStudentRepository;
 
   @BeforeEach
   void beforeEach() {
-    attendanceRepository.deleteAll();
+    attendanceStudentRepository.deleteAll();
     studentRepository.deleteAll();
+    attendanceRepository.deleteAll();
   }
 
   @ParameterizedTest
