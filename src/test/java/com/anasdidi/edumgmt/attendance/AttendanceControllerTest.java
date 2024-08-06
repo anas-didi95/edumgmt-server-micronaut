@@ -71,6 +71,7 @@ public class AttendanceControllerTest {
     assertEquals(0, resBody.version());
     assertEquals(false, resBody.isDeleted());
     assertTrue(resBody.date().compareTo(reqBody.date()) == 0);
+    assertEquals(reqBody.remark(), resBody.remark());
   }
 
   @ParameterizedTest

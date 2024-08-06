@@ -6,4 +6,5 @@ import io.micronaut.serde.annotation.Serdeable;
 import java.time.LocalDate;
 
 @Serdeable
-public record CreateAttendanceDTO(@Format("yyyy-MM-dd") LocalDate date) implements IAttendanceDTO {}
+public record CreateAttendanceDTO(@Format("yyyy-MM-dd") LocalDate date, String remark)
+    implements IAttendanceDTO {}

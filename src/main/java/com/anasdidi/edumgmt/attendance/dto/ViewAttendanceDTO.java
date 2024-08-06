@@ -10,6 +10,7 @@ import java.util.UUID;
 public record ViewAttendanceDTO(
     UUID id,
     LocalDate date,
+    String remark,
     Boolean isDeleted,
     Integer version,
     String createdBy,

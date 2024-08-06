@@ -16,11 +16,22 @@ public class Attendance extends BaseEntity {
   @Column(name = "DT")
   private LocalDate date;
 
+  @Column(name = "REMARK")
+  private String remark;
+
   public LocalDate getDate() {
     return date;
   }
 
   public void setDate(LocalDate date) {
     this.date = date;
+  }
+
+  public String getRemark() {
+    return remark;
+  }
+
+  public void setRemark(String remark) {
+    this.remark = remark;
   }
 }
