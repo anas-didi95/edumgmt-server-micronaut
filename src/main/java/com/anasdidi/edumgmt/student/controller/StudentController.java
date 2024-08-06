@@ -5,7 +5,7 @@ import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
-import com.anasdidi.edumgmt.student.service.StudentService;
+import com.anasdidi.edumgmt.student.service.IStudentService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory;
 class StudentController implements IStudentController {
 
   private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
-  private final StudentService studentService;
+  private final IStudentService studentService;
 
   @Inject
-  public StudentController(StudentService studentService) {
+  StudentController(IStudentService studentService) {
     this.studentService = studentService;
   }
 

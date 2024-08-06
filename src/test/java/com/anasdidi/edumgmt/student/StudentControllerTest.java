@@ -36,7 +36,7 @@ public class StudentControllerTest {
   @Inject private StudentRepository studentRepository;
 
   @BeforeEach
-  void setupUp() {
+  void beforeEach() {
     studentRepository.deleteAll();
   }
 

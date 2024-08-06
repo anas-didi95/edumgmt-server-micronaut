@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 
 @Tag(name = "student")
-interface IStudentController {
+public interface IStudentController {
 
   @Operation(summary = "Add new student record")
   HttpResponse<ViewStudentDTO> createStudent(CreateStudentDTO reqBody);
