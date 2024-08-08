@@ -2,6 +2,7 @@
 package com.anasdidi.edumgmt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
@@ -9,6 +10,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
+import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -17,6 +19,7 @@ import java.io.InputStream;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -37,8 +40,15 @@ class EdumgmtTest {
 
   @Test
   void testSwaggerUISuccess() {
-    HttpResponse<String> response =
-        httpClient.toBlocking().exchange(HttpRequest.GET("/swagger-ui/index.html"));
+    Executable e =
+        () -> httpClient.toBlocking().exchange(HttpRequest.GET("/swagger-ui/index.html"));
+    HttpClientResponseException thrown = assertThrows(HttpClientResponseException.class, e);
+    assertEquals(HttpStatus.UNAUTHORIZED, thrown.getStatus());
+
+    HttpResponse<?> response =
+        httpClient
+            .toBlocking()
+            .exchange(HttpRequest.GET("/swagger-ui/index.html").basicAuth("sherlock", "password"));
     assertEquals(HttpStatus.OK, response.status());
   }
 

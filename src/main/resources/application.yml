@@ -16,9 +16,9 @@ micronaut:
       - pattern: /exception/**
         access: isAnonymous()
       - pattern: /swagger/**
-        access: isAnonymous()
+        access: isAuthenticated()
       - pattern: /swagger-ui/**
-        access: isAnonymous()
+        access: isAuthenticated()
       - pattern: /student/**
         access: isAnonymous()
       - pattern: /attendance/**
