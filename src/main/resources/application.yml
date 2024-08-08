@@ -12,8 +12,6 @@ micronaut:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
   security:
-    redirect:
-      login-success: /swagger-ui/index.html
     intercept-url-map:
       - pattern: /exception/**
         access: isAnonymous()
