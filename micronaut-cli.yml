@@ -27,6 +27,7 @@ features:
     readme,
     security,
     security-annotations,
+    security-jwt,
     serialization-jackson,
     shade,
     static-resources,
