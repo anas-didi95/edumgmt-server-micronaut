@@ -49,3 +49,8 @@ liquibase:
 logger:
   levels:
     com.anasdidi.edumgmt: DEBUG
+
+edumgmt:
+  basic-auth:
+    username: anas
+    password: password

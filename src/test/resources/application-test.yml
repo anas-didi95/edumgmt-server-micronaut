@@ -10,3 +10,8 @@ liquibase:
   datasources:
     default:
       drop-first: true
+
+edumgmt:
+  basic-auth:
+    username: testUsername
+    password: testPassword

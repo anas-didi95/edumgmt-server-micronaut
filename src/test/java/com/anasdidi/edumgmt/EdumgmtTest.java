@@ -4,6 +4,7 @@ package com.anasdidi.edumgmt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.anasdidi.edumgmt.common.factory.CommonProps;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -32,6 +33,7 @@ class EdumgmtTest {
 
   @Inject private EmbeddedApplication<?> application;
   @Inject private JsonMapper jsonMapper;
+  @Inject private CommonProps commonProps;
 
   @Test
   void testItWorks() {
@@ -48,8 +50,18 @@ class EdumgmtTest {
     HttpResponse<?> response =
         httpClient
             .toBlocking()
-            .exchange(HttpRequest.GET("/swagger-ui/index.html").basicAuth("sherlock", "password"));
+            .exchange(
+                HttpRequest.GET("/swagger-ui/index.html")
+                    .basicAuth(
+                        commonProps.getBasicAuth().username(),
+                        commonProps.getBasicAuth().password()));
     assertEquals(HttpStatus.OK, response.status());
+  }
+
+  @Test
+  void testCommonPropsSuccess() {
+    assertEquals("testUsername", commonProps.getBasicAuth().username());
+    assertEquals("testPassword", commonProps.getBasicAuth().password());
   }
 
   @ParameterizedTest
