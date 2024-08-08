@@ -8,6 +8,7 @@ import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.server.exceptions.response.ErrorResponseProcessor;
 import io.micronaut.security.authentication.AuthorizationException;
@@ -46,8 +47,14 @@ class AuthorizationExceptionHandler extends DefaultAuthorizationExceptionHandler
     if (e.isForbidden()) {
       return HttpResponse.status(HttpStatus.FORBIDDEN);
     }
-    return HttpResponse.status(HttpStatus.UNAUTHORIZED)
-        .header(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"edumgmt\"");
+
+    boolean isSwagger =
+        request.getHeaders().accept().stream().anyMatch(t -> t.matches(MediaType.ALL_TYPE));
+    if (isSwagger) {
+      return HttpResponse.status(HttpStatus.UNAUTHORIZED)
+          .header(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"edumgmt\"");
+    }
+    return super.httpResponseWithStatus(request, e);
   }
 
   @Override

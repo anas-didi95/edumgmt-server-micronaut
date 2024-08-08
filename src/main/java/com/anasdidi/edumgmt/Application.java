@@ -3,8 +3,12 @@ package com.anasdidi.edumgmt;
 
 import io.micronaut.runtime.Micronaut;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 
 @OpenAPIDefinition(
     info =
@@ -13,7 +17,14 @@ import io.swagger.v3.oas.annotations.info.Info;
             version = "0.1.0",
             description = "Education Management System",
             contact =
-                @Contact(name = "Anas Juwaidi Bin Mohd Jeffry", email = "anas.didi95@gmail.com")))
+                @Contact(name = "Anas Juwaidi Bin Mohd Jeffry", email = "anas.didi95@gmail.com")),
+    security = {@SecurityRequirement(name = "jwt")})
+@SecuritySchemes(
+    @SecurityScheme(
+        name = "jwt",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"))
 public class Application {
 
   public static void main(String[] args) {

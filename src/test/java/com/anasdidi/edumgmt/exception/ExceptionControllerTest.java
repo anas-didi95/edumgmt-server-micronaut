@@ -2,15 +2,23 @@
 package com.anasdidi.edumgmt.exception;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.anasdidi.edumgmt.common.client.TestClient;
 import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MutableHttpRequest;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
+import io.micronaut.security.authentication.UsernamePasswordCredentials;
+import io.micronaut.security.token.render.BearerAccessRefreshToken;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 @MicronautTest(environments = "test-exception")
 public class ExceptionControllerTest {
@@ -19,23 +27,52 @@ public class ExceptionControllerTest {
   @Client("/edumgmt/exception")
   private HttpClient httpClient;
 
+  @Inject TestClient testClient;
+
+  private String accessToken;
+
+  @BeforeEach
+  void a() {
+    if (accessToken != null) {
+      return;
+    }
+
+    UsernamePasswordCredentials credentials =
+        new UsernamePasswordCredentials("sherlock", "password");
+    HttpResponse<BearerAccessRefreshToken> response = testClient.login(credentials);
+    assertEquals(HttpStatus.OK, response.getStatus());
+    accessToken = response.body().getAccessToken();
+  }
+
   @Test
   void testRecordNotFoundError() {
-    try {
-      httpClient.toBlocking().exchange(HttpRequest.GET("/recordNotFoundError"));
-    } catch (HttpClientResponseException e) {
-      assertEquals(HttpStatus.BAD_REQUEST, e.getStatus());
-      assertEquals("Record not found!", e.getLocalizedMessage());
-    }
+    Executable e;
+    HttpClientResponseException ex;
+    MutableHttpRequest<?> req = HttpRequest.GET("/recordNotFoundError");
+
+    e = () -> httpClient.toBlocking().exchange(req);
+    ex = assertThrows(HttpClientResponseException.class, e);
+    assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatus());
+
+    e = () -> httpClient.toBlocking().exchange(req.bearerAuth(accessToken));
+    ex = assertThrows(HttpClientResponseException.class, e);
+    assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+    assertEquals("Record not found!", ex.getMessage());
   }
 
   @Test
   void testRecordNotMatchedError() {
-    try {
-      httpClient.toBlocking().exchange(HttpRequest.GET("/recordNotMatchedError"));
-    } catch (HttpClientResponseException e) {
-      assertEquals(HttpStatus.BAD_REQUEST, e.getStatus());
-      assertEquals("Record not matched!", e.getLocalizedMessage());
-    }
+    Executable e;
+    HttpClientResponseException ex;
+    MutableHttpRequest<?> req = HttpRequest.GET("/recordNotMatchedError");
+
+    e = () -> httpClient.toBlocking().exchange(req);
+    ex = assertThrows(HttpClientResponseException.class, e);
+    assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatus());
+
+    e = () -> httpClient.toBlocking().exchange(req.bearerAuth(accessToken));
+    ex = assertThrows(HttpClientResponseException.class, e);
+    assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+    assertEquals("Record not matched!", ex.getMessage());
   }
 }

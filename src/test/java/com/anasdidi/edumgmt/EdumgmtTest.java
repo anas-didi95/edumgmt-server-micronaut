@@ -9,6 +9,8 @@ import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.MutableHttpRequest;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
@@ -42,8 +44,10 @@ class EdumgmtTest {
 
   @Test
   void testSwaggerUISuccess() {
-    Executable e =
-        () -> httpClient.toBlocking().exchange(HttpRequest.GET("/swagger-ui/index.html"));
+    MutableHttpRequest<?> req =
+        HttpRequest.GET("/swagger-ui/index.html").accept(MediaType.ALL_TYPE);
+
+    Executable e = () -> httpClient.toBlocking().exchange(req);
     HttpClientResponseException thrown = assertThrows(HttpClientResponseException.class, e);
     assertEquals(HttpStatus.UNAUTHORIZED, thrown.getStatus());
 
@@ -51,10 +55,8 @@ class EdumgmtTest {
         httpClient
             .toBlocking()
             .exchange(
-                HttpRequest.GET("/swagger-ui/index.html")
-                    .basicAuth(
-                        commonProps.getBasicAuth().username(),
-                        commonProps.getBasicAuth().password()));
+                req.basicAuth(
+                    commonProps.getBasicAuth().username(), commonProps.getBasicAuth().password()));
     assertEquals(HttpStatus.OK, response.status());
   }
 

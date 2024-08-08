@@ -21,7 +21,7 @@ micronaut:
               secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
     intercept-url-map:
       - pattern: /exception/**
-        access: isAnonymous()
+        access: isAuthenticated()
       - pattern: /swagger/**
         access: isAuthenticated()
       - pattern: /swagger-ui/**
