@@ -1,6 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.auth.handler;
 
+import com.anasdidi.edumgmt.common.factory.CommonProps;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpHeaders;
@@ -15,17 +16,28 @@ import io.micronaut.security.config.RedirectConfiguration;
 import io.micronaut.security.config.RedirectService;
 import io.micronaut.security.errors.PriorToLoginPersistence;
 import jakarta.inject.Singleton;
+import java.util.Base64;
 
 @Singleton
 @Replaces(DefaultAuthorizationExceptionHandler.class)
 class AuthorizationExceptionHandler extends DefaultAuthorizationExceptionHandler {
 
-  public AuthorizationExceptionHandler(
+  private final String basicAuthHash;
+
+  AuthorizationExceptionHandler(
       ErrorResponseProcessor<?> errorResponseProcessor,
       RedirectConfiguration redirectConfiguration,
       RedirectService redirectService,
-      @Nullable PriorToLoginPersistence<?, ?> priorToLoginPersistence) {
+      @Nullable PriorToLoginPersistence<?, ?> priorToLoginPersistence,
+      CommonProps commonProps) {
     super(errorResponseProcessor, redirectConfiguration, redirectService, priorToLoginPersistence);
+    this.basicAuthHash =
+        Base64.getEncoder()
+            .encodeToString(
+                (commonProps.getBasicAuth().username()
+                        + ":"
+                        + commonProps.getBasicAuth().password())
+                    .getBytes());
   }
 
   @Override
@@ -36,5 +48,14 @@ class AuthorizationExceptionHandler extends DefaultAuthorizationExceptionHandler
     }
     return HttpResponse.status(HttpStatus.UNAUTHORIZED)
         .header(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"edumgmt\"");
+  }
+
+  @Override
+  protected String getRedirectUri(HttpRequest<?> request, AuthorizationException exception) {
+    String[] authArr = request.getHeaders().getAuthorization().orElse("").split(" ");
+    if (authArr.length == 2 && authArr[0].equals("Basic") && authArr[1].equals(basicAuthHash)) {
+      return "/edumgmt/swagger-ui/index.html";
+    }
+    return super.getRedirectUri(request, exception);
   }
 }
