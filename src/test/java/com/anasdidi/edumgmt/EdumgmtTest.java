@@ -45,7 +45,7 @@ class EdumgmtTest {
   @Test
   void testSwaggerUISuccess() {
     MutableHttpRequest<?> req =
-        HttpRequest.GET("/swagger-ui/index.html").accept(MediaType.ALL_TYPE);
+        HttpRequest.GET("/swagger-ui/index.html").accept(MediaType.TEXT_HTML_TYPE);
 
     Executable e = () -> httpClient.toBlocking().exchange(req);
     HttpClientResponseException thrown = assertThrows(HttpClientResponseException.class, e);

@@ -26,7 +26,8 @@ class AuthenticationProviderHandler implements HttpRequestAuthenticationProvider
       @Nullable HttpRequest<Object> requestContext,
       @NonNull AuthenticationRequest<String, String> authRequest) {
     boolean isSwagger =
-        requestContext.getHeaders().accept().stream().anyMatch(t -> t.matches(MediaType.ALL_TYPE));
+        requestContext.getHeaders().accept().stream()
+            .anyMatch(t -> t.matches(MediaType.TEXT_HTML_TYPE));
     if (isSwagger) {
       return authRequest.getIdentity().equals(commonProps.getBasicAuth().username())
               && authRequest.getSecret().equals(commonProps.getBasicAuth().password())

@@ -49,7 +49,7 @@ class AuthorizationExceptionHandler extends DefaultAuthorizationExceptionHandler
     }
 
     boolean isSwagger =
-        request.getHeaders().accept().stream().anyMatch(t -> t.matches(MediaType.ALL_TYPE));
+        request.getHeaders().accept().stream().anyMatch(t -> t.matches(MediaType.TEXT_HTML_TYPE));
     if (isSwagger) {
       return HttpResponse.status(HttpStatus.UNAUTHORIZED)
           .header(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"edumgmt\"");
