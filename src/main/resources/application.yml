@@ -11,6 +11,18 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
+  security:
+    intercept-url-map:
+      - pattern: /exception/**
+        access: isAnonymous()
+      - pattern: /swagger/**
+        access: isAnonymous()
+      - pattern: /swagger-ui/**
+        access: isAnonymous()
+      - pattern: /student/**
+        access: isAnonymous()
+      - pattern: /attendance/**
+        access: isAnonymous()
 
 datasources:
   default:

@@ -25,6 +25,8 @@ features:
     netty-server,
     openapi,
     readme,
+    security,
+    security-annotations,
     serialization-jackson,
     shade,
     static-resources,
