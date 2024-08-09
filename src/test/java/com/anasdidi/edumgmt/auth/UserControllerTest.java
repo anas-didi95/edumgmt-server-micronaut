@@ -5,50 +5,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.anasdidi.edumgmt.auth.client.AuthClient;
 import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
+import com.anasdidi.edumgmt.common.BaseControllerTest;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.json.JsonMapper;
-import io.micronaut.security.authentication.UsernamePasswordCredentials;
-import io.micronaut.security.token.render.BearerAccessRefreshToken;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 @MicronautTest(transactional = false)
-class UserControllerTest {
+class UserControllerTest extends BaseControllerTest {
 
   @Inject
   @Client("/edumgmt/user")
   private HttpClient userClient;
 
-  @Inject private AuthClient authClient;
   @Inject private UserRepository userRepository;
   @Inject private JsonMapper jsonMapper;
-  private String accessToken;
 
   @BeforeEach
   void beforeEach() {
-    accessToken =
-        Optional.ofNullable(accessToken)
-            .orElseGet(
-                () -> {
-                  UsernamePasswordCredentials credentials =
-                      new UsernamePasswordCredentials("sherlock", "password");
-                  HttpResponse<BearerAccessRefreshToken> response = authClient.login(credentials);
-                  assertEquals(HttpStatus.OK, response.getStatus());
-                  return response.body().getAccessToken();
-                });
+    setModuleTest(ModuleTest.AUTH);
     userRepository.deleteAll();
   }
 
@@ -66,7 +52,8 @@ class UserControllerTest {
     HttpResponse<ViewUserDTO> response =
         userClient
             .toBlocking()
-            .exchange(HttpRequest.POST("", reqBody).bearerAuth(accessToken), ViewUserDTO.class);
+            .exchange(
+                HttpRequest.POST("", reqBody).bearerAuth(getAccessToken()), ViewUserDTO.class);
     assertEquals(HttpStatus.CREATED, response.status());
 
     ViewUserDTO resBody = response.body();
@@ -79,9 +66,5 @@ class UserControllerTest {
     assertEquals(false, resBody.isDeleted());
     assertEquals(reqBody.userId(), resBody.userId());
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
-  }
-
-  private InputStream getFile(String fileName) {
-    return this.getClass().getResourceAsStream(String.format("/testcase/auth/%s", fileName));
   }
 }

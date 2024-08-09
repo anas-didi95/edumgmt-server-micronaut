@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.anasdidi.edumgmt.common.BaseControllerTest;
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
@@ -26,7 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 @MicronautTest(transactional = false)
-public class StudentControllerTest {
+public class StudentControllerTest extends BaseControllerTest {
 
   @Inject
   @Client("/edumgmt/student")
@@ -37,6 +38,7 @@ public class StudentControllerTest {
 
   @BeforeEach
   void beforeEach() {
+    setModuleTest(ModuleTest.STUDENT);
     studentRepository.deleteAll();
   }
 
@@ -140,9 +142,5 @@ public class StudentControllerTest {
     assertTrue(entity.getUpdatedDate().compareTo(entity.getCreatedDate()) > 0);
     assertEquals(1, entity.getVersion());
     assertEquals(true, entity.getIsDeleted());
-  }
-
-  private InputStream getFile(String fileName) {
-    return this.getClass().getResourceAsStream(String.format("/testcase/student/%s", fileName));
   }
 }

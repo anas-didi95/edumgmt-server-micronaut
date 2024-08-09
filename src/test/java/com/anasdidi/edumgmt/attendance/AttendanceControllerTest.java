@@ -13,6 +13,7 @@ import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.entity.Attendance;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceRepository;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceStudentRepository;
+import com.anasdidi.edumgmt.common.BaseControllerTest;
 import com.anasdidi.edumgmt.student.entity.Student;
 import com.anasdidi.edumgmt.student.repository.StudentRepository;
 import io.micronaut.http.HttpRequest;
@@ -29,7 +30,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 @MicronautTest(transactional = false)
-public class AttendanceControllerTest {
+public class AttendanceControllerTest extends BaseControllerTest {
 
   @Inject
   @Client("/edumgmt/attendance")
@@ -42,6 +43,7 @@ public class AttendanceControllerTest {
 
   @BeforeEach
   void beforeEach() {
+    setModuleTest(ModuleTest.ATTENDANCE);
     attendanceStudentRepository.deleteAll();
     studentRepository.deleteAll();
     attendanceRepository.deleteAll();
@@ -100,9 +102,5 @@ public class AttendanceControllerTest {
     ViewAttendanceStudentDTO resBody = response.body();
     assertEquals(attendance.getDate(), resBody.date());
     assertEquals(student.getName(), resBody.studentName());
-  }
-
-  private InputStream getFile(String fileName) {
-    return this.getClass().getResourceAsStream(String.format("/testcase/attendance/%s", fileName));
   }
 }
