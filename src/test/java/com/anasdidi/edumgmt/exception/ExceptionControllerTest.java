@@ -4,7 +4,7 @@ package com.anasdidi.edumgmt.exception;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.anasdidi.edumgmt.common.client.TestClient;
+import com.anasdidi.edumgmt.auth.client.AuthClient;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -16,6 +16,7 @@ import io.micronaut.security.authentication.UsernamePasswordCredentials;
 import io.micronaut.security.token.render.BearerAccessRefreshToken;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -27,21 +28,21 @@ public class ExceptionControllerTest {
   @Client("/edumgmt/exception")
   private HttpClient httpClient;
 
-  @Inject TestClient testClient;
-
+  @Inject private AuthClient authClient;
   private String accessToken;
 
   @BeforeEach
-  void a() {
-    if (accessToken != null) {
-      return;
-    }
-
-    UsernamePasswordCredentials credentials =
-        new UsernamePasswordCredentials("sherlock", "password");
-    HttpResponse<BearerAccessRefreshToken> response = testClient.login(credentials);
-    assertEquals(HttpStatus.OK, response.getStatus());
-    accessToken = response.body().getAccessToken();
+  void beforeEach() {
+    accessToken =
+        Optional.ofNullable(accessToken)
+            .orElseGet(
+                () -> {
+                  UsernamePasswordCredentials credentials =
+                      new UsernamePasswordCredentials("sherlock", "password");
+                  HttpResponse<BearerAccessRefreshToken> response = authClient.login(credentials);
+                  assertEquals(HttpStatus.OK, response.getStatus());
+                  return response.body().getAccessToken();
+                });
   }
 
   @Test

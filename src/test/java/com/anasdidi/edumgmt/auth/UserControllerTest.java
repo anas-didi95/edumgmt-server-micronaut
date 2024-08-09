@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.anasdidi.edumgmt.auth.client.AuthClient;
 import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
-import com.anasdidi.edumgmt.common.client.TestClient;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -20,6 +20,7 @@ import io.micronaut.security.token.render.BearerAccessRefreshToken;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -31,20 +32,23 @@ class UserControllerTest {
   @Client("/edumgmt/user")
   private HttpClient userClient;
 
-  @Inject private TestClient testClient;
+  @Inject private AuthClient authClient;
   @Inject private UserRepository userRepository;
   @Inject private JsonMapper jsonMapper;
   private String accessToken;
 
   @BeforeEach
   void beforeEach() {
-    if (accessToken == null) {
-      UsernamePasswordCredentials credentials =
-          new UsernamePasswordCredentials("sherlock", "password");
-      HttpResponse<BearerAccessRefreshToken> response = testClient.login(credentials);
-      assertEquals(HttpStatus.OK, response.getStatus());
-      accessToken = response.body().getAccessToken();
-    }
+    accessToken =
+        Optional.ofNullable(accessToken)
+            .orElseGet(
+                () -> {
+                  UsernamePasswordCredentials credentials =
+                      new UsernamePasswordCredentials("sherlock", "password");
+                  HttpResponse<BearerAccessRefreshToken> response = authClient.login(credentials);
+                  assertEquals(HttpStatus.OK, response.getStatus());
+                  return response.body().getAccessToken();
+                });
     userRepository.deleteAll();
   }
 
