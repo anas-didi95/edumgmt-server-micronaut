@@ -30,6 +30,8 @@ micronaut:
         access: isAnonymous()
       - pattern: /attendance/**
         access: isAnonymous()
+      - pattern: /user/**
+        access: isAuthenticated()
 
 datasources:
   default:
