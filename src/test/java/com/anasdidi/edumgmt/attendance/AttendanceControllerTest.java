@@ -61,7 +61,11 @@ public class AttendanceControllerTest extends BaseControllerTest {
     }
 
     HttpResponse<ViewAttendanceDTO> response =
-        httpClient.toBlocking().exchange(HttpRequest.POST("", reqBody), ViewAttendanceDTO.class);
+        httpClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.POST("", reqBody).bearerAuth(getAccessToken()),
+                ViewAttendanceDTO.class);
     assertEquals(HttpStatus.CREATED, response.getStatus());
 
     ViewAttendanceDTO resBody = response.body();
@@ -95,7 +99,7 @@ public class AttendanceControllerTest extends BaseControllerTest {
         httpClient
             .toBlocking()
             .exchange(
-                HttpRequest.POST("/" + attendance.getId(), reqBody),
+                HttpRequest.POST("/" + attendance.getId(), reqBody).bearerAuth(getAccessToken()),
                 ViewAttendanceStudentDTO.class);
     assertEquals(HttpStatus.OK, response.status());
 

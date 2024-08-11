@@ -54,7 +54,10 @@ public class StudentControllerTest extends BaseControllerTest {
     }
 
     HttpResponse<ViewStudentDTO> response =
-        httpClient.toBlocking().exchange(HttpRequest.POST("", reqBody), ViewStudentDTO.class);
+        httpClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.POST("", reqBody).bearerAuth(getAccessToken()), ViewStudentDTO.class);
     assertEquals(HttpStatus.CREATED, response.getStatus());
 
     ViewStudentDTO resBody = response.body();
@@ -84,7 +87,9 @@ public class StudentControllerTest extends BaseControllerTest {
     HttpResponse<ViewStudentDTO> response =
         httpClient
             .toBlocking()
-            .exchange(HttpRequest.GET("/" + entity.getId()), ViewStudentDTO.class);
+            .exchange(
+                HttpRequest.GET("/" + entity.getId()).bearerAuth(getAccessToken()),
+                ViewStudentDTO.class);
     assertEquals(HttpStatus.OK, response.status());
     assertEquals(entity.getId(), response.body().id());
   }
@@ -107,7 +112,9 @@ public class StudentControllerTest extends BaseControllerTest {
     HttpResponse<ViewStudentDTO> response =
         httpClient
             .toBlocking()
-            .exchange(HttpRequest.PUT("/" + entity.getId(), reqBody), ViewStudentDTO.class);
+            .exchange(
+                HttpRequest.PUT("/" + entity.getId(), reqBody).bearerAuth(getAccessToken()),
+                ViewStudentDTO.class);
     assertEquals(HttpStatus.OK, response.status());
 
     ViewStudentDTO resBody = response.body();
@@ -134,7 +141,9 @@ public class StudentControllerTest extends BaseControllerTest {
     HttpResponse<Void> response =
         httpClient
             .toBlocking()
-            .exchange(HttpRequest.DELETE("/" + entity.getId(), reqBody), Void.class);
+            .exchange(
+                HttpRequest.DELETE("/" + entity.getId(), reqBody).bearerAuth(getAccessToken()),
+                Void.class);
     assertEquals(HttpStatus.NO_CONTENT, response.status());
 
     entity = studentRepository.findById(entity.getId()).get();
