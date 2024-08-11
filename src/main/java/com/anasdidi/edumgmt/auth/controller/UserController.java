@@ -2,11 +2,13 @@
 package com.anasdidi.edumgmt.auth.controller;
 
 import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
+import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.service.IUserService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import java.util.UUID;
 
@@ -25,5 +27,13 @@ class UserController implements IUserController {
     UUID id = userService.createUser(reqBody);
     ViewUserDTO resBody = userService.viewUser(id);
     return HttpResponse.created(resBody);
+  }
+
+  @Override
+  @Post("/{id}")
+  public HttpResponse<ViewUserDTO> updateUser(@PathVariable UUID id, @Body UpdateUserDTO reqBody) {
+    UUID updateId = userService.updateUser(id, reqBody);
+    ViewUserDTO resBody = userService.viewUser(updateId);
+    return HttpResponse.ok(resBody);
   }
 }

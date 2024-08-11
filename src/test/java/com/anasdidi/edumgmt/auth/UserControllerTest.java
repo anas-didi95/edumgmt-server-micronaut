@@ -3,10 +3,13 @@ package com.anasdidi.edumgmt.auth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
+import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
+import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
 import com.anasdidi.edumgmt.common.BaseControllerTest;
 import io.micronaut.http.HttpRequest;
@@ -66,5 +69,33 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(false, resBody.isDeleted());
     assertEquals(reqBody.userId(), resBody.userId());
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createUser-input.json"})
+  void testUpdateUserSuccess(String input) {
+    User entity = null;
+
+    try (InputStream is = getFile(input)) {
+      entity = userRepository.save(jsonMapper.readValue(is, User.class));
+    } catch (Exception e) {
+      fail(e);
+    }
+
+    String newName = "abc" + System.currentTimeMillis();
+    UpdateUserDTO reqBody = new UpdateUserDTO(entity.getId(), entity.getVersion(), newName);
+    HttpResponse<ViewUserDTO> response =
+        userClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.POST("/" + entity.getId(), reqBody).bearerAuth(getAccessToken()),
+                ViewUserDTO.class);
+    assertEquals(HttpStatus.OK, response.status());
+
+    ViewUserDTO resBody = response.body();
+    assertNotNull(resBody.updatedBy());
+    assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
+    assertEquals(1, resBody.version());
+    assertEquals(newName.toUpperCase(), resBody.name());
   }
 }

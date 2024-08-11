@@ -7,6 +7,7 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.beans.BeanWrapper;
 import io.micronaut.data.event.EntityEventContext;
 import io.micronaut.data.event.listeners.PrePersistEventListener;
+import io.micronaut.data.event.listeners.PreUpdateEventListener;
 import jakarta.inject.Singleton;
 
 @Factory
@@ -23,14 +24,34 @@ class UserFactory {
 
       @Override
       public boolean prePersist(@NonNull EntityEventContext<User> context) {
-        User entity = context.getEntity();
-        BeanWrapper<User> bean = BeanWrapper.getWrapper(entity);
-
-        context.setProperty(
-            bean.getIntrospection().getRequiredProperty("name", String.class),
-            entity.getName().toUpperCase());
-        return true;
+        return handlePreSaveUser(context);
       }
     };
+  }
+
+  @Singleton
+  PreUpdateEventListener<User> preUpdateUser() {
+    return new PreUpdateEventListener<User>() {
+
+      @Override
+      public boolean preUpdate(@NonNull User entity) {
+        throw new UnsupportedOperationException("Unimplemented method 'preUpdate'");
+      }
+
+      @Override
+      public boolean preUpdate(@NonNull EntityEventContext<User> context) {
+        return handlePreSaveUser(context);
+      }
+    };
+  }
+
+  private boolean handlePreSaveUser(@NonNull EntityEventContext<User> context) {
+    User entity = context.getEntity();
+    BeanWrapper<User> bean = BeanWrapper.getWrapper(entity);
+
+    context.setProperty(
+        bean.getIntrospection().getRequiredProperty("name", String.class),
+        entity.getName().toUpperCase());
+    return true;
   }
 }
