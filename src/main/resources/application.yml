@@ -63,3 +63,5 @@ edumgmt:
   basic-auth:
     username: anas
     password: password
+  super-admin:
+    password: ${random.shortuuid}

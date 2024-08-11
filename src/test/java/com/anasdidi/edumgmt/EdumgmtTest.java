@@ -3,7 +3,9 @@ package com.anasdidi.edumgmt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.anasdidi.edumgmt.auth.repository.UserRepository;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
@@ -36,6 +38,7 @@ class EdumgmtTest {
   @Inject private EmbeddedApplication<?> application;
   @Inject private JsonMapper jsonMapper;
   @Inject private CommonProps commonProps;
+  @Inject private UserRepository userRepository;
 
   @Test
   void testItWorks() {
@@ -64,6 +67,12 @@ class EdumgmtTest {
   void testCommonPropsSuccess() {
     assertEquals("testUsername", commonProps.getBasicAuth().username());
     assertEquals("testPassword", commonProps.getBasicAuth().password());
+  }
+
+  @Test
+  void testOnStartupEventSuccess() {
+    assertTrue(application.isRunning());
+    assertTrue(userRepository.findByUserIdAndIsDeleted("super-admin", false).isPresent());
   }
 
   @ParameterizedTest

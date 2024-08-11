@@ -4,7 +4,11 @@ package com.anasdidi.edumgmt.auth.repository;
 import com.anasdidi.edumgmt.auth.entity.User;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, UUID> {}
+public interface UserRepository extends CrudRepository<User, UUID> {
+
+  Optional<User> findByUserIdAndIsDeleted(String userId, Boolean isDeleted);
+}

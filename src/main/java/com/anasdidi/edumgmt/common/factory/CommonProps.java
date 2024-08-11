@@ -18,4 +18,17 @@ public class CommonProps {
   public BasicAuth getBasicAuth() {
     return basicAuth;
   }
+
+  @ConfigurationProperties("super-admin")
+  public static record SuperAdmin(String password) {}
+
+  private SuperAdmin superAdmin;
+
+  public SuperAdmin getSuperAdmin() {
+    return superAdmin;
+  }
+
+  public void setSuperAdmin(SuperAdmin superAdmin) {
+    this.superAdmin = superAdmin;
+  }
 }
