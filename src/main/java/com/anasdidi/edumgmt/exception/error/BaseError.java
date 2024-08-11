@@ -2,6 +2,7 @@
 package com.anasdidi.edumgmt.exception.error;
 
 import com.anasdidi.edumgmt.exception.util.ErrorCode;
+import java.util.HashMap;
 import java.util.Map;
 
 abstract class BaseError extends RuntimeException {
@@ -21,5 +22,13 @@ abstract class BaseError extends RuntimeException {
         paramMap.entrySet().stream()
             .map(param -> "%s=%s".formatted(param.getKey(), param.getValue()))
             .toList());
+  }
+
+  protected static String parseParamMap(String[] fields, Object[] values) {
+    Map<String, Object> paramMap = new HashMap<>();
+    for (int i = 0; i < fields.length; i++) {
+      paramMap.put(fields[i] + "Matched", values[i]);
+    }
+    return parseParamMap(paramMap);
   }
 }

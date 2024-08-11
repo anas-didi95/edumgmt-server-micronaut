@@ -8,6 +8,7 @@ import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.mapper.UserMapper;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
+import com.anasdidi.edumgmt.common.service.BaseService;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
 import io.micronaut.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 @Singleton
 @Transactional
-class UserService implements IUserService {
+class UserService extends BaseService implements IUserService {
 
   private static final Logger logger = LoggerFactory.getLogger(UserService.class);
   private final UserMapper userMapper;
@@ -58,21 +59,16 @@ class UserService implements IUserService {
     }
 
     User entity = result.get();
-    boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
+    Boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
     if (!matched[0] || !matched[1]) {
-      RecordNotMatchedError error = new RecordNotMatchedError("updateUser", matched[0], matched[1]);
+      RecordNotMatchedError error =
+          new RecordNotMatchedError("updateUser", matched, "id", "version");
       logger.debug(error.logMessage);
       throw error;
     }
 
     entity.setName(dto.name());
     return userRepository.save(entity).getId();
-  }
-
-  private boolean[] checkRecordMatched(User entity, UUID id, Integer version) {
-    boolean idMatched = entity.getId().compareTo(id) == 0;
-    boolean versionMatched = entity.getVersion().compareTo(version) == 0;
-    return new boolean[] {idMatched, versionMatched};
   }
 
   @Override
@@ -85,9 +81,10 @@ class UserService implements IUserService {
     }
 
     User entity = result.get();
-    boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
+    Boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
     if (!matched[0] || !matched[1]) {
-      RecordNotMatchedError error = new RecordNotMatchedError("deleteUser", matched[0], matched[1]);
+      RecordNotMatchedError error =
+          new RecordNotMatchedError("deleteUser", matched, "id", "version");
       logger.debug(error.logMessage);
       throw error;
     }
