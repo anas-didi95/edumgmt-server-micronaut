@@ -2,6 +2,7 @@
 package com.anasdidi.edumgmt.auth.controller;
 
 import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
+import com.anasdidi.edumgmt.auth.dto.DeleteUserDTO;
 import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import io.micronaut.http.HttpResponse;
@@ -17,4 +18,7 @@ public interface IUserController {
 
   @Operation(summary = "Update existing user record")
   HttpResponse<ViewUserDTO> updateUser(UUID id, UpdateUserDTO reqBody);
+
+  @Operation(summary = "Delete existing user record")
+  HttpResponse<Void> deleteUser(UUID id, DeleteUserDTO reqBody);
 }

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
+import com.anasdidi.edumgmt.auth.dto.DeleteUserDTO;
 import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.entity.User;
@@ -97,5 +98,31 @@ class UserControllerTest extends BaseControllerTest {
     assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
     assertEquals(1, resBody.version());
     assertEquals(newName.toUpperCase(), resBody.name());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createUser-input.json"})
+  void testDeleteUserSuccess(String input) {
+    User entity = null;
+
+    try (InputStream is = getFile(input)) {
+      entity = userRepository.save(jsonMapper.readValue(is, User.class));
+    } catch (Exception e) {
+      fail(e);
+    }
+
+    DeleteUserDTO reqBody = new DeleteUserDTO(entity.getId(), entity.getVersion());
+    HttpResponse<Void> response =
+        userClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.DELETE("/" + entity.getId(), reqBody).bearerAuth(getAccessToken()));
+    assertEquals(HttpStatus.NO_CONTENT, response.status());
+
+    entity = userRepository.findById(entity.getId()).get();
+    assertNotNull(entity.getUpdatedBy());
+    assertTrue(entity.getUpdatedDate().compareTo(entity.getCreatedDate()) > 0);
+    assertEquals(1, entity.getVersion());
+    assertEquals(true, entity.getIsDeleted());
   }
 }

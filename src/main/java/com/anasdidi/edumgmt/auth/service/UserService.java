@@ -2,6 +2,7 @@
 package com.anasdidi.edumgmt.auth.service;
 
 import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
+import com.anasdidi.edumgmt.auth.dto.DeleteUserDTO;
 import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.entity.User;
@@ -72,5 +73,26 @@ class UserService implements IUserService {
     boolean idMatched = entity.getId().compareTo(id) == 0;
     boolean versionMatched = entity.getVersion().compareTo(version) == 0;
     return new boolean[] {idMatched, versionMatched};
+  }
+
+  @Override
+  public void deleteUser(UUID id, DeleteUserDTO dto) {
+    Optional<User> result = userRepository.findById(id);
+    if (result.isEmpty()) {
+      RecordNotFoundError error = new RecordNotFoundError("deleteUser", Map.of("id", id));
+      logger.debug(error.logMessage);
+      throw error;
+    }
+
+    User entity = result.get();
+    boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
+    if (!matched[0] || !matched[1]) {
+      RecordNotMatchedError error = new RecordNotMatchedError("deleteUser", matched[0], matched[1]);
+      logger.debug(error.logMessage);
+      throw error;
+    }
+
+    entity.setIsDeleted(true);
+    userRepository.save(entity);
   }
 }
