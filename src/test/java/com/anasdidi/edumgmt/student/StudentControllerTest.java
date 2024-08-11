@@ -101,7 +101,7 @@ public class StudentControllerTest extends BaseControllerTest {
       fail(e);
     }
 
-    String newName = "" + System.currentTimeMillis();
+    String newName = "abc" + System.currentTimeMillis();
     String newIcNo = "010203040506";
     UpdateStudentDTO reqBody = new UpdateStudentDTO(entity.getId(), newIcNo, newName, 0);
     HttpResponse<ViewStudentDTO> response =
@@ -114,7 +114,7 @@ public class StudentControllerTest extends BaseControllerTest {
     assertNotNull(resBody.updatedBy());
     assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
     assertEquals(1, resBody.version());
-    assertEquals(newName, resBody.name());
+    assertEquals(newName.toUpperCase(), resBody.name());
     assertEquals(newIcNo, resBody.icNo());
   }
 
