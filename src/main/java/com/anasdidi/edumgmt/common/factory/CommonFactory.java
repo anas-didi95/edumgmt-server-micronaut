@@ -10,6 +10,8 @@ import io.micronaut.core.beans.BeanWrapper;
 import io.micronaut.data.event.EntityEventContext;
 import io.micronaut.data.event.listeners.PrePersistEventListener;
 import jakarta.inject.Singleton;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Factory
 class CommonFactory {
@@ -17,6 +19,11 @@ class CommonFactory {
   @Singleton
   MessageSource messageSource() {
     return new ResourceBundleMessageSource("i18n.messages");
+  }
+
+  @Singleton
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 
   @Singleton

@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Singleton
 @Transactional
@@ -26,15 +27,19 @@ class UserService extends BaseService implements IUserService {
   private static final Logger logger = LoggerFactory.getLogger(UserService.class);
   private final UserMapper userMapper;
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-  UserService(UserMapper userMapper, UserRepository userRepository) {
+  UserService(
+      UserMapper userMapper, UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userMapper = userMapper;
     this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override
   public UUID createUser(CreateUserDTO dto) {
     User entity = userMapper.toEntity(dto);
+    entity.setPassword(passwordEncoder.encode(entity.getPassword()));
     return userRepository.save(entity).getId();
   }
 
