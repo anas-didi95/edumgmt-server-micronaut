@@ -11,10 +11,12 @@ import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import io.micronaut.security.authentication.provider.HttpRequestAuthenticationProvider;
 import jakarta.inject.Singleton;
+import java.util.Arrays;
 
 @Singleton
 class AuthenticationProviderHandler implements HttpRequestAuthenticationProvider<Object> {
 
+  private static final String ROLE_SWAGGER = "ROLE_SWAGGER";
   private final CommonProps commonProps;
 
   AuthenticationProviderHandler(CommonProps commonProps) {
@@ -31,7 +33,7 @@ class AuthenticationProviderHandler implements HttpRequestAuthenticationProvider
     if (isSwagger) {
       return authRequest.getIdentity().equals(commonProps.getBasicAuth().username())
               && authRequest.getSecret().equals(commonProps.getBasicAuth().password())
-          ? AuthenticationResponse.success(authRequest.getIdentity())
+          ? AuthenticationResponse.success(authRequest.getIdentity(), Arrays.asList(ROLE_SWAGGER))
           : AuthenticationResponse.failure(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);
     }
 

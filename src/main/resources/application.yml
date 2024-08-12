@@ -23,9 +23,9 @@ micronaut:
       - pattern: /exception/**
         access: isAuthenticated()
       - pattern: /swagger/**
-        access: isAuthenticated()
+        access: ROLE_SWAGGER
       - pattern: /swagger-ui/**
-        access: isAuthenticated()
+        access: ROLE_SWAGGER
       - pattern: /student/**
         access: isAuthenticated()
       - pattern: /attendance/**
