@@ -42,9 +42,10 @@ class UserControllerTest extends BaseControllerTest {
     userRepository.deleteAll();
   }
 
+  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createUser-input.json"})
-  void testCreateUserSuccess(String input) {
+  void testCreateUser_Success(String input) {
     CreateUserDTO reqBody = null;
 
     try (InputStream iFile = getFile(input)) {
@@ -72,9 +73,10 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
   }
 
+  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createUser-input.json"})
-  void testUpdateUserSuccess(String input) {
+  void testUpdateUser_Success(String input) {
     User entity = null;
 
     try (InputStream is = getFile(input)) {
@@ -100,9 +102,10 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(newName.toUpperCase(), resBody.name());
   }
 
+  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createUser-input.json"})
-  void testDeleteUserSuccess(String input) {
+  void testDeleteUser_Success(String input) {
     User entity = null;
 
     try (InputStream is = getFile(input)) {

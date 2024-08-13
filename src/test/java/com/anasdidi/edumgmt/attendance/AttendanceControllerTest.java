@@ -49,9 +49,10 @@ public class AttendanceControllerTest extends BaseControllerTest {
     attendanceRepository.deleteAll();
   }
 
+  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createAttendance-input.json"})
-  void testCreateAttendanceSuccess(String input) {
+  void testCreateAttendance_Success(String input) {
     CreateAttendanceDTO reqBody = null;
 
     try (InputStream iFile = getFile(input)) {
@@ -80,9 +81,10 @@ public class AttendanceControllerTest extends BaseControllerTest {
     assertEquals(reqBody.remark(), resBody.remark());
   }
 
+  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createAttendance-input.json,createStudent-input.json"})
-  void testCreateAttendanceStudentSuccess(String s1, String s2) {
+  void testCreateAttendanceStudent_Success(String s1, String s2) {
     Attendance attendance = null;
     Student student = null;
 

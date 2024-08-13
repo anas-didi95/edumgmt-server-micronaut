@@ -24,7 +24,7 @@ public class ExceptionControllerTest extends BaseControllerTest {
   private HttpClient httpClient;
 
   @Test
-  void testRecordNotFoundError() {
+  void testRecordNotFoundError_Success() {
     Executable e;
     HttpClientResponseException ex;
     MutableHttpRequest<?> req = HttpRequest.GET("/recordNotFoundError");
@@ -40,7 +40,7 @@ public class ExceptionControllerTest extends BaseControllerTest {
   }
 
   @Test
-  void testRecordNotMatchedError() {
+  void testRecordNotMatchedError_Success() {
     Executable e;
     HttpClientResponseException ex;
     MutableHttpRequest<?> req = HttpRequest.GET("/recordNotMatchedError");

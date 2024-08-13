@@ -42,9 +42,10 @@ public class StudentControllerTest extends BaseControllerTest {
     studentRepository.deleteAll();
   }
 
+  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
-  void testCreateStudentSuccess(String input) {
+  void testCreateStudent_Success(String input) {
     CreateStudentDTO reqBody = null;
 
     try (InputStream iFile = getFile(input)) {
@@ -72,9 +73,10 @@ public class StudentControllerTest extends BaseControllerTest {
     assertEquals(reqBody.icNo(), resBody.icNo());
   }
 
+  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
-  void testViewStudentSuccess(String file) {
+  void testViewStudent_Success(String file) {
     Student entity = null;
 
     try (InputStream is = getFile(file)) {
@@ -94,9 +96,10 @@ public class StudentControllerTest extends BaseControllerTest {
     assertEquals(entity.getId(), response.body().id());
   }
 
+  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
-  void testUpdateStudentSuccess(String file) {
+  void testUpdateStudent_Success(String file) {
     Student entity = null;
 
     try (InputStream is = getFile(file)) {
@@ -125,9 +128,10 @@ public class StudentControllerTest extends BaseControllerTest {
     assertEquals(newIcNo, resBody.icNo());
   }
 
+  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
-  void testDeleteStudentSuccess(String file) {
+  void testDeleteStudent_Success(String file) {
     Student entity = null;
 
     try (InputStream is = getFile(file)) {
