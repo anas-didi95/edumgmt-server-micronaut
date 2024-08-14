@@ -34,8 +34,8 @@ dependencies {
 	aotPlugins platform("io.micronaut.platform:micronaut-platform:4.5.1")
 	aotPlugins("io.micronaut.security:micronaut-security-aot")
 
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
-	implementation("org.springframework.boot:spring-boot-starter-security:3.3.2")
+	implementation("org.springframework.security:spring-security-crypto:6.2.0")
+	implementation("org.slf4j:jcl-over-slf4j")
 }
 
 
