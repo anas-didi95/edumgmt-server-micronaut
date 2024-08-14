@@ -42,7 +42,6 @@ class UserControllerTest extends BaseControllerTest {
     userRepository.deleteAll();
   }
 
-  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createUser-input.json"})
   void testCreateUser_Success(String input) {
@@ -73,7 +72,6 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
   }
 
-  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createUser-input.json"})
   void testUpdateUser_Success(String input) {
@@ -102,7 +100,6 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(newName.toUpperCase(), resBody.name());
   }
 
-  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createUser-input.json"})
   void testDeleteUser_Success(String input) {

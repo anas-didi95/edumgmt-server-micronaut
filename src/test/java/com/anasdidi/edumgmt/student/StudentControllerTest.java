@@ -42,7 +42,6 @@ public class StudentControllerTest extends BaseControllerTest {
     studentRepository.deleteAll();
   }
 
-  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
   void testCreateStudent_Success(String input) {
@@ -73,7 +72,6 @@ public class StudentControllerTest extends BaseControllerTest {
     assertEquals(reqBody.icNo(), resBody.icNo());
   }
 
-  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
   void testViewStudent_Success(String file) {
@@ -96,7 +94,6 @@ public class StudentControllerTest extends BaseControllerTest {
     assertEquals(entity.getId(), response.body().id());
   }
 
-  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
   void testUpdateStudent_Success(String file) {
@@ -128,7 +125,6 @@ public class StudentControllerTest extends BaseControllerTest {
     assertEquals(newIcNo, resBody.icNo());
   }
 
-  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
   void testDeleteStudent_Success(String file) {

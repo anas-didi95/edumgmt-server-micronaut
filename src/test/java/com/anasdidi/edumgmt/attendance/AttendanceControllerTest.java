@@ -49,7 +49,6 @@ public class AttendanceControllerTest extends BaseControllerTest {
     attendanceRepository.deleteAll();
   }
 
-  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createAttendance-input.json"})
   void testCreateAttendance_Success(String input) {
@@ -81,7 +80,6 @@ public class AttendanceControllerTest extends BaseControllerTest {
     assertEquals(reqBody.remark(), resBody.remark());
   }
 
-  @SuppressWarnings("null")
   @ParameterizedTest
   @CsvSource({"createAttendance-input.json,createStudent-input.json"})
   void testCreateAttendanceStudent_Success(String s1, String s2) {
