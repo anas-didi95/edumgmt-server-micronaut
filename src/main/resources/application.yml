@@ -57,7 +57,7 @@ liquibase:
 
 logger:
   levels:
-    com.anasdidi.edumgmt: DEBUG
+    com.anasdidi.edumgmt: TRACE
 
 edumgmt:
   basic-auth:

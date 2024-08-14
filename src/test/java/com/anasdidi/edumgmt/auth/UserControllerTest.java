@@ -70,6 +70,7 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(false, resBody.isDeleted());
     assertEquals(reqBody.userId(), resBody.userId());
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
+    assertTrue(reqBody.roles().containsAll(resBody.roles()));
   }
 
   @ParameterizedTest

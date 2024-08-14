@@ -9,6 +9,7 @@ import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 import java.util.Optional;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +41,7 @@ class CommonEvent {
       entity.setUserId(SUPERADMIN_ID);
       entity.setPassword(commonProps.getSuperAdmin().password());
       entity.setName("SuperAdmin");
+      entity.setRoles(Set.of("ROLE_SUPERADMIN"));
       userRepository.save(entity);
       logger.info(
           "[onStartupEvent] SuperAdmin created: {}", commonProps.getSuperAdmin().password());
