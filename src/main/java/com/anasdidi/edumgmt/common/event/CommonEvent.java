@@ -33,17 +33,19 @@ class CommonEvent {
   @EventListener
   @Transactional
   void onStartupEvent(StartupEvent event) {
+    String password = passwordEncoder.encode(commonProps.getSuperAdmin().password());
+
     Optional<User> result = userRepository.findByUserIdAndIsDeleted(SUPERADMIN_ID, false);
     if (result.isPresent()) {
       User entity = result.get();
-      entity.setPassword(passwordEncoder.encode(commonProps.getSuperAdmin().password()));
+      entity.setPassword(password);
       userRepository.save(entity);
       logger.info(
           "[onStartupEvent] SuperAdmin updated: {}", commonProps.getSuperAdmin().password());
     } else {
       User entity = new User();
       entity.setUserId(SUPERADMIN_ID);
-      entity.setPassword(passwordEncoder.encode(commonProps.getSuperAdmin().password()));
+      entity.setPassword(password);
       entity.setName("SuperAdmin");
       entity.setRoles(Set.of("ROLE_SUPERADMIN"));
       userRepository.save(entity);

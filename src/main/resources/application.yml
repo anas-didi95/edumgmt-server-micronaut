@@ -27,11 +27,11 @@ micronaut:
       - pattern: /swagger-ui/**
         access: ROLE_SWAGGER
       - pattern: /student/**
-        access: isAuthenticated()
+        access: ROLE_SUPERADMIN,ROLE_TEACHER
       - pattern: /attendance/**
-        access: isAuthenticated()
+        access: ROLE_SUPERADMIN,ROLE_TEACHER
       - pattern: /user/**
-        access: isAuthenticated()
+        access: ROLE_SUPERADMIN,ROLE_TEACHER
 
 datasources:
   default:
