@@ -15,3 +15,7 @@ edumgmt:
   basic-auth:
     username: testUsername
     password: testPassword
+  test-user:
+    username: unittest
+    password: p@ssw0rd
+    roles: ROLE_TEACHER

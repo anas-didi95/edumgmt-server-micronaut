@@ -4,6 +4,7 @@ package com.anasdidi.edumgmt.common;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.anasdidi.edumgmt.auth.client.AuthClient;
+import com.anasdidi.edumgmt.common.factory.CommonProps;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.security.authentication.UsernamePasswordCredentials;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public abstract class BaseControllerTest {
 
   @Inject private AuthClient authClient;
+  @Inject private CommonProps commonProps;
   private String accessToken;
   private ModuleTest moduleTest;
 
@@ -27,7 +29,8 @@ public abstract class BaseControllerTest {
         .orElseGet(
             () -> {
               UsernamePasswordCredentials credentials =
-                  new UsernamePasswordCredentials("sherlock", "password");
+                  new UsernamePasswordCredentials(
+                      commonProps.getTestUser().username(), commonProps.getTestUser().password());
               HttpResponse<BearerAccessRefreshToken> response = authClient.login(credentials);
               assertEquals(HttpStatus.OK, response.getStatus());
               return response.body().getAccessToken();

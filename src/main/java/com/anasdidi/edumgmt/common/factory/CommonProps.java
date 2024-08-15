@@ -2,6 +2,8 @@
 package com.anasdidi.edumgmt.common.factory;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
+import io.micronaut.context.annotation.Requires;
+import java.util.Set;
 
 @ConfigurationProperties("edumgmt")
 public class CommonProps {
@@ -30,5 +32,19 @@ public class CommonProps {
 
   public void setSuperAdmin(SuperAdmin superAdmin) {
     this.superAdmin = superAdmin;
+  }
+
+  @ConfigurationProperties("test-user")
+  @Requires(env = "test")
+  public static record TestUser(String username, String password, Set<String> roles) {}
+
+  private TestUser testUser;
+
+  public TestUser getTestUser() {
+    return testUser;
+  }
+
+  public void setTestUser(TestUser testUser) {
+    this.testUser = testUser;
   }
 }
