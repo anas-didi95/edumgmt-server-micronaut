@@ -24,6 +24,7 @@ import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -47,10 +48,10 @@ class UserControllerTest extends BaseControllerTest {
 
     CreateUserDTO dto =
         new CreateUserDTO(
-            commonProps.getTestUser().username(),
-            commonProps.getTestUser().password(),
-            "test user",
-            commonProps.getTestUser().roles());
+            "super-admin",
+            commonProps.getSuperAdmin().password(),
+            "SuperAdmin",
+            Set.of("ROLE_SUPERADMIN"));
     userService.createUser(dto);
   }
 
@@ -69,7 +70,7 @@ class UserControllerTest extends BaseControllerTest {
         userClient
             .toBlocking()
             .exchange(
-                HttpRequest.POST("", reqBody).bearerAuth(getAccessToken()), ViewUserDTO.class);
+                HttpRequest.POST("", reqBody).bearerAuth(getAccessToken(true)), ViewUserDTO.class);
     assertEquals(HttpStatus.CREATED, response.status());
 
     ViewUserDTO resBody = response.body();
@@ -102,7 +103,7 @@ class UserControllerTest extends BaseControllerTest {
         userClient
             .toBlocking()
             .exchange(
-                HttpRequest.POST("/" + entity.getId(), reqBody).bearerAuth(getAccessToken()),
+                HttpRequest.POST("/" + entity.getId(), reqBody).bearerAuth(getAccessToken(true)),
                 ViewUserDTO.class);
     assertEquals(HttpStatus.OK, response.status());
 
@@ -129,7 +130,7 @@ class UserControllerTest extends BaseControllerTest {
         userClient
             .toBlocking()
             .exchange(
-                HttpRequest.DELETE("/" + entity.getId(), reqBody).bearerAuth(getAccessToken()));
+                HttpRequest.DELETE("/" + entity.getId(), reqBody).bearerAuth(getAccessToken(true)));
     assertEquals(HttpStatus.NO_CONTENT, response.status());
 
     entity = userRepository.findById(entity.getId()).get();

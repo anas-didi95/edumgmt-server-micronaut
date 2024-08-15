@@ -31,7 +31,7 @@ micronaut:
       - pattern: /attendance/**
         access: ROLE_SUPERADMIN,ROLE_TEACHER
       - pattern: /user/**
-        access: ROLE_SUPERADMIN,ROLE_TEACHER
+        access: ROLE_SUPERADMIN
 
 datasources:
   default:

@@ -25,12 +25,21 @@ public abstract class BaseControllerTest {
   }
 
   protected String getAccessToken() {
+    return getAccessToken(false);
+  }
+
+  protected String getAccessToken(boolean isSuperAdmin) {
+    String username = isSuperAdmin ? "super-admin" : commonProps.getTestUser().username();
+    String password =
+        isSuperAdmin
+            ? commonProps.getSuperAdmin().password()
+            : commonProps.getTestUser().password();
+
     return Optional.ofNullable(accessToken)
         .orElseGet(
             () -> {
               UsernamePasswordCredentials credentials =
-                  new UsernamePasswordCredentials(
-                      commonProps.getTestUser().username(), commonProps.getTestUser().password());
+                  new UsernamePasswordCredentials(username, password);
               HttpResponse<BearerAccessRefreshToken> response = authClient.login(credentials);
               assertEquals(HttpStatus.OK, response.getStatus());
               return response.body().getAccessToken();
