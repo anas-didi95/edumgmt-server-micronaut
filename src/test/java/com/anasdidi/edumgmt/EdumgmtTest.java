@@ -76,7 +76,8 @@ class EdumgmtTest {
   void testOnStartupEventSuccess() {
     assertTrue(application.isRunning());
 
-    Optional<User> result = userRepository.findByUserIdAndIsDeleted("super-admin", false);
+    Optional<User> result =
+        userRepository.findByUserIdAndIsDeleted(Constant.SUPERADMIN_USER, false);
     assertTrue(result.isPresent());
 
     User user = result.get();

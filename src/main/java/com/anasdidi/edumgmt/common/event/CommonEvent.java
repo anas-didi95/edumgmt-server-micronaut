@@ -4,6 +4,7 @@ package com.anasdidi.edumgmt.common.event;
 import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
+import com.anasdidi.edumgmt.common.util.Constant;
 import io.micronaut.context.event.StartupEvent;
 import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.transaction.annotation.Transactional;
@@ -17,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Singleton
 class CommonEvent {
 
-  private static final String SUPERADMIN_ID = "super-admin";
   private static final Logger logger = LoggerFactory.getLogger(CommonEvent.class);
   private final UserRepository userRepository;
   private final CommonProps commonProps;
@@ -35,7 +35,8 @@ class CommonEvent {
   void onStartupEvent(StartupEvent event) {
     String password = passwordEncoder.encode(commonProps.getSuperAdmin().password());
 
-    Optional<User> result = userRepository.findByUserIdAndIsDeleted(SUPERADMIN_ID, false);
+    Optional<User> result =
+        userRepository.findByUserIdAndIsDeleted(Constant.SUPERADMIN_USER, false);
     if (result.isPresent()) {
       User entity = result.get();
       entity.setPassword(password);
@@ -44,7 +45,7 @@ class CommonEvent {
           "[onStartupEvent] SuperAdmin updated: {}", commonProps.getSuperAdmin().password());
     } else {
       User entity = new User();
-      entity.setUserId(SUPERADMIN_ID);
+      entity.setUserId(Constant.SUPERADMIN_USER);
       entity.setPassword(password);
       entity.setName("SuperAdmin");
       entity.setRoles(Set.of("ROLE_SUPERADMIN"));

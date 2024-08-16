@@ -49,7 +49,7 @@ class UserControllerTest extends BaseControllerTest {
 
     CreateUserDTO dto =
         new CreateUserDTO(
-            "super-admin",
+            Constant.SUPERADMIN_USER,
             commonProps.getSuperAdmin().password(),
             "SuperAdmin",
             Set.of("ROLE_SUPERADMIN"));
