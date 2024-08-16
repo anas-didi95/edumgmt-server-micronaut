@@ -15,6 +15,7 @@ import com.anasdidi.edumgmt.auth.repository.UserRepository;
 import com.anasdidi.edumgmt.auth.service.IUserService;
 import com.anasdidi.edumgmt.common.BaseControllerTest;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
+import com.anasdidi.edumgmt.common.util.Constant;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -75,7 +76,7 @@ class UserControllerTest extends BaseControllerTest {
 
     ViewUserDTO resBody = response.body();
     assertNotNull(resBody.id());
-    assertNotNull(resBody.createdBy());
+    assertEquals(Constant.SUPERADMIN_USER, resBody.createdBy());
     assertNotNull(resBody.createdDate());
     assertEquals(resBody.createdBy(), resBody.updatedBy());
     assertEquals(resBody.createdDate(), resBody.updatedDate());
@@ -108,7 +109,7 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(HttpStatus.OK, response.status());
 
     ViewUserDTO resBody = response.body();
-    assertNotNull(resBody.updatedBy());
+    assertEquals(Constant.SUPERADMIN_USER, resBody.updatedBy());
     assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
     assertEquals(1, resBody.version());
     assertEquals(newName.toUpperCase(), resBody.name());
@@ -134,7 +135,7 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(HttpStatus.NO_CONTENT, response.status());
 
     entity = userRepository.findById(entity.getId()).get();
-    assertNotNull(entity.getUpdatedBy());
+    assertEquals(Constant.SUPERADMIN_USER, entity.getUpdatedBy());
     assertTrue(entity.getUpdatedDate().compareTo(entity.getCreatedDate()) > 0);
     assertEquals(1, entity.getVersion());
     assertEquals(true, entity.getIsDeleted());

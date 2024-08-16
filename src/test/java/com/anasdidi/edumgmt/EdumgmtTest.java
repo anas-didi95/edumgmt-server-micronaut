@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
+import com.anasdidi.edumgmt.common.util.Constant;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -22,6 +24,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -72,7 +75,12 @@ class EdumgmtTest {
   @Test
   void testOnStartupEventSuccess() {
     assertTrue(application.isRunning());
-    assertTrue(userRepository.findByUserIdAndIsDeleted("super-admin", false).isPresent());
+
+    Optional<User> result = userRepository.findByUserIdAndIsDeleted("super-admin", false);
+    assertTrue(result.isPresent());
+
+    User user = result.get();
+    assertEquals(Constant.SYSTEM_USER, user.getCreatedBy());
   }
 
   @ParameterizedTest

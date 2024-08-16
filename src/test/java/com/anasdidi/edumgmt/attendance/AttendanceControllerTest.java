@@ -14,6 +14,7 @@ import com.anasdidi.edumgmt.attendance.entity.Attendance;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceRepository;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceStudentRepository;
 import com.anasdidi.edumgmt.common.BaseControllerTest;
+import com.anasdidi.edumgmt.common.factory.CommonProps;
 import com.anasdidi.edumgmt.student.entity.Student;
 import com.anasdidi.edumgmt.student.repository.StudentRepository;
 import io.micronaut.http.HttpRequest;
@@ -40,6 +41,7 @@ public class AttendanceControllerTest extends BaseControllerTest {
   @Inject private AttendanceRepository attendanceRepository;
   @Inject private StudentRepository studentRepository;
   @Inject private AttendanceStudentRepository attendanceStudentRepository;
+  @Inject private CommonProps commonProps;
 
   @BeforeEach
   void beforeEach() {
@@ -70,7 +72,7 @@ public class AttendanceControllerTest extends BaseControllerTest {
 
     ViewAttendanceDTO resBody = response.body();
     assertNotNull(resBody.id());
-    assertNotNull(resBody.createdBy());
+    assertEquals(commonProps.getTestUser().username(), resBody.createdBy());
     assertNotNull(resBody.createdDate());
     assertEquals(resBody.createdBy(), resBody.updatedBy());
     assertEquals(resBody.createdDate(), resBody.updatedDate());
