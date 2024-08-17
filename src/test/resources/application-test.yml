@@ -16,11 +16,6 @@ datasources:
     username: sa
     password: sa
 
-liquibase:
-  datasources:
-    default:
-      drop-first: true
-
 logger:
   levels:
     com.anasdidi.edumgmt: TRACE
@@ -29,6 +24,8 @@ edumgmt:
   basic-auth:
     username: testUsername
     password: testPassword
+  super-admin:
+    password: ${random.shortuuid}
   test-user:
     username: unittest
     password: p@ssw0rd

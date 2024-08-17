@@ -16,11 +16,6 @@ datasources:
     username: sa
     password: sa
 
-liquibase:
-  datasources:
-    default:
-      change-log: classpath:/db/db.changelog-main.yml
-
 logger:
   levels:
     com.anasdidi.edumgmt: TRACE
