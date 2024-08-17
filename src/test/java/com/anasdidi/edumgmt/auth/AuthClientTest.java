@@ -7,12 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.anasdidi.edumgmt.auth.client.AuthClient;
+import com.anasdidi.edumgmt.auth.dto.LogoutUserDTO;
 import com.anasdidi.edumgmt.auth.repository.UserTokenRepository;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
+import com.anasdidi.edumgmt.common.util.Constant;
 import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
+import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.client.HttpClient;
+import io.micronaut.http.client.annotation.Client;
 import io.micronaut.security.authentication.UsernamePasswordCredentials;
 import io.micronaut.security.endpoints.TokenRefreshRequest;
 import io.micronaut.security.token.render.AccessRefreshToken;
@@ -24,6 +29,10 @@ import org.junit.jupiter.api.Test;
 
 @MicronautTest(transactional = false)
 public class AuthClientTest {
+
+  @Inject
+  @Client("/edumgmt/auth/logout")
+  private HttpClient logoutClient;
 
   @Inject private CommonProps commonProps;
   @Inject private AuthClient authClient;
@@ -68,5 +77,33 @@ public class AuthClientTest {
     AccessRefreshToken resBody2 = response2.body();
     assertNotNull(resBody2.getAccessToken());
     assertNotEquals(resBody.getAccessToken(), resBody2.getAccessToken());
+  }
+
+  @Test
+  void testLogout_Success() throws InterruptedException {
+    userTokenRepository.deleteAll();
+    long oldCount = userTokenRepository.count();
+    UsernamePasswordCredentials creds1 =
+        new UsernamePasswordCredentials(
+            Constant.SUPERADMIN_USER, commonProps.getSuperAdmin().password());
+    authClient.login(creds1);
+
+    UsernamePasswordCredentials creds =
+        new UsernamePasswordCredentials(
+            commonProps.getTestUser().username(), commonProps.getTestUser().password());
+    HttpResponse<BearerAccessRefreshToken> response = authClient.login(creds);
+    assertEquals(oldCount + 2, userTokenRepository.count());
+
+    BearerAccessRefreshToken resBody = response.body();
+    HttpResponse<LogoutUserDTO> response2 =
+        logoutClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.POST("", null).bearerAuth(resBody.getAccessToken()),
+                LogoutUserDTO.class);
+    assertEquals(HttpStatus.OK, response2.status());
+
+    LogoutUserDTO resBody2 = response2.body();
+    assertEquals(1, resBody2.totalRevokedToken());
   }
 }

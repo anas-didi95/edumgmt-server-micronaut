@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface UserTokenRepository extends CrudRepository<UserToken, UUID> {
 
   Optional<UserToken> findByToken(String token);
+
+  Number updateByUserId(String userId, Boolean isDeleted);
 }
