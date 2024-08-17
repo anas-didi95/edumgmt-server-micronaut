@@ -9,6 +9,8 @@ micronaut:
         generator:
           refresh-token:
             secret: pleaseChangeThisSecretForANewOne
+        claims-validators:
+          issuer: jwt-issuer
 
 datasources:
   default:

@@ -9,6 +9,8 @@ micronaut:
         generator:
           refresh-token:
             secret: ${JWT_REFRESH_TOKEN_SECRET}
+        claims-validators:
+          issuer: edumgmt-${random.shortuuid}
 
 datasources:
   default:
