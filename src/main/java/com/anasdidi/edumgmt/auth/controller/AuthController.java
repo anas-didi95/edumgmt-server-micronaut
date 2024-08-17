@@ -2,25 +2,14 @@
 package com.anasdidi.edumgmt.auth.controller;
 
 import com.anasdidi.edumgmt.auth.dto.LogoutUserDTO;
-import com.anasdidi.edumgmt.auth.service.IAuthService;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Post;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.security.Principal;
 
-@Controller("/auth")
-class AuthController implements IAuthController {
+@Tag(name = "auth")
+public interface AuthController {
 
-  private final IAuthService authService;
-
-  AuthController(IAuthService authService) {
-    this.authService = authService;
-  }
-
-  @Override
-  @Post("/logout")
-  public HttpResponse<LogoutUserDTO> logout(Principal principal) {
-    LogoutUserDTO resBody = authService.logout(principal);
-    return HttpResponse.ok(resBody);
-  }
+  @Operation(summary = "Logout user and revoked token")
+  HttpResponse<LogoutUserDTO> logout(Principal principal);
 }
