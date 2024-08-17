@@ -25,7 +25,7 @@ public class AuthClientTest {
   @Inject private AuthClient authClient;
 
   @Test
-  void testGetAccessToken_Success() throws ParseException {
+  void testGetAccessTokenRefreshToken_Success() throws ParseException {
     UsernamePasswordCredentials creds =
         new UsernamePasswordCredentials(
             commonProps.getTestUser().username(), commonProps.getTestUser().password());
@@ -35,7 +35,7 @@ public class AuthClientTest {
     BearerAccessRefreshToken resBody = response.body();
     assertEquals(commonProps.getTestUser().username(), resBody.getUsername());
     assertNotNull(resBody.getAccessToken());
-    // assertNotNull(resBody.getRefreshToken());
+    assertNotNull(resBody.getRefreshToken());
     assertTrue(JWTParser.parse(resBody.getAccessToken()) instanceof SignedJWT);
   }
 }

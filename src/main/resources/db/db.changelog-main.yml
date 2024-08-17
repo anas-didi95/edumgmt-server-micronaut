@@ -7,3 +7,5 @@ databaseChangeLog:
       file: classpath:/db/changelog/db.changelog-3.t_attendance_student-1.sql
   - include:
       file: classpath:/db/changelog/db.changelog-4.t_user-1.sql
+  - include:
+      file: classpath:/db/changelog/db.changelog-5.t_user_token-1.sql
