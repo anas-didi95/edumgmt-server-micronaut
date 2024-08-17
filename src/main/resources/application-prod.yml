@@ -1,0 +1,28 @@
+micronaut:
+  security:
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_ACCESS_TOKEN_SECRET}
+        generator:
+          refresh-token:
+            secret: ${JWT_REFRESH_TOKEN_SECRET}
+
+datasources:
+  default:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+logger:
+  levels:
+    com.anasdidi.edumgmt: DEBUG
+
+edumgmt:
+  basic-auth:
+    username: ${BASIC_AUTH_USERNAME}
+    password: ${BASIC_AUTH_PASSWORD}
+  super-admin:
+    password: ${SUPER_ADMIN_PASSWORD_1}${random.shortuuid}${SUPER_ADMIN_PASSWORD_2}
