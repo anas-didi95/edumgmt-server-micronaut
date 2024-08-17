@@ -42,6 +42,9 @@ public class AuthClientTest {
     assertNotNull(resBody.getAccessToken());
     assertNotNull(resBody.getRefreshToken());
     assertTrue(JWTParser.parse(resBody.getAccessToken()) instanceof SignedJWT);
+
+    System.out.println("accessToken\n" + resBody.getAccessToken());
+    System.out.println("refreshToken\n" + resBody.getRefreshToken());
   }
 
   @Test

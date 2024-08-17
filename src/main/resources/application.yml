@@ -31,3 +31,7 @@ liquibase:
   datasources:
     default:
       change-log: classpath:/db/db.changelog-main.yml
+
+edumgmt:
+  jwt:
+    issuer: ${micronaut.security.token.jwt.claims-validators.issuer}

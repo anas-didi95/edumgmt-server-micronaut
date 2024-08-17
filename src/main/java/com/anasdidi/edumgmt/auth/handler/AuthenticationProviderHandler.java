@@ -12,8 +12,10 @@ import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import io.micronaut.security.authentication.provider.HttpRequestAuthenticationProvider;
+import io.micronaut.security.token.Claims;
 import jakarta.inject.Singleton;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +65,9 @@ class AuthenticationProviderHandler implements HttpRequestAuthenticationProvider
         "[authenticate] matches={}",
         passwordEncoder.matches(authRequest.getSecret(), user.getPassword()));
 
+    Map<String, Object> attributeMap = Map.of(Claims.ISSUER, commonProps.getJwt().issuer());
     return passwordEncoder.matches(authRequest.getSecret(), user.getPassword())
-        ? AuthenticationResponse.success(authRequest.getIdentity(), user.getRoles())
+        ? AuthenticationResponse.success(authRequest.getIdentity(), user.getRoles(), attributeMap)
         : AuthenticationResponse.failure(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);
   }
 }
