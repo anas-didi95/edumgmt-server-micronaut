@@ -1,6 +1,7 @@
 .h2/
 .gradle-cache/
 .vscode-server/
+.env
 
 # Compiled class file
 *.class
