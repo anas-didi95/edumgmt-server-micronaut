@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.anasdidi.edumgmt.common.BaseControllerTest;
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
@@ -26,7 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 @MicronautTest(transactional = false)
-public class StudentControllerTest {
+public class StudentControllerTest extends BaseControllerTest {
 
   @Inject
   @Client("/edumgmt/student")
@@ -37,12 +38,13 @@ public class StudentControllerTest {
 
   @BeforeEach
   void beforeEach() {
+    setModuleTest(ModuleTest.STUDENT);
     studentRepository.deleteAll();
   }
 
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
-  void testCreateStudentSuccess(String input) {
+  void testCreateStudent_Success(String input) {
     CreateStudentDTO reqBody = null;
 
     try (InputStream iFile = getFile(input)) {
@@ -52,7 +54,10 @@ public class StudentControllerTest {
     }
 
     HttpResponse<ViewStudentDTO> response =
-        httpClient.toBlocking().exchange(HttpRequest.POST("", reqBody), ViewStudentDTO.class);
+        httpClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.POST("", reqBody).bearerAuth(getAccessToken()), ViewStudentDTO.class);
     assertEquals(HttpStatus.CREATED, response.getStatus());
 
     ViewStudentDTO resBody = response.body();
@@ -69,7 +74,7 @@ public class StudentControllerTest {
 
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
-  void testViewStudentSuccess(String file) {
+  void testViewStudent_Success(String file) {
     Student entity = null;
 
     try (InputStream is = getFile(file)) {
@@ -82,14 +87,16 @@ public class StudentControllerTest {
     HttpResponse<ViewStudentDTO> response =
         httpClient
             .toBlocking()
-            .exchange(HttpRequest.GET("/" + entity.getId()), ViewStudentDTO.class);
+            .exchange(
+                HttpRequest.GET("/" + entity.getId()).bearerAuth(getAccessToken()),
+                ViewStudentDTO.class);
     assertEquals(HttpStatus.OK, response.status());
     assertEquals(entity.getId(), response.body().id());
   }
 
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
-  void testUpdateStudentSuccess(String file) {
+  void testUpdateStudent_Success(String file) {
     Student entity = null;
 
     try (InputStream is = getFile(file)) {
@@ -99,26 +106,28 @@ public class StudentControllerTest {
       fail(e);
     }
 
-    String newName = "" + System.currentTimeMillis();
+    String newName = "abc" + System.currentTimeMillis();
     String newIcNo = "010203040506";
     UpdateStudentDTO reqBody = new UpdateStudentDTO(entity.getId(), newIcNo, newName, 0);
     HttpResponse<ViewStudentDTO> response =
         httpClient
             .toBlocking()
-            .exchange(HttpRequest.PUT("/" + entity.getId(), reqBody), ViewStudentDTO.class);
+            .exchange(
+                HttpRequest.PUT("/" + entity.getId(), reqBody).bearerAuth(getAccessToken()),
+                ViewStudentDTO.class);
     assertEquals(HttpStatus.OK, response.status());
 
     ViewStudentDTO resBody = response.body();
     assertNotNull(resBody.updatedBy());
     assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
     assertEquals(1, resBody.version());
-    assertEquals(newName, resBody.name());
+    assertEquals(newName.toUpperCase(), resBody.name());
     assertEquals(newIcNo, resBody.icNo());
   }
 
   @ParameterizedTest
   @CsvSource({"createStudent-input.json"})
-  void testDeleteStudentSuccess(String file) {
+  void testDeleteStudent_Success(String file) {
     Student entity = null;
 
     try (InputStream is = getFile(file)) {
@@ -132,7 +141,9 @@ public class StudentControllerTest {
     HttpResponse<Void> response =
         httpClient
             .toBlocking()
-            .exchange(HttpRequest.DELETE("/" + entity.getId(), reqBody), Void.class);
+            .exchange(
+                HttpRequest.DELETE("/" + entity.getId(), reqBody).bearerAuth(getAccessToken()),
+                Void.class);
     assertEquals(HttpStatus.NO_CONTENT, response.status());
 
     entity = studentRepository.findById(entity.getId()).get();
@@ -140,9 +151,5 @@ public class StudentControllerTest {
     assertTrue(entity.getUpdatedDate().compareTo(entity.getCreatedDate()) > 0);
     assertEquals(1, entity.getVersion());
     assertEquals(true, entity.getIsDeleted());
-  }
-
-  private InputStream getFile(String fileName) {
-    return this.getClass().getResourceAsStream(String.format("/testcase/student/%s", fileName));
   }
 }

@@ -5,10 +5,10 @@ import com.anasdidi.edumgmt.exception.util.ErrorCode;
 
 public final class RecordNotMatchedError extends BaseError {
 
-  public RecordNotMatchedError(String methodName, boolean idMatched, boolean versionMatched) {
+  public RecordNotMatchedError(String methodName, Boolean[] matched, String... fields) {
     super(
         ErrorCode.RECORD_NOT_MATCHED,
         methodName,
-        "Record not matched! idMatched=%b, versionMatched=%b".formatted(idMatched, versionMatched));
+        "Record not matched! %s".formatted(parseParamMap(fields, matched)));
   }
 }

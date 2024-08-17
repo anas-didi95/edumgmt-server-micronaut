@@ -22,6 +22,6 @@ class ExceptionController {
 
   @Get("/recordNotMatchedError")
   HttpResponse<Void> recordNotMatchedError() {
-    throw new RecordNotMatchedError("methodName", false, false);
+    throw new RecordNotMatchedError("methodName", new Boolean[] {false}, "test");
   }
 }

@@ -13,6 +13,8 @@ import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.entity.Attendance;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceRepository;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceStudentRepository;
+import com.anasdidi.edumgmt.common.BaseControllerTest;
+import com.anasdidi.edumgmt.common.factory.CommonProps;
 import com.anasdidi.edumgmt.student.entity.Student;
 import com.anasdidi.edumgmt.student.repository.StudentRepository;
 import io.micronaut.http.HttpRequest;
@@ -29,7 +31,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 @MicronautTest(transactional = false)
-public class AttendanceControllerTest {
+public class AttendanceControllerTest extends BaseControllerTest {
 
   @Inject
   @Client("/edumgmt/attendance")
@@ -39,9 +41,11 @@ public class AttendanceControllerTest {
   @Inject private AttendanceRepository attendanceRepository;
   @Inject private StudentRepository studentRepository;
   @Inject private AttendanceStudentRepository attendanceStudentRepository;
+  @Inject private CommonProps commonProps;
 
   @BeforeEach
   void beforeEach() {
+    setModuleTest(ModuleTest.ATTENDANCE);
     attendanceStudentRepository.deleteAll();
     studentRepository.deleteAll();
     attendanceRepository.deleteAll();
@@ -49,7 +53,7 @@ public class AttendanceControllerTest {
 
   @ParameterizedTest
   @CsvSource({"createAttendance-input.json"})
-  void testCreateAttendanceSuccess(String input) {
+  void testCreateAttendance_Success(String input) {
     CreateAttendanceDTO reqBody = null;
 
     try (InputStream iFile = getFile(input)) {
@@ -59,12 +63,16 @@ public class AttendanceControllerTest {
     }
 
     HttpResponse<ViewAttendanceDTO> response =
-        httpClient.toBlocking().exchange(HttpRequest.POST("", reqBody), ViewAttendanceDTO.class);
+        httpClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.POST("", reqBody).bearerAuth(getAccessToken()),
+                ViewAttendanceDTO.class);
     assertEquals(HttpStatus.CREATED, response.getStatus());
 
     ViewAttendanceDTO resBody = response.body();
     assertNotNull(resBody.id());
-    assertNotNull(resBody.createdBy());
+    assertEquals(commonProps.getTestUser().username(), resBody.createdBy());
     assertNotNull(resBody.createdDate());
     assertEquals(resBody.createdBy(), resBody.updatedBy());
     assertEquals(resBody.createdDate(), resBody.updatedDate());
@@ -76,7 +84,7 @@ public class AttendanceControllerTest {
 
   @ParameterizedTest
   @CsvSource({"createAttendance-input.json,createStudent-input.json"})
-  void testCreateAttendanceStudentSuccess(String s1, String s2) {
+  void testCreateAttendanceStudent_Success(String s1, String s2) {
     Attendance attendance = null;
     Student student = null;
 
@@ -93,16 +101,12 @@ public class AttendanceControllerTest {
         httpClient
             .toBlocking()
             .exchange(
-                HttpRequest.POST("/" + attendance.getId(), reqBody),
+                HttpRequest.POST("/" + attendance.getId(), reqBody).bearerAuth(getAccessToken()),
                 ViewAttendanceStudentDTO.class);
     assertEquals(HttpStatus.OK, response.status());
 
     ViewAttendanceStudentDTO resBody = response.body();
     assertEquals(attendance.getDate(), resBody.date());
     assertEquals(student.getName(), resBody.studentName());
-  }
-
-  private InputStream getFile(String fileName) {
-    return this.getClass().getResourceAsStream(String.format("/testcase/attendance/%s", fileName));
   }
 }

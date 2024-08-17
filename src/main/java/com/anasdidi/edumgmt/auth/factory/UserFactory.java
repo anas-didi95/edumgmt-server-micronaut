@@ -1,7 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
-package com.anasdidi.edumgmt.student.factory;
+package com.anasdidi.edumgmt.auth.factory;
 
-import com.anasdidi.edumgmt.student.entity.Student;
+import com.anasdidi.edumgmt.auth.entity.User;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.beans.BeanWrapper;
@@ -11,43 +11,43 @@ import io.micronaut.data.event.listeners.PreUpdateEventListener;
 import jakarta.inject.Singleton;
 
 @Factory
-class StudentFactory {
+class UserFactory {
 
   @Singleton
-  PrePersistEventListener<Student> prePresistStudent() {
-    return new PrePersistEventListener<Student>() {
+  PrePersistEventListener<User> prePresistUser() {
+    return new PrePersistEventListener<User>() {
 
       @Override
-      public boolean prePersist(@NonNull Student entity) {
+      public boolean prePersist(@NonNull User entity) {
         throw new UnsupportedOperationException("Unimplemented method 'prePersist'");
       }
 
       @Override
-      public boolean prePersist(@NonNull EntityEventContext<Student> context) {
-        return handlePreSaveStudent(context);
+      public boolean prePersist(@NonNull EntityEventContext<User> context) {
+        return handlePreSaveUser(context);
       }
     };
   }
 
   @Singleton
-  PreUpdateEventListener<Student> preUpdateStudent() {
-    return new PreUpdateEventListener<Student>() {
+  PreUpdateEventListener<User> preUpdateUser() {
+    return new PreUpdateEventListener<User>() {
 
       @Override
-      public boolean preUpdate(@NonNull Student entity) {
+      public boolean preUpdate(@NonNull User entity) {
         throw new UnsupportedOperationException("Unimplemented method 'preUpdate'");
       }
 
       @Override
-      public boolean preUpdate(@NonNull EntityEventContext<Student> context) {
-        return handlePreSaveStudent(context);
+      public boolean preUpdate(@NonNull EntityEventContext<User> context) {
+        return handlePreSaveUser(context);
       }
     };
   }
 
-  private boolean handlePreSaveStudent(@NonNull EntityEventContext<Student> context) {
-    Student entity = context.getEntity();
-    BeanWrapper<Student> bean = BeanWrapper.getWrapper(entity);
+  private boolean handlePreSaveUser(@NonNull EntityEventContext<User> context) {
+    User entity = context.getEntity();
+    BeanWrapper<User> bean = BeanWrapper.getWrapper(entity);
 
     context.setProperty(
         bean.getIntrospection().getRequiredProperty("name", String.class),

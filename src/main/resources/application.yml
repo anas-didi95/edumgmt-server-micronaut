@@ -11,6 +11,30 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
+  security:
+    authentication: bearer
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
+        generator:
+          refresh-token:
+            secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
+    intercept-url-map:
+      - pattern: /exception/**
+        access: isAuthenticated()
+      - pattern: /swagger/**
+        access: ROLE_SWAGGER
+      - pattern: /swagger-ui/**
+        access: ROLE_SWAGGER
+      - pattern: /student/**
+        access: ROLE_SUPERADMIN,ROLE_TEACHER
+      - pattern: /attendance/**
+        access: ROLE_SUPERADMIN,ROLE_TEACHER
+      - pattern: /user/**
+        access: ROLE_SUPERADMIN
 
 datasources:
   default:
@@ -36,4 +60,11 @@ liquibase:
 
 logger:
   levels:
-    com.anasdidi.edumgmt: DEBUG
+    com.anasdidi.edumgmt: TRACE
+
+edumgmt:
+  basic-auth:
+    username: anas
+    password: password
+  super-admin:
+    password: ${random.shortuuid}

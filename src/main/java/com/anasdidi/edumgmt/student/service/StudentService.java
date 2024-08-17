@@ -1,6 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.student.service;
 
+import com.anasdidi.edumgmt.common.service.BaseService;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
@@ -21,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 @Singleton
 @Transactional
-class StudentService implements IStudentService {
+class StudentService extends BaseService implements IStudentService {
 
   private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
   private final StudentRepository studentRepository;
@@ -60,10 +61,10 @@ class StudentService implements IStudentService {
     }
 
     Student entity = result.get();
-    boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
+    Boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
     if (!matched[0] || !matched[1]) {
       RecordNotMatchedError error =
-          new RecordNotMatchedError("updateStudent", matched[0], matched[1]);
+          new RecordNotMatchedError("updateStudent", matched, "id", "version");
       logger.debug(error.logMessage, error);
       throw error;
     }
@@ -83,21 +84,15 @@ class StudentService implements IStudentService {
     }
 
     Student entity = result.get();
-    boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
+    Boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
     if (!matched[0] || !matched[1]) {
       RecordNotMatchedError error =
-          new RecordNotMatchedError("deleteStudent", matched[0], matched[1]);
+          new RecordNotMatchedError("deleteStudent", matched, "id", "version");
       logger.debug(error.logMessage, error);
       throw error;
     }
 
     entity.setIsDeleted(true);
     studentRepository.save(entity);
-  }
-
-  private boolean[] checkRecordMatched(Student entity, UUID id, Integer version) {
-    boolean idMatched = entity.getId().compareTo(id) == 0;
-    boolean versionMatched = entity.getVersion().compareTo(version) == 0;
-    return new boolean[] {idMatched, versionMatched};
   }
 }
