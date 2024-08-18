@@ -31,6 +31,15 @@ micronaut:
       - pattern: /auth/**
         access: isAuthenticated()
 
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: validate
+        show_sql: false
+        format_sql: false
+
 liquibase:
   datasources:
     default:
