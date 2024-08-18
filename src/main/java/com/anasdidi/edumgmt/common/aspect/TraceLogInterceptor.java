@@ -7,6 +7,7 @@ import io.micronaut.aop.MethodInvocationContext;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.annotation.Controller;
 import jakarta.inject.Singleton;
+import java.security.Principal;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -40,7 +41,15 @@ class TraceLogInterceptor implements MethodInterceptor<Object, Object> {
             ? String.join(
                 ", ",
                 context.getParameterValueMap().entrySet().stream()
-                    .map(o -> "%s=%s".formatted(o.getKey(), o.getValue()))
+                    .map(
+                        o -> {
+                          String value =
+                              switch (o.getValue()) {
+                                case Principal o2 -> o2.getName();
+                                default -> o.getValue().toString();
+                              };
+                          return "%s=%s".formatted(o.getKey(), value);
+                        })
                     .toList())
             : "No parameter";
     logger.trace("[{}] REQ: {}", classMethod, parameters);
