@@ -12,7 +12,7 @@ import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
-import com.anasdidi.edumgmt.auth.service.IUserService;
+import com.anasdidi.edumgmt.auth.service.UserService;
 import com.anasdidi.edumgmt.common.BaseControllerTest;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
 import com.anasdidi.edumgmt.common.util.Constant;
@@ -39,7 +39,7 @@ class UserControllerTest extends BaseControllerTest {
 
   @Inject private UserRepository userRepository;
   @Inject private JsonMapper jsonMapper;
-  @Inject private IUserService userService;
+  @Inject private UserService userService;
   @Inject private CommonProps commonProps;
 
   @BeforeEach

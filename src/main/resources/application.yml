@@ -3,6 +3,8 @@ micronaut:
     name: edumgmt
   server:
     context-path: /${micronaut.application.name}
+    cors:
+      enabled: true
   router:
     static-resources:
       swagger:
@@ -13,15 +15,6 @@ micronaut:
         mapping: /swagger-ui/**
   security:
     authentication: bearer
-    token:
-      jwt:
-        signatures:
-          secret:
-            generator:
-              secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
-        generator:
-          refresh-token:
-            secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
     intercept-url-map:
       - pattern: /exception/**
         access: isAuthenticated()
@@ -35,14 +28,8 @@ micronaut:
         access: ROLE_SUPERADMIN,ROLE_TEACHER
       - pattern: /user/**
         access: ROLE_SUPERADMIN
-
-datasources:
-  default:
-    url: jdbc:h2:./.h2/edumgmt;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090
-    username: sa
-    password: sa
-    driver-class-name: org.h2.Driver
-    dialect: H2
+      - pattern: /auth/**
+        access: isAuthenticated()
 
 jpa:
   default:
@@ -58,13 +45,6 @@ liquibase:
     default:
       change-log: classpath:/db/db.changelog-main.yml
 
-logger:
-  levels:
-    com.anasdidi.edumgmt: TRACE
-
 edumgmt:
-  basic-auth:
-    username: anas
-    password: password
-  super-admin:
-    password: ${random.shortuuid}
+  jwt:
+    issuer: ${micronaut.security.token.jwt.claims-validators.issuer}

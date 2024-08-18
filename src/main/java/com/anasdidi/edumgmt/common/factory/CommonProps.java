@@ -34,6 +34,19 @@ public class CommonProps {
     this.superAdmin = superAdmin;
   }
 
+  @ConfigurationProperties("jwt")
+  public static record Jwt(String issuer) {}
+
+  private Jwt jwt;
+
+  public Jwt getJwt() {
+    return jwt;
+  }
+
+  public void setJwt(Jwt jwt) {
+    this.jwt = jwt;
+  }
+
   @ConfigurationProperties("test-user")
   @Requires(env = "test")
   public static record TestUser(String username, String password, Set<String> roles) {}

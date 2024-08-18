@@ -5,39 +5,18 @@ import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
-import com.anasdidi.edumgmt.attendance.service.IAttendanceService;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.PathVariable;
-import io.micronaut.http.annotation.Post;
-import jakarta.inject.Inject;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 
-@Controller("/attendance")
-class AttendanceController implements IAttendanceController {
+@Tag(name = "attendance")
+public interface AttendanceController {
 
-  private final IAttendanceService attendanceService;
+  @Operation(summary = "Add new attendance record")
+  HttpResponse<ViewAttendanceDTO> createAttendance(CreateAttendanceDTO reqBody);
 
-  @Inject
-  AttendanceController(IAttendanceService attendanceService) {
-    this.attendanceService = attendanceService;
-  }
-
-  @Override
-  @Post
-  public HttpResponse<ViewAttendanceDTO> createAttendance(@Body CreateAttendanceDTO reqBody) {
-    UUID id = attendanceService.createAttendance(reqBody);
-    ViewAttendanceDTO resBody = attendanceService.viewAttendance(id);
-    return HttpResponse.created(resBody);
-  }
-
-  @Override
-  @Post("/{attendanceId}")
-  public HttpResponse<ViewAttendanceStudentDTO> createAttendanceStudent(
-      @PathVariable UUID attendanceId, @Body CreateAttendanceStudentDTO reqBody) {
-    UUID attendanceStudentId = attendanceService.createAttendanceStudent(attendanceId, reqBody);
-    ViewAttendanceStudentDTO resBody = attendanceService.viewAttendanceStudent(attendanceStudentId);
-    return HttpResponse.ok(resBody);
-  }
+  @Operation(summary = "Add new attendance student record")
+  HttpResponse<ViewAttendanceStudentDTO> createAttendanceStudent(
+      UUID attendanceId, CreateAttendanceStudentDTO reqBody);
 }

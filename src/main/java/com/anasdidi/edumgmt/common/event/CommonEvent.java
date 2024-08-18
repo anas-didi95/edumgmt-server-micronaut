@@ -9,6 +9,9 @@ import io.micronaut.context.event.StartupEvent;
 import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -19,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class CommonEvent {
 
   private static final Logger logger = LoggerFactory.getLogger(CommonEvent.class);
+  private static final String FILE_SUPERADMIN = "/var/tmp/edumgmt.super-admin.txt";
   private final UserRepository userRepository;
   private final CommonProps commonProps;
   private final PasswordEncoder passwordEncoder;
@@ -33,7 +37,8 @@ class CommonEvent {
   @EventListener
   @Transactional
   void onStartupEvent(StartupEvent event) {
-    String password = passwordEncoder.encode(commonProps.getSuperAdmin().password());
+    String rawPassword = commonProps.getSuperAdmin().password();
+    String password = passwordEncoder.encode(rawPassword);
 
     Optional<User> result =
         userRepository.findByUserIdAndIsDeleted(Constant.SUPERADMIN_USER, false);
@@ -41,7 +46,7 @@ class CommonEvent {
       User entity = result.get();
       entity.setPassword(password);
       userRepository.save(entity);
-      logger.info(
+      logger.trace(
           "[onStartupEvent] SuperAdmin updated: {}", commonProps.getSuperAdmin().password());
     } else {
       User entity = new User();
@@ -50,8 +55,17 @@ class CommonEvent {
       entity.setName("SuperAdmin");
       entity.setRoles(Set.of("ROLE_SUPERADMIN"));
       userRepository.save(entity);
-      logger.info(
+      logger.trace(
           "[onStartupEvent] SuperAdmin created: {}", commonProps.getSuperAdmin().password());
+    }
+
+    try (FileWriter fileWriter = new FileWriter(FILE_SUPERADMIN);
+        PrintWriter printWriter = new PrintWriter(fileWriter); ) {
+      printWriter.println(rawPassword);
+      logger.info("[onStartupEvent] Write file {}", FILE_SUPERADMIN);
+    } catch (IOException e) {
+      logger.error("[onStartupEvent] Fail to write to file!", e);
+      throw new RuntimeException(e);
     }
   }
 }
