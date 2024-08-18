@@ -40,14 +40,14 @@ public class AuthClientTest {
 
   @Test
   void testLogin_Success() throws ParseException {
-    UsernamePasswordCredentials creds =
-        new UsernamePasswordCredentials(
-            commonProps.getTestUser().username(), commonProps.getTestUser().password());
+    String username = Constant.SUPERADMIN_USER;
+    String password = commonProps.getSuperAdmin().password();
+    UsernamePasswordCredentials creds = new UsernamePasswordCredentials(username, password);
     HttpResponse<BearerAccessRefreshToken> response = authClient.login(creds);
     assertEquals(HttpStatus.OK, response.status());
 
     BearerAccessRefreshToken resBody = response.body();
-    assertEquals(commonProps.getTestUser().username(), resBody.getUsername());
+    assertEquals(username, resBody.getUsername());
     assertNotNull(resBody.getAccessToken());
     assertNotNull(resBody.getRefreshToken());
     assertTrue(JWTParser.parse(resBody.getAccessToken()) instanceof SignedJWT);
