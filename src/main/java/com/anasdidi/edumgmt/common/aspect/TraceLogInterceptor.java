@@ -27,15 +27,6 @@ class TraceLogInterceptor implements MethodInterceptor<Object, Object> {
 
   @Override
   public @Nullable Object intercept(MethodInvocationContext<Object, Object> context) {
-    boolean isController = context.hasAnnotation(Controller.class);
-    if (isController) {
-      traceContext.setTraceId(UUID.randomUUID());
-      MDC.put("traceId", traceContext.getTraceId().toString());
-    }
-
-    String classMethod =
-        "%s.%s".formatted(context.getDeclaringType().getSimpleName(), context.getMethodName());
-
     String parameters =
         context.getParameterValueMap().size() > 0
             ? String.join(
@@ -52,6 +43,15 @@ class TraceLogInterceptor implements MethodInterceptor<Object, Object> {
                         })
                     .toList())
             : "No parameter";
+    boolean isController = context.hasAnnotation(Controller.class);
+    if (isController) {
+      traceContext.setTraceId(UUID.randomUUID());
+      traceContext.setRequestParam(parameters);
+      MDC.put("traceId", traceContext.getTraceId().toString());
+    }
+
+    String classMethod =
+        "%s.%s".formatted(context.getDeclaringType().getSimpleName(), context.getMethodName());
     logger.trace("[{}] REQ: {}", classMethod, parameters);
 
     Object result = context.proceed();

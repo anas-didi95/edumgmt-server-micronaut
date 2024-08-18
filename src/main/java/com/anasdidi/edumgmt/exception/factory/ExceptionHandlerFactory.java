@@ -1,6 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.exception.factory;
 
+import com.anasdidi.edumgmt.common.aspect.TraceContext;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
 import com.anasdidi.edumgmt.exception.util.ErrorCode;
@@ -16,18 +17,25 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Arrays;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Factory
 class ExceptionHandlerFactory {
 
+  private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerFactory.class);
   private final ErrorResponseProcessor<?> processor;
   private final LocalizedMessageSource messageSource;
+  private final TraceContext traceContext;
 
   @Inject
   ExceptionHandlerFactory(
-      ErrorResponseProcessor<?> processor, LocalizedMessageSource messageSource) {
+      ErrorResponseProcessor<?> processor,
+      LocalizedMessageSource messageSource,
+      TraceContext traceContext) {
     this.processor = processor;
     this.messageSource = messageSource;
+    this.traceContext = traceContext;
   }
 
   @Singleton
@@ -36,8 +44,12 @@ class ExceptionHandlerFactory {
     return (request, exception) -> {
       HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
       ErrorCode error = exception.error;
-      String message = getMessage(error, httpStatus);
-      List<String> messageList = Arrays.asList(error.code, message);
+      String message = getMessage(error, httpStatus, traceContext.getTraceId());
+      List<String> messageList =
+          Arrays.asList(error.code, message, traceContext.getTraceId().toString());
+
+      logger.debug("[recordNotFoundError] errorCode={}, message={}", error.code, message);
+      logger.debug("[recordNotFoundError] requestParam={}", traceContext.getRequestParam());
 
       return processor.processResponse(
           ErrorContext.builder(request).cause(exception).errorMessages(messageList).build(),
@@ -60,7 +72,8 @@ class ExceptionHandlerFactory {
     };
   }
 
-  private String getMessage(ErrorCode error, HttpStatus httpStatus) {
-    return messageSource.getMessageOrDefault("error." + error.code, httpStatus.getReason());
+  private String getMessage(ErrorCode error, HttpStatus httpStatus, Object... variables) {
+    return messageSource.getMessageOrDefault(
+        "error." + error.code, httpStatus.getReason(), variables);
   }
 }

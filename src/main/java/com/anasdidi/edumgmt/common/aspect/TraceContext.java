@@ -8,6 +8,7 @@ import java.util.UUID;
 public class TraceContext {
 
   private UUID traceId;
+  private String requestParam;
 
   public UUID getTraceId() {
     return traceId;
@@ -15,5 +16,13 @@ public class TraceContext {
 
   public void setTraceId(UUID traceId) {
     this.traceId = traceId;
+  }
+
+  public String getRequestParam() {
+    return requestParam;
+  }
+
+  public void setRequestParam(String requestParam) {
+    this.requestParam = requestParam;
   }
 }
