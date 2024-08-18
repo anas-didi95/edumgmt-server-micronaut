@@ -13,13 +13,10 @@ import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Controller("/user")
 class UserControllerImpl implements UserController {
 
-  private static final Logger logger = LoggerFactory.getLogger(UserControllerImpl.class);
   private final UserService userService;
 
   UserControllerImpl(UserService userService) {
@@ -31,9 +28,6 @@ class UserControllerImpl implements UserController {
   public HttpResponse<ViewUserDTO> createUser(@Body CreateUserDTO reqBody) {
     UUID id = userService.createUser(reqBody);
     ViewUserDTO resBody = userService.viewUser(id);
-
-    logger.trace("[createUser], reqBody={}, id={}, resBody={}", reqBody, id, resBody);
-
     return HttpResponse.created(resBody);
   }
 

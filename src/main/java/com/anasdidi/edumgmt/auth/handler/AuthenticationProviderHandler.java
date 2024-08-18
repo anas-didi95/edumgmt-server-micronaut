@@ -17,14 +17,11 @@ import jakarta.inject.Singleton;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Singleton
 class AuthenticationProviderHandler implements HttpRequestAuthenticationProvider<Object> {
 
-  private static final Logger logger = LoggerFactory.getLogger(AuthenticationProviderHandler.class);
   private static final String ROLE_SWAGGER = "ROLE_SWAGGER";
   private final CommonProps commonProps;
   private final UserRepository userRepository;
@@ -58,13 +55,6 @@ class AuthenticationProviderHandler implements HttpRequestAuthenticationProvider
     }
 
     User user = result.get();
-
-    logger.trace(
-        "[authenticate] secret={}, password={}", authRequest.getSecret(), user.getPassword());
-    logger.trace(
-        "[authenticate] matches={}",
-        passwordEncoder.matches(authRequest.getSecret(), user.getPassword()));
-
     Map<String, Object> attributeMap = Map.of(Claims.ISSUER, commonProps.getJwt().issuer());
     return passwordEncoder.matches(authRequest.getSecret(), user.getPassword())
         ? AuthenticationResponse.success(authRequest.getIdentity(), user.getRoles(), attributeMap)

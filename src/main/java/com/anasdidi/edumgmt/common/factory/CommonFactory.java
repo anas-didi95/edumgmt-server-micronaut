@@ -14,15 +14,12 @@ import io.micronaut.data.event.listeners.PreUpdateEventListener;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.utils.SecurityService;
 import jakarta.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Factory
 class CommonFactory {
 
-  private static final Logger logger = LoggerFactory.getLogger(CommonFactory.class);
   private final SecurityService securityService;
 
   CommonFactory(SecurityService securityService) {
@@ -79,12 +76,6 @@ class CommonFactory {
             .getName();
     BaseEntity entity = context.getEntity();
     BeanWrapper<BaseEntity> bean = BeanWrapper.getWrapper(entity);
-
-    logger.trace(
-        "[handlePreSaveEntity] userId={}, securityService={}",
-        userId,
-        securityService.isAuthenticated());
-    logger.trace(entity.getCreatedBy());
 
     if (entity.getCreatedBy() == null) {
       context.setProperty(
