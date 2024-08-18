@@ -5,8 +5,10 @@ import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.DeleteUserDTO;
 import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
+import com.anasdidi.edumgmt.common.aspect.TraceLog;
 import java.util.UUID;
 
+@TraceLog
 public interface UserService {
 
   UUID createUser(CreateUserDTO dto);

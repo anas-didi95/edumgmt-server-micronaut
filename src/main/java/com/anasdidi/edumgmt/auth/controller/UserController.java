@@ -5,12 +5,14 @@ import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.DeleteUserDTO;
 import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
+import com.anasdidi.edumgmt.common.aspect.TraceLog;
 import io.micronaut.http.HttpResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 
 @Tag(name = "user")
+@TraceLog
 public interface UserController {
 
   @Operation(summary = "Add new user record")
