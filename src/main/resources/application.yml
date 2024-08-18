@@ -3,6 +3,8 @@ micronaut:
     name: edumgmt
   server:
     context-path: /${micronaut.application.name}
+    cors:
+      enabled: true
   router:
     static-resources:
       swagger:
