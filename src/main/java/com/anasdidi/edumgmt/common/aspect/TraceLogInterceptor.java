@@ -6,6 +6,7 @@ import io.micronaut.aop.MethodInterceptor;
 import io.micronaut.aop.MethodInvocationContext;
 import io.micronaut.core.annotation.Nullable;
 import jakarta.inject.Singleton;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,16 +20,19 @@ class TraceLogInterceptor implements MethodInterceptor<Object, Object> {
   public @Nullable Object intercept(MethodInvocationContext<Object, Object> context) {
     String classMethod =
         "%s.%s".formatted(context.getDeclaringType().getSimpleName(), context.getMethodName());
-    String parameters =
-        String.join(
-            ",",
-            context.getParameterValueMap().entrySet().stream()
-                .map(o -> "%s=%s".formatted(o.getKey(), o.getValue()))
-                .toList());
 
-    logger.trace("[{}] {}", classMethod, parameters);
+    String parameters =
+        context.getParameterValueMap().size() > 0
+            ? String.join(
+                ", ",
+                context.getParameterValueMap().entrySet().stream()
+                    .map(o -> "%s=%s".formatted(o.getKey(), o.getValue()))
+                    .toList())
+            : "No parameter";
+    logger.trace("[{}] REQ: {}", classMethod, parameters);
+
     Object result = context.proceed();
-    logger.trace("[{}] Returning result: {}", classMethod, result);
+    logger.trace("[{}] RES: {}", classMethod, Optional.ofNullable(result).orElse("No result"));
 
     return result;
   }
