@@ -81,7 +81,16 @@ class ExceptionHandlerFactory {
       List<String> errorMessages,
       HttpStatus httpStatus) {
     logger.debug("[{}] errorCode={}, message={}", logTag, exception.error.code, message);
-    logger.debug("[{}] requestParam={}", logTag, traceContext.getRequestParam());
+    logger.debug(
+        "[{}] classMethod={}, variable={}",
+        logTag,
+        traceContext.getClassMethod(),
+        exception.variable);
+    logger.debug(
+        "[{}] controller={}, controllerParam={}",
+        logTag,
+        traceContext.getController(),
+        traceContext.getControllerParam());
 
     return processor.processResponse(
         ErrorContext.builder(request).cause(exception).errorMessages(errorMessages).build(),

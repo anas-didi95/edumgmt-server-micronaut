@@ -18,14 +18,11 @@ import jakarta.inject.Singleton;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 @Transactional
 class AttendanceServiceImpl implements AttendanceService {
 
-  private static final Logger logger = LoggerFactory.getLogger(AttendanceServiceImpl.class);
   private final AttendanceRepository attendanceRepository;
   private final AttendanceMapper attendanceMapper;
   private final StudentRepository studentRepository;
@@ -53,9 +50,7 @@ class AttendanceServiceImpl implements AttendanceService {
   public ViewAttendanceDTO viewAttendance(UUID id) {
     Optional<Attendance> result = attendanceRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("viewAttendance", Map.of("id", id));
-      logger.debug(error.logMessage);
-      throw error;
+      throw new RecordNotFoundError(Map.of("id", id));
     }
     return attendanceMapper.toDTO(result.get());
   }
@@ -63,17 +58,11 @@ class AttendanceServiceImpl implements AttendanceService {
   @Override
   public UUID createAttendanceStudent(UUID attendanceId, CreateAttendanceStudentDTO dto) {
     if (!attendanceRepository.existsById(attendanceId)) {
-      RecordNotFoundError error =
-          new RecordNotFoundError("createAttendanceStudent", Map.of("attendanceId", attendanceId));
-      logger.debug(error.logMessage);
-      throw error;
+      throw new RecordNotFoundError(Map.of("attendanceId", attendanceId));
     }
 
     if (!studentRepository.existsById(dto.studentId())) {
-      RecordNotFoundError error =
-          new RecordNotFoundError("createAttendanceStudent", Map.of("studentId", dto.studentId()));
-      logger.debug(error.logMessage);
-      throw error;
+      throw new RecordNotFoundError(Map.of("studentId", dto.studentId()));
     }
 
     AttendanceStudent entity = new AttendanceStudent();
@@ -87,11 +76,7 @@ class AttendanceServiceImpl implements AttendanceService {
     Optional<ViewAttendanceStudentDTO> result =
         attendanceStudentRepository.viewAttendanceStudent(attendanceStudentId);
     if (result.isEmpty()) {
-      RecordNotFoundError error =
-          new RecordNotFoundError(
-              "viewAttendanceStudent", Map.of("attendanceStudentId", attendanceStudentId));
-      logger.debug(error.logMessage);
-      throw error;
+      throw new RecordNotFoundError(Map.of("attendanceStudentId", attendanceStudentId));
     }
     return result.get();
   }

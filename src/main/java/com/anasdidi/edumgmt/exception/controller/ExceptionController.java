@@ -19,11 +19,11 @@ class ExceptionController {
 
   @Get("/recordNotFoundError")
   HttpResponse<Void> recordNotFoundError() {
-    throw new RecordNotFoundError("methodName", Map.of());
+    throw new RecordNotFoundError(Map.of());
   }
 
   @Get("/recordNotMatchedError")
   HttpResponse<Void> recordNotMatchedError() {
-    throw new RecordNotMatchedError("methodName", new Boolean[] {false}, "test");
+    throw new RecordNotMatchedError(new Boolean[] {false}, "test");
   }
 }

@@ -8,12 +8,12 @@ import java.util.Map;
 public abstract class BaseError extends RuntimeException {
 
   public final ErrorCode error;
-  public final String logMessage;
+  public final String variable;
 
-  BaseError(ErrorCode error, String logTag, String logMessage) {
+  BaseError(ErrorCode error, String variable) {
     super(error.code);
     this.error = error;
-    this.logMessage = "[%s] %s".formatted(logTag, logMessage);
+    this.variable = variable;
   }
 
   protected static String parseParamMap(Map<String, Object> paramMap) {

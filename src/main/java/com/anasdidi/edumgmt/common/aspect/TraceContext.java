@@ -8,7 +8,9 @@ import java.util.UUID;
 public class TraceContext {
 
   private UUID traceId;
-  private String requestParam;
+  private String controller;
+  private String controllerParam;
+  private String classMethod;
 
   public UUID getTraceId() {
     return traceId;
@@ -18,11 +20,27 @@ public class TraceContext {
     this.traceId = traceId;
   }
 
-  public String getRequestParam() {
-    return requestParam;
+  public String getController() {
+    return controller;
   }
 
-  public void setRequestParam(String requestParam) {
-    this.requestParam = requestParam;
+  public void setController(String controller) {
+    this.controller = controller;
+  }
+
+  public String getControllerParam() {
+    return controllerParam;
+  }
+
+  public void setControllerParam(String controllerParam) {
+    this.controllerParam = controllerParam;
+  }
+
+  public String getClassMethod() {
+    return classMethod;
+  }
+
+  public void setClassMethod(String classMethod) {
+    this.classMethod = classMethod;
   }
 }
