@@ -12,7 +12,6 @@ import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
-import com.anasdidi.edumgmt.auth.service.UserService;
 import com.anasdidi.edumgmt.common.BaseControllerTest;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
 import com.anasdidi.edumgmt.common.util.Constant;
@@ -29,6 +28,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @MicronautTest(transactional = false)
 class UserControllerTest extends BaseControllerTest {
@@ -39,21 +39,20 @@ class UserControllerTest extends BaseControllerTest {
 
   @Inject private UserRepository userRepository;
   @Inject private JsonMapper jsonMapper;
-  @Inject private UserService userService;
   @Inject private CommonProps commonProps;
+  @Inject private PasswordEncoder passwordEncoder;
 
   @BeforeEach
   void beforeEach() {
     setModuleTest(ModuleTest.AUTH);
     userRepository.deleteAll();
 
-    CreateUserDTO dto =
-        new CreateUserDTO(
-            Constant.SUPERADMIN_USER,
-            commonProps.getSuperAdmin().password(),
-            "SuperAdmin",
-            Set.of("ROLE_SUPERADMIN"));
-    userService.createUser(dto);
+    User entity = new User();
+    entity.setUserId(Constant.SUPERADMIN_USER);
+    entity.setPassword(passwordEncoder.encode(commonProps.getSuperAdmin().password()));
+    entity.setName("SuperAdmin");
+    entity.setRoles(Set.of("ROLE_SUPERADMIN"));
+    userRepository.save(entity);
   }
 
   @ParameterizedTest
