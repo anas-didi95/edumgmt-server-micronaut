@@ -2,12 +2,14 @@
 package com.anasdidi.edumgmt.exception.factory;
 
 import com.anasdidi.edumgmt.common.aspect.TraceContext;
+import com.anasdidi.edumgmt.exception.error.BaseError;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
 import com.anasdidi.edumgmt.exception.util.ErrorCode;
 import io.micronaut.context.LocalizedMessageSource;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
@@ -43,17 +45,10 @@ class ExceptionHandlerFactory {
   ExceptionHandler<RecordNotFoundError, HttpResponse<?>> recordNotFoundError() {
     return (request, exception) -> {
       HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-      ErrorCode error = exception.error;
-      String message = getMessage(error, httpStatus, traceContext.getTraceId());
-      List<String> messageList =
-          Arrays.asList(error.code, message, traceContext.getTraceId().toString());
-
-      logger.debug("[recordNotFoundError] errorCode={}, message={}", error.code, message);
-      logger.debug("[recordNotFoundError] requestParam={}", traceContext.getRequestParam());
-
-      return processor.processResponse(
-          ErrorContext.builder(request).cause(exception).errorMessages(messageList).build(),
-          HttpResponse.status(HttpStatus.BAD_REQUEST, message));
+      String message = getMessage(exception.error, httpStatus, traceContext.getTraceId());
+      List<String> errorMessages = prepareErrorMessage(exception.error, message);
+      return prepareResponse(
+          "recordNotFoundError", exception, message, request, errorMessages, httpStatus);
     };
   }
 
@@ -62,18 +57,34 @@ class ExceptionHandlerFactory {
   ExceptionHandler<RecordNotMatchedError, HttpResponse<?>> recordNotMatchedError() {
     return (request, exception) -> {
       HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-      ErrorCode error = exception.error;
-      String message = getMessage(error, httpStatus);
-      List<String> messageList = Arrays.asList(error.code, message);
-
-      return processor.processResponse(
-          ErrorContext.builder(request).cause(exception).errorMessages(messageList).build(),
-          HttpResponse.status(HttpStatus.BAD_REQUEST, message));
+      String message = getMessage(exception.error, httpStatus, traceContext.getTraceId());
+      List<String> errorMessages = prepareErrorMessage(exception.error, message);
+      return prepareResponse(
+          "recordNotMatchedError", exception, message, request, errorMessages, httpStatus);
     };
   }
 
   private String getMessage(ErrorCode error, HttpStatus httpStatus, Object... variables) {
     return messageSource.getMessageOrDefault(
         "error." + error.code, httpStatus.getReason(), variables);
+  }
+
+  private List<String> prepareErrorMessage(ErrorCode error, String message) {
+    return Arrays.asList(error.code, message, traceContext.getTraceId().toString());
+  }
+
+  private HttpResponse<?> prepareResponse(
+      String logTag,
+      BaseError exception,
+      String message,
+      HttpRequest<?> request,
+      List<String> errorMessages,
+      HttpStatus httpStatus) {
+    logger.debug("[{}] errorCode={}, message={}", logTag, exception.error.code, message);
+    logger.debug("[{}] requestParam={}", logTag, traceContext.getRequestParam());
+
+    return processor.processResponse(
+        ErrorContext.builder(request).cause(exception).errorMessages(errorMessages).build(),
+        HttpResponse.status(httpStatus, message));
   }
 }

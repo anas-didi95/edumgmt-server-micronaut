@@ -5,7 +5,7 @@ import com.anasdidi.edumgmt.exception.util.ErrorCode;
 import java.util.HashMap;
 import java.util.Map;
 
-abstract class BaseError extends RuntimeException {
+public abstract class BaseError extends RuntimeException {
 
   public final ErrorCode error;
   public final String logMessage;

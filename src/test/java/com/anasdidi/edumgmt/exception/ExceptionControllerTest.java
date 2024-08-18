@@ -53,6 +53,6 @@ public class ExceptionControllerTest extends BaseControllerTest {
     e = () -> httpClient.toBlocking().exchange(req.bearerAuth(getAccessToken()));
     ex = assertThrows(HttpClientResponseException.class, e);
     assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
-    assertEquals("Record not matched!", ex.getMessage());
+    assertTrue(ex.getMessage().contains("Record not matched!"));
   }
 }
