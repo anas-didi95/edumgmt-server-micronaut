@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class CommonEvent {
 
   private static final Logger logger = LoggerFactory.getLogger(CommonEvent.class);
-  private static final String FILE_SUPERADMIN = "/var/tmp/edumgmt.super-admin.txt";
+  private static final String FILE_EDUMGMT = "/var/tmp/edumgmt.data.txt";
   private final UserRepository userRepository;
   private final CommonProps commonProps;
   private final PasswordEncoder passwordEncoder;
@@ -59,10 +59,11 @@ class CommonEvent {
           "[onStartupEvent] SuperAdmin created: {}", commonProps.getSuperAdmin().password());
     }
 
-    try (FileWriter fileWriter = new FileWriter(FILE_SUPERADMIN);
+    try (FileWriter fileWriter = new FileWriter(FILE_EDUMGMT);
         PrintWriter printWriter = new PrintWriter(fileWriter); ) {
-      printWriter.println(rawPassword);
-      logger.info("[onStartupEvent] Write file {}", FILE_SUPERADMIN);
+      printWriter.println("super-admin=%s".formatted(rawPassword));
+      printWriter.println("jwt-issuer=%s".formatted(commonProps.getJwt().issuer()));
+      logger.info("[onStartupEvent] Write file {}", FILE_EDUMGMT);
     } catch (IOException e) {
       logger.error("[onStartupEvent] Fail to write to file!", e);
       throw new RuntimeException(e);
