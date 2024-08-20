@@ -12,9 +12,9 @@ import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
+import com.anasdidi.edumgmt.auth.util.UserConstants;
 import com.anasdidi.edumgmt.common.BaseControllerTest;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
-import com.anasdidi.edumgmt.common.util.Constant;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -48,10 +48,10 @@ class UserControllerTest extends BaseControllerTest {
     userRepository.deleteAll();
 
     User entity = new User();
-    entity.setUserId(Constant.SUPERADMIN_USER);
+    entity.setUserId(UserConstants.SuperAdmin.ID);
     entity.setPassword(passwordEncoder.encode(commonProps.getSuperAdmin().password()));
     entity.setName("SuperAdmin");
-    entity.setRoles(Set.of("ROLE_SUPERADMIN"));
+    entity.setRoles(Set.of(UserConstants.Role.SUPERADMIN));
     userRepository.save(entity);
   }
 
@@ -75,7 +75,7 @@ class UserControllerTest extends BaseControllerTest {
 
     ViewUserDTO resBody = response.body();
     assertNotNull(resBody.id());
-    assertEquals(Constant.SUPERADMIN_USER, resBody.createdBy());
+    assertEquals(UserConstants.SuperAdmin.ID, resBody.createdBy());
     assertNotNull(resBody.createdDate());
     assertEquals(resBody.createdBy(), resBody.updatedBy());
     assertEquals(resBody.createdDate(), resBody.updatedDate());
@@ -108,7 +108,7 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(HttpStatus.OK, response.status());
 
     ViewUserDTO resBody = response.body();
-    assertEquals(Constant.SUPERADMIN_USER, resBody.updatedBy());
+    assertEquals(UserConstants.SuperAdmin.ID, resBody.updatedBy());
     assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
     assertEquals(1, resBody.version());
     assertEquals(newName.toUpperCase(), resBody.name());
@@ -134,7 +134,7 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(HttpStatus.NO_CONTENT, response.status());
 
     entity = userRepository.findById(entity.getId()).get();
-    assertEquals(Constant.SUPERADMIN_USER, entity.getUpdatedBy());
+    assertEquals(UserConstants.SuperAdmin.ID, entity.getUpdatedBy());
     assertTrue(entity.getUpdatedDate().compareTo(entity.getCreatedDate()) > 0);
     assertEquals(1, entity.getVersion());
     assertEquals(true, entity.getIsDeleted());

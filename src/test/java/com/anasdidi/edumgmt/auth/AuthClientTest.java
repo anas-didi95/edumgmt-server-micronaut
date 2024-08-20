@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.anasdidi.edumgmt.auth.client.AuthClient;
 import com.anasdidi.edumgmt.auth.dto.LogoutUserDTO;
 import com.anasdidi.edumgmt.auth.repository.UserTokenRepository;
+import com.anasdidi.edumgmt.auth.util.UserConstants;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
-import com.anasdidi.edumgmt.common.util.Constant;
 import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
 import io.micronaut.http.HttpRequest;
@@ -40,7 +40,7 @@ public class AuthClientTest {
 
   @Test
   void testLogin_Success() throws ParseException {
-    String username = Constant.SUPERADMIN_USER;
+    String username = UserConstants.SuperAdmin.ID;
     String password = commonProps.getSuperAdmin().password();
     UsernamePasswordCredentials creds = new UsernamePasswordCredentials(username, password);
     HttpResponse<BearerAccessRefreshToken> response = authClient.login(creds);
@@ -85,7 +85,7 @@ public class AuthClientTest {
     long oldCount = userTokenRepository.count();
     UsernamePasswordCredentials creds1 =
         new UsernamePasswordCredentials(
-            Constant.SUPERADMIN_USER, commonProps.getSuperAdmin().password());
+            UserConstants.SuperAdmin.ID, commonProps.getSuperAdmin().password());
     authClient.login(creds1);
 
     UsernamePasswordCredentials creds =

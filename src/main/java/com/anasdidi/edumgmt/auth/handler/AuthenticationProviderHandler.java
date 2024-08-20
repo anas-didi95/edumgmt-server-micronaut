@@ -3,6 +3,7 @@ package com.anasdidi.edumgmt.auth.handler;
 
 import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
+import com.anasdidi.edumgmt.auth.util.UserConstants;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
@@ -22,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Singleton
 class AuthenticationProviderHandler implements HttpRequestAuthenticationProvider<Object> {
 
-  private static final String ROLE_SWAGGER = "ROLE_SWAGGER";
   private final CommonProps commonProps;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
@@ -44,7 +44,8 @@ class AuthenticationProviderHandler implements HttpRequestAuthenticationProvider
     if (isSwagger) {
       return authRequest.getIdentity().equals(commonProps.getBasicAuth().username())
               && authRequest.getSecret().equals(commonProps.getBasicAuth().password())
-          ? AuthenticationResponse.success(authRequest.getIdentity(), Arrays.asList(ROLE_SWAGGER))
+          ? AuthenticationResponse.success(
+              authRequest.getIdentity(), Arrays.asList(UserConstants.Role.SWAGGER))
           : AuthenticationResponse.failure(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);
     }
 
