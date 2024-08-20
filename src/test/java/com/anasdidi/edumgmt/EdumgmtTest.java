@@ -9,7 +9,7 @@ import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
 import com.anasdidi.edumgmt.auth.util.UserConstants;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
-import com.anasdidi.edumgmt.common.util.Constant;
+import com.anasdidi.edumgmt.common.util.CommonConstants;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -82,7 +82,7 @@ class EdumgmtTest {
     assertTrue(result.isPresent());
 
     User user = result.get();
-    assertEquals(Constant.SYSTEM_USER, user.getCreatedBy());
+    assertEquals(CommonConstants.SYSTEM_USER, user.getCreatedBy());
   }
 
   @ParameterizedTest

@@ -2,7 +2,7 @@
 package com.anasdidi.edumgmt.common.factory;
 
 import com.anasdidi.edumgmt.common.entity.BaseEntity;
-import com.anasdidi.edumgmt.common.util.Constant;
+import com.anasdidi.edumgmt.common.util.CommonConstants;
 import io.micronaut.context.MessageSource;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.i18n.ResourceBundleMessageSource;
@@ -72,7 +72,7 @@ class CommonFactory {
     String userId =
         securityService
             .getAuthentication()
-            .orElse(Authentication.build(Constant.SYSTEM_USER))
+            .orElse(Authentication.build(CommonConstants.SYSTEM_USER))
             .getName();
     BaseEntity entity = context.getEntity();
     BeanWrapper<BaseEntity> bean = BeanWrapper.getWrapper(entity);
