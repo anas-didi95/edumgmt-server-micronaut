@@ -7,8 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
+import com.anasdidi.edumgmt.auth.util.UserConstants;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
-import com.anasdidi.edumgmt.common.util.Constant;
+import com.anasdidi.edumgmt.common.util.CommonConstants;
 import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -77,11 +78,11 @@ class EdumgmtTest {
     assertTrue(application.isRunning());
 
     Optional<User> result =
-        userRepository.findByUserIdAndIsDeleted(Constant.SUPERADMIN_USER, false);
+        userRepository.findByUserIdAndIsDeleted(UserConstants.SuperAdmin.ID, false);
     assertTrue(result.isPresent());
 
     User user = result.get();
-    assertEquals(Constant.SYSTEM_USER, user.getCreatedBy());
+    assertEquals(CommonConstants.SYSTEM_USER, user.getCreatedBy());
   }
 
   @ParameterizedTest

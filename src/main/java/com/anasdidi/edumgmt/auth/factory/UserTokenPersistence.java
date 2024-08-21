@@ -16,15 +16,12 @@ import jakarta.inject.Singleton;
 import java.util.Map;
 import java.util.Optional;
 import org.reactivestreams.Publisher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
 @Singleton
 class UserTokenPersistence implements RefreshTokenPersistence {
 
-  private static final Logger logger = LoggerFactory.getLogger(UserTokenPersistence.class);
   private final UserTokenRepository userTokenRepository;
   private final UserRepository userRepository;
   private final CommonProps commonProps;
@@ -48,9 +45,7 @@ class UserTokenPersistence implements RefreshTokenPersistence {
       entity.setUserId(event.getAuthentication().getName());
       entity.setToken(event.getRefreshToken());
       userTokenRepository.save(entity);
-      logger.trace("[persistToken] entity.token={}", entity.getToken());
     } else {
-      logger.trace("[persistToken] event={}", event != null);
     }
   }
 
@@ -58,7 +53,6 @@ class UserTokenPersistence implements RefreshTokenPersistence {
   public Publisher<Authentication> getAuthentication(String refreshToken) {
     return Flux.create(
         emitter -> {
-          logger.trace("[getAuthentication] refreshToken={}", refreshToken);
           Optional<UserToken> result = userTokenRepository.findByToken(refreshToken);
           if (result.isPresent()) {
             UserToken entity = result.get();

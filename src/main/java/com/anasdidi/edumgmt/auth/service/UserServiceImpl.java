@@ -16,15 +16,12 @@ import jakarta.inject.Singleton;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Singleton
 @Transactional
 class UserServiceImpl extends BaseService implements UserService {
 
-  private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
   private final UserMapper userMapper;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
@@ -40,7 +37,6 @@ class UserServiceImpl extends BaseService implements UserService {
   public UUID createUser(CreateUserDTO dto) {
     User entity = userMapper.toEntity(dto);
     entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-    logger.trace("[createUser] entity={}", entity.getRoles());
     return userRepository.save(entity).getId();
   }
 
@@ -48,9 +44,7 @@ class UserServiceImpl extends BaseService implements UserService {
   public ViewUserDTO viewUser(UUID id) {
     Optional<User> result = userRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("viewUser", Map.of("id", id));
-      logger.debug(error.logMessage);
-      throw error;
+      throw new RecordNotFoundError(Map.of("id", id));
     }
     return userMapper.toDTO(result.get());
   }
@@ -59,17 +53,13 @@ class UserServiceImpl extends BaseService implements UserService {
   public UUID updateUser(UUID id, UpdateUserDTO dto) {
     Optional<User> result = userRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("updateUser", Map.of("id", id));
-      logger.debug(error.logMessage);
-      throw error;
+      throw new RecordNotFoundError(Map.of("id", id));
     }
 
     User entity = result.get();
     Boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
     if (!matched[0] || !matched[1]) {
-      RecordNotMatchedError error =
-          new RecordNotMatchedError("updateUser", matched, "id", "version");
-      logger.debug(error.logMessage);
+      RecordNotMatchedError error = new RecordNotMatchedError(matched, "id", "version");
       throw error;
     }
 
@@ -81,18 +71,13 @@ class UserServiceImpl extends BaseService implements UserService {
   public void deleteUser(UUID id, DeleteUserDTO dto) {
     Optional<User> result = userRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("deleteUser", Map.of("id", id));
-      logger.debug(error.logMessage);
-      throw error;
+      throw new RecordNotFoundError(Map.of("id", id));
     }
 
     User entity = result.get();
     Boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
     if (!matched[0] || !matched[1]) {
-      RecordNotMatchedError error =
-          new RecordNotMatchedError("deleteUser", matched, "id", "version");
-      logger.debug(error.logMessage);
-      throw error;
+      throw new RecordNotMatchedError(matched, "id", "version");
     }
 
     entity.setIsDeleted(true);

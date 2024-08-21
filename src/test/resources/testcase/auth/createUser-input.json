@@ -1,6 +1,6 @@
 {
-  "userId": "superadmin",
+  "userId": "testTeacher",
   "password": "p@ssw0rd",
-  "name": "super admin",
+  "name": "Test Teacher",
   "roles": ["ROLE_TEACHER"]
 }

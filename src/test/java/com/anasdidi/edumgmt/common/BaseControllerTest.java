@@ -4,8 +4,8 @@ package com.anasdidi.edumgmt.common;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.anasdidi.edumgmt.auth.client.AuthClient;
+import com.anasdidi.edumgmt.auth.util.UserConstants;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
-import com.anasdidi.edumgmt.common.util.Constant;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.security.authentication.UsernamePasswordCredentials;
@@ -31,7 +31,7 @@ public abstract class BaseControllerTest {
 
   protected String getAccessToken(boolean isSuperAdmin) {
     String username =
-        isSuperAdmin ? Constant.SUPERADMIN_USER : commonProps.getTestUser().username();
+        isSuperAdmin ? UserConstants.SuperAdmin.ID : commonProps.getTestUser().username();
     String password =
         isSuperAdmin
             ? commonProps.getSuperAdmin().password()

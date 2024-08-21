@@ -2,7 +2,7 @@
 package com.anasdidi.edumgmt.common.factory;
 
 import com.anasdidi.edumgmt.common.entity.BaseEntity;
-import com.anasdidi.edumgmt.common.util.Constant;
+import com.anasdidi.edumgmt.common.util.CommonConstants;
 import io.micronaut.context.MessageSource;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.i18n.ResourceBundleMessageSource;
@@ -14,15 +14,12 @@ import io.micronaut.data.event.listeners.PreUpdateEventListener;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.utils.SecurityService;
 import jakarta.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Factory
 class CommonFactory {
 
-  private static final Logger logger = LoggerFactory.getLogger(CommonFactory.class);
   private final SecurityService securityService;
 
   CommonFactory(SecurityService securityService) {
@@ -75,16 +72,10 @@ class CommonFactory {
     String userId =
         securityService
             .getAuthentication()
-            .orElse(Authentication.build(Constant.SYSTEM_USER))
+            .orElse(Authentication.build(CommonConstants.SYSTEM_USER))
             .getName();
     BaseEntity entity = context.getEntity();
     BeanWrapper<BaseEntity> bean = BeanWrapper.getWrapper(entity);
-
-    logger.trace(
-        "[handlePreSaveEntity] userId={}, securityService={}",
-        userId,
-        securityService.isAuthenticated());
-    logger.trace(entity.getCreatedBy());
 
     if (entity.getCreatedBy() == null) {
       context.setProperty(

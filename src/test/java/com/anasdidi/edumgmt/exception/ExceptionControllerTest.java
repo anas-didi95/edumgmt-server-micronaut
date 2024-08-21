@@ -3,6 +3,7 @@ package com.anasdidi.edumgmt.exception;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.anasdidi.edumgmt.common.BaseControllerTest;
 import io.micronaut.http.HttpRequest;
@@ -36,7 +37,7 @@ public class ExceptionControllerTest extends BaseControllerTest {
     e = () -> httpClient.toBlocking().exchange(req.bearerAuth(getAccessToken()));
     ex = assertThrows(HttpClientResponseException.class, e);
     assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
-    assertEquals("Record not found!", ex.getMessage());
+    assertTrue(ex.getMessage().contains("Record not found!"));
   }
 
   @Test
@@ -52,6 +53,6 @@ public class ExceptionControllerTest extends BaseControllerTest {
     e = () -> httpClient.toBlocking().exchange(req.bearerAuth(getAccessToken()));
     ex = assertThrows(HttpClientResponseException.class, e);
     assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
-    assertEquals("Record not matched!", ex.getMessage());
+    assertTrue(ex.getMessage().contains("Record not matched!"));
   }
 }

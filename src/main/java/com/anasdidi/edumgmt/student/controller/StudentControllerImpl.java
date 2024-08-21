@@ -16,13 +16,10 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import jakarta.inject.Inject;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Controller("/student")
 class StudentControllerImpl implements StudentController {
 
-  private static final Logger logger = LoggerFactory.getLogger(StudentControllerImpl.class);
   private final StudentService studentService;
 
   @Inject
@@ -32,31 +29,20 @@ class StudentControllerImpl implements StudentController {
 
   @Post
   public HttpResponse<ViewStudentDTO> createStudent(@Body CreateStudentDTO reqBody) {
-    logger.trace("[createStudent] reqBody={}", reqBody);
-
     UUID id = studentService.createStudent(reqBody);
-    logger.trace("[createStudent] id={}", id);
-
     ViewStudentDTO resBody = studentService.viewStudent(id);
-    logger.trace("[createStudent] resBody={}", resBody);
-
     return HttpResponse.created(resBody);
   }
 
   @Get("/{id}")
   public HttpResponse<ViewStudentDTO> viewStudent(@PathVariable UUID id) {
-    logger.trace("[viewStudent] id={}", id);
-
     ViewStudentDTO resBody = studentService.viewStudent(id);
-    logger.trace("[viewStudent] resBody={}", resBody);
-
     return HttpResponse.ok(resBody);
   }
 
   @Put("/{id}")
   public HttpResponse<ViewStudentDTO> updateStudent(
       @PathVariable UUID id, @Body UpdateStudentDTO reqBody) {
-    logger.trace("[updateStudent] id={}, reqBody={}", id, reqBody);
     UUID update = studentService.updateStudent(id, reqBody);
     ViewStudentDTO resBody = studentService.viewStudent(update);
     return HttpResponse.ok(resBody);

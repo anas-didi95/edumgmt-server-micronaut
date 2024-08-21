@@ -17,14 +17,11 @@ import jakarta.inject.Singleton;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 @Transactional
 class StudentServiceImpl extends BaseService implements StudentService {
 
-  private static final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
   private final StudentRepository studentRepository;
   private final StudentMapper studentMapper;
 
@@ -44,9 +41,7 @@ class StudentServiceImpl extends BaseService implements StudentService {
   public ViewStudentDTO viewStudent(UUID id) {
     Optional<Student> result = studentRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("viewStudent", Map.of("id", id));
-      logger.debug(error.logMessage, error);
-      throw error;
+      throw new RecordNotFoundError(Map.of("id", id));
     }
     return studentMapper.toDTO(result.get());
   }
@@ -55,18 +50,13 @@ class StudentServiceImpl extends BaseService implements StudentService {
   public UUID updateStudent(UUID id, UpdateStudentDTO dto) {
     Optional<Student> result = studentRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("updateStudent", Map.of("id", id));
-      logger.debug(error.logMessage, error);
-      throw error;
+      throw new RecordNotFoundError(Map.of("id", id));
     }
 
     Student entity = result.get();
     Boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
     if (!matched[0] || !matched[1]) {
-      RecordNotMatchedError error =
-          new RecordNotMatchedError("updateStudent", matched, "id", "version");
-      logger.debug(error.logMessage, error);
-      throw error;
+      throw new RecordNotMatchedError(matched, "id", "version");
     }
 
     entity.setName(dto.name());
@@ -78,18 +68,13 @@ class StudentServiceImpl extends BaseService implements StudentService {
   public void deleteStudent(UUID id, DeleteStudentDTO dto) {
     Optional<Student> result = studentRepository.findById(id);
     if (result.isEmpty()) {
-      RecordNotFoundError error = new RecordNotFoundError("deleteStudent", Map.of("id", id));
-      logger.debug(error.logMessage, error);
-      throw error;
+      throw new RecordNotFoundError(Map.of("id", id));
     }
 
     Student entity = result.get();
     Boolean[] matched = checkRecordMatched(entity, dto.id(), dto.version());
     if (!matched[0] || !matched[1]) {
-      RecordNotMatchedError error =
-          new RecordNotMatchedError("deleteStudent", matched, "id", "version");
-      logger.debug(error.logMessage, error);
-      throw error;
+      throw new RecordNotMatchedError(matched, "id", "version");
     }
 
     entity.setIsDeleted(true);
