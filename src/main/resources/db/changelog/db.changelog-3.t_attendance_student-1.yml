@@ -1,0 +1,84 @@
+databaseChangeLog:
+  - changeSet:
+      id: db.changelog-3.t_attendance_student-1-1
+      author: anas
+      changes:
+        - createTable:
+            tableName: T_ATTENDANCE_STUDENT
+            columns:
+              - column:
+                  name: ID
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: IS_DEL
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: CREATE_BY
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: CREATE_DT
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: UPDATE_BY
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: UPDATE_DT
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: VER
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ATTENDANCE_ID
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: STUDENT_ID
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: db.changelog-3.t_attendance_student-1-2
+      author: anas
+      changes:
+        - addUniqueConstraint:
+            tableName: T_ATTENDANCE_STUDENT
+            columnNames: ATTENDANCE_ID,STUDENT_ID,IS_DEL
+        - addForeignKeyConstraint:
+            baseTableName: T_ATTENDANCE_STUDENT
+            baseColumnNames: ATTENDANCE_ID
+            referencedTableName: T_ATTENDANCE
+            referencedColumnNames: ID
+            constraintName: FK_ATT_STU_ATT
+        - addForeignKeyConstraint:
+            baseTableName: T_ATTENDANCE_STUDENT
+            baseColumnNames: STUDENT_ID
+            referencedTableName: T_STUDENT
+            referencedColumnNames: ID
+            constraintName: FK_ATT_STU_STU
+        - createIndex:
+            tableName: T_ATTENDANCE_STUDENT
+            columns:
+              - column:
+                  name: ATTENDANCE_ID
+        - createIndex:
+            tableName: T_ATTENDANCE_STUDENT
+            columns:
+              - column:
+                  name: STUDENT_ID

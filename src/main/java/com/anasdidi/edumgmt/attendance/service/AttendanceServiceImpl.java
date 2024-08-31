@@ -69,6 +69,7 @@ class AttendanceServiceImpl implements AttendanceService {
     AttendanceStudent entity = new AttendanceStudent();
     entity.setAttendanceId(attendanceId);
     entity.setStudentId(dto.studentId());
+    entity.setIsDeleted(false);
     return attendanceStudentRepository.save(entity).getId();
   }
 
