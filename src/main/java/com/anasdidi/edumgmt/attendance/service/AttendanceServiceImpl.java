@@ -43,6 +43,7 @@ class AttendanceServiceImpl implements AttendanceService {
   @Override
   public UUID createAttendance(CreateAttendanceDTO dto) {
     Attendance entity = attendanceMapper.toEntity(dto);
+    entity.setIsDeleted(false);
     return attendanceRepository.save(entity).getId();
   }
 
