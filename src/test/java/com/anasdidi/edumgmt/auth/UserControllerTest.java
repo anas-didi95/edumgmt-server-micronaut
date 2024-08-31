@@ -52,6 +52,7 @@ class UserControllerTest extends BaseControllerTest {
     entity.setPassword(passwordEncoder.encode(commonProps.getSuperAdmin().password()));
     entity.setName("SuperAdmin");
     entity.setRoles(Set.of(UserConstants.Role.SUPERADMIN));
+    entity.setIsDeleted(false);
     userRepository.save(entity);
   }
 

@@ -48,6 +48,7 @@ class TestEvent {
       entity.setPassword(password);
       entity.setName("test user");
       entity.setRoles(commonProps.getTestUser().roles());
+      entity.setIsDeleted(false);
       userRepository.save(entity);
       logger.info("[onStartupEvent] TestUser created: {}", commonProps.getSuperAdmin().password());
     }

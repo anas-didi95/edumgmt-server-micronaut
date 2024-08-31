@@ -37,6 +37,7 @@ class UserServiceImpl extends BaseService implements UserService {
   public UUID createUser(CreateUserDTO dto) {
     User entity = userMapper.toEntity(dto);
     entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+    entity.setIsDeleted(false);
     return userRepository.save(entity).getId();
   }
 

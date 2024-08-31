@@ -54,6 +54,7 @@ class CommonEvent {
       entity.setPassword(password);
       entity.setName("SuperAdmin");
       entity.setRoles(Set.of(UserConstants.Role.SUPERADMIN));
+      entity.setIsDeleted(false);
       userRepository.save(entity);
       logger.trace(
           "[onStartupEvent] SuperAdmin created: {}", commonProps.getSuperAdmin().password());
