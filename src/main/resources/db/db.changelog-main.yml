@@ -8,4 +8,4 @@ databaseChangeLog:
   - include:
       file: classpath:/db/changelog/db.changelog-4.t_user-1.yml
   - include:
-      file: classpath:/db/changelog/db.changelog-5.t_user_token-1.sql
+      file: classpath:/db/changelog/db.changelog-5.t_user_token-1.yml
