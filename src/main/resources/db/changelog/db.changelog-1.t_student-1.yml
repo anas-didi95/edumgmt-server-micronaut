@@ -1,0 +1,66 @@
+databaseChangeLog:
+  - changeSet:
+      id: db.changelog-1.t_student-1-1
+      author: anas
+      changes:
+        - createTable:
+            tableName: T_STUDENT
+            columns:
+              - column:
+                  name: ID
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: IS_DEL
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: CREATE_BY
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: CREATE_DT
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: UPDATE_BY
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: UPDATE_DT
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: VER
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: IC_NO
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: NM
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: db.changelog-1.t_student-1-2
+      author: anas
+      changes:
+        - addUniqueConstraint:
+            tableName: T_STUDENT
+            columnNames: IC_NO,IS_DEL
+        - createIndex:
+            tableName: T_STUDENT
+            column:
+              name: IC_NO
