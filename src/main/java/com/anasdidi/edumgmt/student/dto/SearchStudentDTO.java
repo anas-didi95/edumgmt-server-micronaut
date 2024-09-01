@@ -15,5 +15,5 @@ public record SearchStudentDTO(
     implements IStudentDTO {
 
   @Serdeable
-  public static record ResultDTO(UUID id, String icNo, String name) {}
+  public static record ResultDTO(UUID id, String idNo, String name) {}
 }

@@ -4,4 +4,4 @@ package com.anasdidi.edumgmt.student.dto;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
-public record CreateStudentDTO(String icNo, String name) implements IStudentDTO {}
+public record CreateStudentDTO(String idNo, String name) implements IStudentDTO {}

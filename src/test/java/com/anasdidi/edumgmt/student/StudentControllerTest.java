@@ -71,7 +71,7 @@ public class StudentControllerTest extends BaseControllerTest {
     assertEquals(0, resBody.version());
     assertEquals(false, resBody.isDeleted());
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
-    assertEquals(reqBody.icNo(), resBody.icNo());
+    assertEquals(reqBody.idNo(), resBody.idNo());
   }
 
   @ParameterizedTest
@@ -109,8 +109,8 @@ public class StudentControllerTest extends BaseControllerTest {
     }
 
     String newName = "abc" + System.currentTimeMillis();
-    String newIcNo = "010203040506";
-    UpdateStudentDTO reqBody = new UpdateStudentDTO(entity.getId(), newIcNo, newName, 0);
+    String newIdNo = "010203040506";
+    UpdateStudentDTO reqBody = new UpdateStudentDTO(entity.getId(), newIdNo, newName, 0);
     HttpResponse<ViewStudentDTO> response =
         httpClient
             .toBlocking()
@@ -124,7 +124,7 @@ public class StudentControllerTest extends BaseControllerTest {
     assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
     assertEquals(1, resBody.version());
     assertEquals(newName.toUpperCase(), resBody.name());
-    assertEquals(newIcNo, resBody.icNo());
+    assertEquals(newIdNo, resBody.idNo());
   }
 
   @ParameterizedTest

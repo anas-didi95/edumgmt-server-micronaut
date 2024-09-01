@@ -64,7 +64,7 @@ class StudentServiceImpl extends BaseService implements StudentService {
     }
 
     entity.setName(dto.name());
-    entity.setIcNo(dto.icNo());
+    entity.setIdNo(dto.idNo());
     return studentRepository.save(entity).getId();
   }
 

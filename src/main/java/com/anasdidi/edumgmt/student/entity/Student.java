@@ -12,18 +12,18 @@ import jakarta.persistence.Table;
 @Table(name = "T_STUDENT")
 public class Student extends BaseEntity {
 
-  @Column(name = "IC_NO")
-  private String icNo;
+  @Column(name = "ID_NO")
+  private String idNo;
 
   @Column(name = "NM")
   private String name;
 
-  public String getIcNo() {
-    return icNo;
+  public String getIdNo() {
+    return idNo;
   }
 
-  public void setIcNo(String icNo) {
-    this.icNo = icNo;
+  public void setIdNo(String idNo) {
+    this.idNo = idNo;
   }
 
   public String getName() {

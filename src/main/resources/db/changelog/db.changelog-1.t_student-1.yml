@@ -43,7 +43,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: IC_NO
+                  name: ID_NO
                   type: VARCHAR(20)
                   constraints:
                     nullable: false
@@ -59,8 +59,8 @@ databaseChangeLog:
       changes:
         - addUniqueConstraint:
             tableName: T_STUDENT
-            columnNames: IC_NO,IS_DEL
+            columnNames: ID_NO,IS_DEL
         - createIndex:
             tableName: T_STUDENT
             column:
-              name: IC_NO
+              name: ID_NO
