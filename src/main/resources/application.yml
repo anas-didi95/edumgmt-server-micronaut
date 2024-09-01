@@ -33,12 +33,16 @@ micronaut:
 
 jpa:
   default:
+    compile-time-hibernate-proxies: true
     properties:
       hibernate:
         hbm2ddl:
           auto: validate
         show_sql: false
         format_sql: false
+        bytecode:
+          provider: none
+          use_reflection_optimizer: false
 
 liquibase:
   datasources:
