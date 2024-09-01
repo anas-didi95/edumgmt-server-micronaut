@@ -1,7 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.auth.controller;
 
-import com.anasdidi.edumgmt.auth.dto.LogoutUserDTO;
+import com.anasdidi.edumgmt.auth.dto.SignOutDTO;
 import com.anasdidi.edumgmt.auth.service.AuthService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -18,9 +18,9 @@ class AuthControllerImpl implements AuthController {
   }
 
   @Override
-  @Post("/logout")
-  public HttpResponse<LogoutUserDTO> logout(Principal principal) {
-    LogoutUserDTO resBody = authService.logout(principal);
+  @Post("/signOut")
+  public HttpResponse<SignOutDTO> signOut(Principal principal) {
+    SignOutDTO resBody = authService.signOut(principal);
     return HttpResponse.ok(resBody);
   }
 }

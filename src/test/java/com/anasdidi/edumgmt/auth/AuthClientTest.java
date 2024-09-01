@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.anasdidi.edumgmt.auth.client.AuthClient;
-import com.anasdidi.edumgmt.auth.dto.LogoutUserDTO;
+import com.anasdidi.edumgmt.auth.dto.SignOutDTO;
 import com.anasdidi.edumgmt.auth.repository.UserTokenRepository;
 import com.anasdidi.edumgmt.auth.util.UserConstants;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
@@ -31,8 +31,8 @@ import org.junit.jupiter.api.Test;
 public class AuthClientTest {
 
   @Inject
-  @Client("/edumgmt/auth/logout")
-  private HttpClient logoutClient;
+  @Client("/edumgmt/auth")
+  private HttpClient httpClient;
 
   @Inject private CommonProps commonProps;
   @Inject private AuthClient authClient;
@@ -99,15 +99,15 @@ public class AuthClientTest {
     assertEquals(oldCount + 2, userTokenRepository.count());
 
     BearerAccessRefreshToken resBody = response.body();
-    HttpResponse<LogoutUserDTO> response2 =
-        logoutClient
+    HttpResponse<SignOutDTO> response2 =
+        httpClient
             .toBlocking()
             .exchange(
-                HttpRequest.POST("", null).bearerAuth(resBody.getAccessToken()),
-                LogoutUserDTO.class);
+                HttpRequest.POST("/signOut", null).bearerAuth(resBody.getAccessToken()),
+                SignOutDTO.class);
     assertEquals(HttpStatus.OK, response2.status());
 
-    LogoutUserDTO resBody2 = response2.body();
+    SignOutDTO resBody2 = response2.body();
     assertEquals(1, resBody2.totalRevokedToken());
   }
 }

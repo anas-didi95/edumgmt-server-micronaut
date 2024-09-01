@@ -1,7 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.auth.controller;
 
-import com.anasdidi.edumgmt.auth.dto.LogoutUserDTO;
+import com.anasdidi.edumgmt.auth.dto.SignOutDTO;
 import com.anasdidi.edumgmt.common.aspect.TraceLog;
 import io.micronaut.http.HttpResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +12,6 @@ import java.security.Principal;
 @TraceLog
 public interface AuthController {
 
-  @Operation(summary = "Logout user and revoked token")
-  HttpResponse<LogoutUserDTO> logout(Principal principal);
+  @Operation(summary = "Sign out user and revoked token")
+  HttpResponse<SignOutDTO> signOut(Principal principal);
 }

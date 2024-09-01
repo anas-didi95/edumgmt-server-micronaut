@@ -4,4 +4,4 @@ package com.anasdidi.edumgmt.auth.dto;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
-public record LogoutUserDTO(Integer totalRevokedToken) implements IAuthDTO {}
+public record SignOutDTO(Integer totalRevokedToken) implements IAuthDTO {}
