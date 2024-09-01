@@ -4,6 +4,7 @@ package com.anasdidi.edumgmt.attendance.controller;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceDTO;
+import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.service.AttendanceService;
@@ -52,6 +53,17 @@ class AttendanceControllerImpl implements AttendanceController {
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchAttendanceDTO resBody = attendanceService.searchAttendance(Pageable.from(page, size));
+    return HttpResponse.ok(resBody);
+  }
+
+  @Override
+  @Get("/{attendanceId}")
+  public HttpResponse<SearchAttendanceStudentDTO> searchAttendanceStudent(
+      @PathVariable UUID attendanceId,
+      @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
+      @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
+    SearchAttendanceStudentDTO resBody =
+        attendanceService.searchAttendanceStudent(attendanceId, Pageable.from(page, size));
     return HttpResponse.ok(resBody);
   }
 }

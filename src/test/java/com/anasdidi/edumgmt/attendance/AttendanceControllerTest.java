@@ -9,9 +9,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceDTO;
+import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.entity.Attendance;
+import com.anasdidi.edumgmt.attendance.entity.AttendanceStudent;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceRepository;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceStudentRepository;
 import com.anasdidi.edumgmt.common.BaseControllerTest;
@@ -28,6 +30,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -136,6 +139,53 @@ public class AttendanceControllerTest extends BaseControllerTest {
     assertEquals(HttpStatus.OK, response.status());
 
     SearchAttendanceDTO resBody = response.body();
+    assertEquals(1, resBody.page());
+    assertEquals(2, resBody.totalPages());
+    assertEquals(1, resBody.recordsPerPage());
+    assertEquals(2, resBody.totalRecords());
+    assertEquals(1, resBody.resultList().size());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createAttendance-input.json,createStudent-input.json,createStudent-input2.json"})
+  void testSearchAttendanceSuccess_Success(String f1, String f2, String f3) {
+    Attendance attendance = null;
+    try (InputStream s1 = getFile(f1)) {
+      attendance = jsonMapper.readValue(s1, Attendance.class);
+      attendance = attendanceRepository.save(attendance);
+    } catch (Exception e) {
+      fail(e);
+    }
+
+    final UUID attendanceId = attendance.getId();
+    Arrays.asList(f2, f3).stream()
+        .forEach(
+            f -> {
+              Student student = null;
+              AttendanceStudent entity = null;
+              try (InputStream is = getFile(f)) {
+                student = jsonMapper.readValue(is, Student.class);
+                student = studentRepository.save(student);
+
+                entity = new AttendanceStudent();
+                entity.setAttendanceId(attendanceId);
+                entity.setStudentId(student.getId());
+                entity.setIsDeleted(false);
+                entity = attendanceStudentRepository.save(entity);
+              } catch (Exception e) {
+                fail(e);
+              }
+            });
+
+    HttpResponse<SearchAttendanceStudentDTO> response =
+        httpClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.GET("/" + attendanceId + "?page=1&size=1").bearerAuth(getAccessToken()),
+                SearchAttendanceStudentDTO.class);
+    assertEquals(HttpStatus.OK, response.status());
+
+    SearchAttendanceStudentDTO resBody = response.body();
     assertEquals(1, resBody.page());
     assertEquals(2, resBody.totalPages());
     assertEquals(1, resBody.recordsPerPage());

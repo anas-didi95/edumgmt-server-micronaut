@@ -4,6 +4,7 @@ package com.anasdidi.edumgmt.attendance.service;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceDTO;
+import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.common.aspect.TraceLog;
@@ -22,4 +23,6 @@ public interface AttendanceService {
   ViewAttendanceStudentDTO viewAttendanceStudent(UUID attendanceStudentId);
 
   SearchAttendanceDTO searchAttendance(Pageable pageable);
+
+  SearchAttendanceStudentDTO searchAttendanceStudent(UUID attendanceId, Pageable pageable);
 }
