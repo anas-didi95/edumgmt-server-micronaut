@@ -3,8 +3,8 @@ package com.anasdidi.edumgmt.student.repository;
 
 import com.anasdidi.edumgmt.student.entity.Student;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
+import io.micronaut.data.repository.PageableRepository;
 import java.util.UUID;
 
 @Repository
-public interface StudentRepository extends CrudRepository<Student, UUID> {}
+public interface StudentRepository extends PageableRepository<Student, UUID> {}

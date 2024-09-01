@@ -6,11 +6,14 @@ import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
+import com.anasdidi.edumgmt.student.dto.SearchStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.entity.Student;
 import com.anasdidi.edumgmt.student.mapper.StudentMapper;
 import com.anasdidi.edumgmt.student.repository.StudentRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -80,5 +83,16 @@ class StudentServiceImpl extends BaseService implements StudentService {
 
     entity.setIsDeleted(true);
     studentRepository.save(entity);
+  }
+
+  @Override
+  public SearchStudentDTO searchStudent(Pageable pageable) {
+    Page<Student> search = studentRepository.findAll(pageable);
+    return new SearchStudentDTO(
+        search.getContent().stream().map(studentMapper::toResultDTO).toList(),
+        search.getPageNumber(),
+        search.getTotalPages(),
+        search.getSize(),
+        search.getTotalSize());
   }
 }

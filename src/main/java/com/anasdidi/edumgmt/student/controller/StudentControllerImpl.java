@@ -3,9 +3,11 @@ package com.anasdidi.edumgmt.student.controller;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
+import com.anasdidi.edumgmt.student.dto.SearchStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.service.StudentService;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -14,6 +16,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.QueryValue;
 import jakarta.inject.Inject;
 import java.util.UUID;
 
@@ -52,5 +55,13 @@ class StudentControllerImpl implements StudentController {
   public HttpResponse<Void> deleteStudent(@PathVariable UUID id, @Body DeleteStudentDTO reqBody) {
     studentService.deleteStudent(id, reqBody);
     return HttpResponse.noContent();
+  }
+
+  @Override
+  @Get
+  public HttpResponse<SearchStudentDTO> searchStudent(
+      @QueryValue(defaultValue = "1") Integer page, @QueryValue(defaultValue = "10") Integer size) {
+    SearchStudentDTO resBody = studentService.searchStudent(Pageable.from(page, size));
+    return HttpResponse.ok(resBody);
   }
 }
