@@ -34,6 +34,7 @@ class StudentServiceImpl extends BaseService implements StudentService {
   @Override
   public UUID createStudent(CreateStudentDTO dto) {
     Student entity = studentMapper.toEntity(dto);
+    entity.setIsDeleted(false);
     return studentRepository.save(entity).getId();
   }
 

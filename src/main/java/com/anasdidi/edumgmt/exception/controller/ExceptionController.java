@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 import java.util.Map;
 
 @Controller("/exception")
-@Requires(env = "test-exception")
+@Requires(env = "test")
 @Hidden
 @TraceLog
 class ExceptionController {

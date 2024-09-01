@@ -44,8 +44,8 @@ class UserTokenPersistence implements RefreshTokenPersistence {
       UserToken entity = new UserToken();
       entity.setUserId(event.getAuthentication().getName());
       entity.setToken(event.getRefreshToken());
+      entity.setIsDeleted(false);
       userTokenRepository.save(entity);
-    } else {
     }
   }
 

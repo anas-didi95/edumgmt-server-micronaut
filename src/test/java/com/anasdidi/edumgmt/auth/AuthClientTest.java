@@ -64,6 +64,7 @@ public class AuthClientTest {
             commonProps.getTestUser().username(), commonProps.getTestUser().password());
     HttpResponse<BearerAccessRefreshToken> response = authClient.login(creds);
     BearerAccessRefreshToken resBody = response.body();
+
     Thread.sleep(3000);
     assertEquals(oldCount + 1, userTokenRepository.count());
 
@@ -77,6 +78,9 @@ public class AuthClientTest {
     AccessRefreshToken resBody2 = response2.body();
     assertNotNull(resBody2.getAccessToken());
     assertNotEquals(resBody.getAccessToken(), resBody2.getAccessToken());
+
+    Thread.sleep(3000);
+    assertEquals(oldCount + 1, userTokenRepository.count());
   }
 
   @Test

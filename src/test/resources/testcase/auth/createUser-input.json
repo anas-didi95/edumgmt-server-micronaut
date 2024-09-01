@@ -2,5 +2,6 @@
   "userId": "testTeacher",
   "password": "p@ssw0rd",
   "name": "Test Teacher",
-  "roles": ["ROLE_TEACHER"]
+  "roles": ["ROLE_TEACHER"],
+  "isDeleted": false
 }

@@ -17,7 +17,7 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-@MicronautTest(environments = "test-exception")
+@MicronautTest
 public class ExceptionControllerTest extends BaseControllerTest {
 
   @Inject
