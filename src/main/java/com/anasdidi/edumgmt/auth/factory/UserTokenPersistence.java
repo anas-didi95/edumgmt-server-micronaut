@@ -46,7 +46,6 @@ class UserTokenPersistence implements RefreshTokenPersistence {
       entity.setToken(event.getRefreshToken());
       entity.setIsDeleted(false);
       userTokenRepository.save(entity);
-    } else {
     }
   }
 

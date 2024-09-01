@@ -40,9 +40,6 @@ jpa:
           auto: validate
         show_sql: false
         format_sql: false
-        bytecode:
-          provider: none
-          use_reflection_optimizer: false
 
 liquibase:
   datasources:

@@ -9,3 +9,5 @@ services:
       driver: local
     env_file:
       - .env
+    ports:
+      - "8081:8080"
