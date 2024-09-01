@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.anasdidi.edumgmt.auth.client.AuthClient;
+import com.anasdidi.edumgmt.auth.dto.SignInDTO;
 import com.anasdidi.edumgmt.auth.dto.SignOutDTO;
 import com.anasdidi.edumgmt.auth.repository.UserTokenRepository;
 import com.anasdidi.edumgmt.auth.util.UserConstants;
@@ -84,7 +85,7 @@ public class AuthClientTest {
   }
 
   @Test
-  void testLogout_Success() throws InterruptedException {
+  void testSignOut_Success() {
     userTokenRepository.deleteAll();
     long oldCount = userTokenRepository.count();
     UsernamePasswordCredentials creds1 =
@@ -109,5 +110,22 @@ public class AuthClientTest {
 
     SignOutDTO resBody2 = response2.body();
     assertEquals(1, resBody2.totalRevokedToken());
+  }
+
+  @Test
+  void testSignIn_Success() throws ParseException {
+    SignInDTO reqBody =
+        new SignInDTO(commonProps.getTestUser().username(), commonProps.getTestUser().password());
+    HttpResponse<BearerAccessRefreshToken> response =
+        httpClient
+            .toBlocking()
+            .exchange(HttpRequest.POST("/signIn", reqBody), BearerAccessRefreshToken.class);
+    assertEquals(HttpStatus.OK, response.status());
+
+    BearerAccessRefreshToken resBody = response.body();
+    assertEquals(reqBody.userId(), resBody.getUsername());
+    assertNotNull(resBody.getAccessToken());
+    assertNotNull(resBody.getRefreshToken());
+    assertTrue(JWTParser.parse(resBody.getAccessToken()) instanceof SignedJWT);
   }
 }

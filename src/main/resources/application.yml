@@ -28,8 +28,10 @@ micronaut:
         access: ROLE_SUPERADMIN,ROLE_TEACHER
       - pattern: /user/**
         access: ROLE_SUPERADMIN
-      - pattern: /auth/**
+      - pattern: /auth/signOut
         access: isAuthenticated()
+      - pattern: /auth/signIn
+        access: isAnonymous()
 
 jpa:
   default:
