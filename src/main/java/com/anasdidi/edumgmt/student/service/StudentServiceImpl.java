@@ -86,8 +86,8 @@ class StudentServiceImpl extends BaseService implements StudentService {
   }
 
   @Override
-  public SearchStudentDTO searchStudent(Pageable pageable) {
-    Page<Student> search = studentRepository.findAll(pageable);
+  public SearchStudentDTO searchStudent(String idNo, String name, Pageable pageable) {
+    Page<Student> search = studentRepository.searchStudent(idNo, name, pageable);
     return new SearchStudentDTO(
         search.getContent().stream().map(studentMapper::toResultDTO).toList(),
         search.getPageNumber(),

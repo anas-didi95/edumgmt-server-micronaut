@@ -21,5 +21,5 @@ public interface StudentService {
 
   void deleteStudent(UUID id, DeleteStudentDTO dto);
 
-  SearchStudentDTO searchStudent(Pageable pageable);
+  SearchStudentDTO searchStudent(String idNo, String name, Pageable pageable);
 }

@@ -10,6 +10,7 @@ import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import io.micronaut.http.HttpResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Optional;
 import java.util.UUID;
 
 @Tag(name = "student")
@@ -29,5 +30,6 @@ public interface StudentController {
   HttpResponse<Void> deleteStudent(UUID id, DeleteStudentDTO reqBody);
 
   @Operation(summary = "Search student record")
-  HttpResponse<SearchStudentDTO> searchStudent(Integer page, Integer size);
+  HttpResponse<SearchStudentDTO> searchStudent(
+      Optional<String> idNo, Optional<String> name, Integer page, Integer size);
 }

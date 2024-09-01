@@ -19,6 +19,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import jakarta.inject.Inject;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller("/student")
@@ -61,10 +62,14 @@ class StudentControllerImpl implements StudentController {
   @Override
   @Get
   public HttpResponse<SearchStudentDTO> searchStudent(
+      @QueryValue Optional<String> idNo,
+      @QueryValue Optional<String> name,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchStudentDTO resBody =
         studentService.searchStudent(
+            idNo.orElse(""),
+            name.orElse(""),
             Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
     return HttpResponse.ok(resBody);
   }
