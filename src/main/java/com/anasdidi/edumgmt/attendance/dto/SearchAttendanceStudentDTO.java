@@ -15,5 +15,5 @@ public record SearchAttendanceStudentDTO(
     implements IAttendanceDTO {
 
   @Serdeable
-  public static record ResultDTO(UUID studentId) {}
+  public static record ResultDTO(UUID id, UUID studentId) {}
 }

@@ -17,6 +17,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller("/user")
@@ -54,10 +55,15 @@ class UserControllerImpl implements UserController {
   @Override
   @Get
   public HttpResponse<SearchUserDTO> searchUser(
+      @QueryValue Optional<String> userId,
+      @QueryValue Optional<String> name,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchUserDTO resBody =
-        userService.searchUser(Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
+        userService.searchUser(
+            userId.orElse(""),
+            name.orElse(""),
+            Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
     return HttpResponse.ok(resBody);
   }
 }

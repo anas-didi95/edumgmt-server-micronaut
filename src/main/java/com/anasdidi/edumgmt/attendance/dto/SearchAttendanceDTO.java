@@ -4,6 +4,7 @@ package com.anasdidi.edumgmt.attendance.dto;
 import io.micronaut.serde.annotation.Serdeable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Serdeable
 public record SearchAttendanceDTO(
@@ -15,5 +16,5 @@ public record SearchAttendanceDTO(
     implements IAttendanceDTO {
 
   @Serdeable
-  public static record ResultDTO(LocalDate date, String remark) {}
+  public static record ResultDTO(UUID id, LocalDate date, String remark) {}
 }

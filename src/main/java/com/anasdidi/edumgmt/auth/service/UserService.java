@@ -21,5 +21,5 @@ public interface UserService {
 
   void deleteUser(UUID id, DeleteUserDTO dto);
 
-  SearchUserDTO searchUser(Pageable pageable);
+  SearchUserDTO searchUser(String userId, String name, Pageable pageable);
 }

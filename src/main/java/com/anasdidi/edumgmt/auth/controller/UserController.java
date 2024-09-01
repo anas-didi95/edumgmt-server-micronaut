@@ -10,6 +10,7 @@ import com.anasdidi.edumgmt.common.aspect.TraceLog;
 import io.micronaut.http.HttpResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Optional;
 import java.util.UUID;
 
 @Tag(name = "user")
@@ -26,5 +27,6 @@ public interface UserController {
   HttpResponse<Void> deleteUser(UUID id, DeleteUserDTO reqBody);
 
   @Operation(summary = "Search user record")
-  HttpResponse<SearchUserDTO> searchUser(Integer page, Integer size);
+  HttpResponse<SearchUserDTO> searchUser(
+      Optional<String> userId, Optional<String> name, Integer page, Integer size);
 }

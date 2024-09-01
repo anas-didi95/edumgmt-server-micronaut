@@ -89,8 +89,8 @@ class UserServiceImpl extends BaseService implements UserService {
   }
 
   @Override
-  public SearchUserDTO searchUser(Pageable pageable) {
-    Page<User> search = userRepository.findAll(pageable);
+  public SearchUserDTO searchUser(String userId, String name, Pageable pageable) {
+    Page<User> search = userRepository.searchUser(userId, name, pageable);
     return new SearchUserDTO(
         search.getContent().stream().map(userMapper::toResultDTO).toList(),
         search.getPageNumber(),

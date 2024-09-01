@@ -3,6 +3,8 @@ package com.anasdidi.edumgmt.auth.dto;
 
 import io.micronaut.serde.annotation.Serdeable;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Serdeable
 public record SearchUserDTO(
@@ -14,5 +16,5 @@ public record SearchUserDTO(
     implements IAuthDTO {
 
   @Serdeable
-  public static record ResultDTO() {}
+  public static record ResultDTO(UUID id, String userId, String name, Set<String> roles) {}
 }
