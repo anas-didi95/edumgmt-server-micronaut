@@ -7,6 +7,7 @@ import com.anasdidi.edumgmt.auth.dto.SearchUserDTO;
 import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.service.UserService;
+import com.anasdidi.edumgmt.common.util.CommonConstants;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
@@ -53,7 +54,8 @@ class UserControllerImpl implements UserController {
   @Override
   @Get
   public HttpResponse<SearchUserDTO> searchUser(
-      @QueryValue(defaultValue = "1") Integer page, @QueryValue(defaultValue = "10") Integer size) {
+      @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
+      @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchUserDTO resBody = userService.searchUser(Pageable.from(page, size));
     return HttpResponse.ok(resBody);
   }

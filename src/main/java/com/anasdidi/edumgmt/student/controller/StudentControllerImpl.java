@@ -1,6 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.student.controller;
 
+import com.anasdidi.edumgmt.common.util.CommonConstants;
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
 import com.anasdidi.edumgmt.student.dto.SearchStudentDTO;
@@ -60,7 +61,8 @@ class StudentControllerImpl implements StudentController {
   @Override
   @Get
   public HttpResponse<SearchStudentDTO> searchStudent(
-      @QueryValue(defaultValue = "1") Integer page, @QueryValue(defaultValue = "10") Integer size) {
+      @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
+      @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchStudentDTO resBody = studentService.searchStudent(Pageable.from(page, size));
     return HttpResponse.ok(resBody);
   }
