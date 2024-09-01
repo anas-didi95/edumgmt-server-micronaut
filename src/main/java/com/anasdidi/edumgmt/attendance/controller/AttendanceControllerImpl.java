@@ -52,7 +52,9 @@ class AttendanceControllerImpl implements AttendanceController {
   public HttpResponse<SearchAttendanceDTO> searchAttendance(
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
-    SearchAttendanceDTO resBody = attendanceService.searchAttendance(Pageable.from(page, size));
+    SearchAttendanceDTO resBody =
+        attendanceService.searchAttendance(
+            Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
     return HttpResponse.ok(resBody);
   }
 
@@ -63,7 +65,8 @@ class AttendanceControllerImpl implements AttendanceController {
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchAttendanceStudentDTO resBody =
-        attendanceService.searchAttendanceStudent(attendanceId, Pageable.from(page, size));
+        attendanceService.searchAttendanceStudent(
+            attendanceId, Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
     return HttpResponse.ok(resBody);
   }
 }

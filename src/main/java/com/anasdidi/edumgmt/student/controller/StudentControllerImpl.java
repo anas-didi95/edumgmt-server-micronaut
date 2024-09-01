@@ -63,7 +63,9 @@ class StudentControllerImpl implements StudentController {
   public HttpResponse<SearchStudentDTO> searchStudent(
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
-    SearchStudentDTO resBody = studentService.searchStudent(Pageable.from(page, size));
+    SearchStudentDTO resBody =
+        studentService.searchStudent(
+            Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
     return HttpResponse.ok(resBody);
   }
 }

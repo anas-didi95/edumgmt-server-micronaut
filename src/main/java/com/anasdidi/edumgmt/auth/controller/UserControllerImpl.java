@@ -56,7 +56,8 @@ class UserControllerImpl implements UserController {
   public HttpResponse<SearchUserDTO> searchUser(
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
-    SearchUserDTO resBody = userService.searchUser(Pageable.from(page, size));
+    SearchUserDTO resBody =
+        userService.searchUser(Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
     return HttpResponse.ok(resBody);
   }
 }
