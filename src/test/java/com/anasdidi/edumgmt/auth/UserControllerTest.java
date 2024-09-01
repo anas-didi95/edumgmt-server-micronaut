@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.DeleteUserDTO;
+import com.anasdidi.edumgmt.auth.dto.SearchUserDTO;
 import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.entity.User;
@@ -24,6 +25,7 @@ import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -139,5 +141,36 @@ class UserControllerTest extends BaseControllerTest {
     assertTrue(entity.getUpdatedDate().compareTo(entity.getCreatedDate()) > 0);
     assertEquals(1, entity.getVersion());
     assertEquals(true, entity.getIsDeleted());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createUser-input.json,createUser-input2.json"})
+  void testSearchUser_Success(String f1, String f2) {
+    Arrays.asList(f1, f2).stream()
+        .forEach(
+            f -> {
+              User entity = null;
+              try (InputStream is = getFile(f)) {
+                entity = jsonMapper.readValue(is, User.class);
+                entity = userRepository.save(entity);
+              } catch (Exception e) {
+                fail(e);
+              }
+            });
+
+    HttpResponse<SearchUserDTO> response =
+        userClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.GET("?page=1&size=1").bearerAuth(getAccessToken(true)),
+                SearchUserDTO.class);
+    assertEquals(HttpStatus.OK, response.status());
+
+    SearchUserDTO resBody = response.body();
+    assertEquals(1, resBody.page());
+    assertEquals(3, resBody.totalPages());
+    assertEquals(1, resBody.recordsPerPage());
+    assertEquals(3, resBody.totalRecords());
+    assertEquals(1, resBody.resultList().size());
   }
 }

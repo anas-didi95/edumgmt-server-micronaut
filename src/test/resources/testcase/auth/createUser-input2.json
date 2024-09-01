@@ -1,0 +1,7 @@
+{
+  "userId": "testTeacher2",
+  "password": "p@ssw0rd",
+  "name": "Test Teacher",
+  "roles": ["ROLE_TEACHER"],
+  "isDeleted": false
+}

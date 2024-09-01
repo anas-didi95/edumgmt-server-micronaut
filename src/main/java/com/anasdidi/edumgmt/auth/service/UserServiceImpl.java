@@ -3,6 +3,7 @@ package com.anasdidi.edumgmt.auth.service;
 
 import com.anasdidi.edumgmt.auth.dto.CreateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.DeleteUserDTO;
+import com.anasdidi.edumgmt.auth.dto.SearchUserDTO;
 import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.entity.User;
@@ -11,6 +12,8 @@ import com.anasdidi.edumgmt.auth.repository.UserRepository;
 import com.anasdidi.edumgmt.common.service.BaseService;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
 import java.util.Map;
@@ -83,5 +86,16 @@ class UserServiceImpl extends BaseService implements UserService {
 
     entity.setIsDeleted(true);
     userRepository.save(entity);
+  }
+
+  @Override
+  public SearchUserDTO searchUser(Pageable pageable) {
+    Page<User> search = userRepository.findAll(pageable);
+    return new SearchUserDTO(
+        search.getContent().stream().map(userMapper::toResultDTO).toList(),
+        search.getPageNumber(),
+        search.getTotalPages(),
+        search.getSize(),
+        search.getTotalSize());
   }
 }
