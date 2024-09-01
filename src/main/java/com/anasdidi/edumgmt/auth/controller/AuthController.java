@@ -1,10 +1,12 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.auth.controller;
 
+import com.anasdidi.edumgmt.auth.dto.RefreshAccessDTO;
 import com.anasdidi.edumgmt.auth.dto.SignInDTO;
 import com.anasdidi.edumgmt.auth.dto.SignOutDTO;
 import com.anasdidi.edumgmt.common.aspect.TraceLog;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.security.token.render.AccessRefreshToken;
 import io.micronaut.security.token.render.BearerAccessRefreshToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,4 +21,7 @@ public interface AuthController {
 
   @Operation(summary = "Sign in user")
   HttpResponse<BearerAccessRefreshToken> signIn(SignInDTO reqBody);
+
+  @Operation(summary = "Refresh access user")
+  HttpResponse<AccessRefreshToken> refreshAccess(RefreshAccessDTO reqBody);
 }
