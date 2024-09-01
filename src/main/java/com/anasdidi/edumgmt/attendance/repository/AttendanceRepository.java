@@ -3,8 +3,8 @@ package com.anasdidi.edumgmt.attendance.repository;
 
 import com.anasdidi.edumgmt.attendance.entity.Attendance;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
+import io.micronaut.data.repository.PageableRepository;
 import java.util.UUID;
 
 @Repository
-public interface AttendanceRepository extends CrudRepository<Attendance, UUID> {}
+public interface AttendanceRepository extends PageableRepository<Attendance, UUID> {}

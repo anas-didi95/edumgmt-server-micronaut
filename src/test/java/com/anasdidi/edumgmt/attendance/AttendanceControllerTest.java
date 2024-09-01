@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceStudentDTO;
+import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.entity.Attendance;
@@ -26,6 +27,7 @@ import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -108,5 +110,36 @@ public class AttendanceControllerTest extends BaseControllerTest {
     ViewAttendanceStudentDTO resBody = response.body();
     assertEquals(attendance.getDate(), resBody.date());
     assertEquals(student.getName(), resBody.studentName());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createAttendance-input.json,createAttendance-input2.json"})
+  void testSearchAttendance_Success(String f1, String f2) {
+    Arrays.asList(f1, f2).stream()
+        .forEach(
+            f -> {
+              Attendance entity = null;
+              try (InputStream is = getFile(f)) {
+                entity = jsonMapper.readValue(is, Attendance.class);
+                entity = attendanceRepository.save(entity);
+              } catch (Exception e) {
+                fail(e);
+              }
+            });
+
+    HttpResponse<SearchAttendanceDTO> response =
+        httpClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.GET("?page=1&size=1").bearerAuth(getAccessToken()),
+                SearchAttendanceDTO.class);
+    assertEquals(HttpStatus.OK, response.status());
+
+    SearchAttendanceDTO resBody = response.body();
+    assertEquals(1, resBody.page());
+    assertEquals(2, resBody.totalPages());
+    assertEquals(1, resBody.recordsPerPage());
+    assertEquals(2, resBody.totalRecords());
+    assertEquals(1, resBody.resultList().size());
   }
 }

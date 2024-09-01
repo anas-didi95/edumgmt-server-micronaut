@@ -3,6 +3,7 @@ package com.anasdidi.edumgmt.attendance.controller;
 
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceStudentDTO;
+import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.common.aspect.TraceLog;
@@ -21,4 +22,7 @@ public interface AttendanceController {
   @Operation(summary = "Add new attendance student record")
   HttpResponse<ViewAttendanceStudentDTO> createAttendanceStudent(
       UUID attendanceId, CreateAttendanceStudentDTO reqBody);
+
+  @Operation(summary = "Search attendance record")
+  HttpResponse<SearchAttendanceDTO> searchAttendance(Integer page, Integer size);
 }
