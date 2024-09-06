@@ -1,5 +1,5 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
-package com.anasdidi.edumgmt.auth.factory;
+package com.anasdidi.edumgmt.auth.handler;
 
 import com.anasdidi.edumgmt.auth.service.AuthService;
 import io.micronaut.http.HttpRequest;
@@ -12,11 +12,11 @@ import jakarta.inject.Singleton;
 import java.security.Principal;
 
 @Singleton
-class UserLogoutHandler implements LogoutHandler<HttpRequest<?>, MutableHttpResponse<?>> {
+class AuthLogoutHandler implements LogoutHandler<HttpRequest<?>, MutableHttpResponse<?>> {
 
   private final AuthService authService;
 
-  UserLogoutHandler(AuthService authService) {
+  AuthLogoutHandler(AuthService authService) {
     this.authService = authService;
   }
 
@@ -27,7 +27,7 @@ class UserLogoutHandler implements LogoutHandler<HttpRequest<?>, MutableHttpResp
             .getUserPrincipal()
             .orElseThrow(
                 () -> AuthenticationResponse.exception(AuthenticationFailureReason.UNKNOWN));
-    authService.signOut(principal);
+    authService.logout(principal);
     return HttpResponse.ok();
   }
 }

@@ -21,11 +21,11 @@ import java.util.Base64;
 
 @Singleton
 @Replaces(DefaultAuthorizationExceptionHandler.class)
-class AuthorizationExceptionHandler extends DefaultAuthorizationExceptionHandler {
+class AuthExceptionHandler extends DefaultAuthorizationExceptionHandler {
 
   private final String basicAuthHash;
 
-  AuthorizationExceptionHandler(
+  AuthExceptionHandler(
       ErrorResponseProcessor<?> errorResponseProcessor,
       RedirectConfiguration redirectConfiguration,
       RedirectService redirectService,

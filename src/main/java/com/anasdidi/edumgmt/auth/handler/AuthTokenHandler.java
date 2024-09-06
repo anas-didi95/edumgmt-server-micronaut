@@ -1,5 +1,5 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
-package com.anasdidi.edumgmt.auth.factory;
+package com.anasdidi.edumgmt.auth.handler;
 
 import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.entity.UserToken;
@@ -20,13 +20,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
 @Singleton
-class UserTokenPersistence implements RefreshTokenPersistence {
+class AuthTokenHandler implements RefreshTokenPersistence {
 
   private final UserTokenRepository userTokenRepository;
   private final UserRepository userRepository;
   private final CommonProps commonProps;
 
-  UserTokenPersistence(
+  AuthTokenHandler(
       UserTokenRepository userTokenRepository,
       UserRepository userRepository,
       CommonProps commonProps) {

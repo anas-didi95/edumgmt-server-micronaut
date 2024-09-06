@@ -21,13 +21,13 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Singleton
-class AuthenticationProviderHandler implements HttpRequestAuthenticationProvider<Object> {
+class AuthProviderHandler implements HttpRequestAuthenticationProvider<Object> {
 
   private final CommonProps commonProps;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
-  AuthenticationProviderHandler(
+  AuthProviderHandler(
       CommonProps commonProps, UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.commonProps = commonProps;
     this.userRepository = userRepository;
