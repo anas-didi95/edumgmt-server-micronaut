@@ -36,6 +36,9 @@ class TraceLogInterceptor implements MethodInterceptor<Object, Object> {
                 context.getParameterValueMap().entrySet().stream()
                     .map(
                         o -> {
+                          if (o.getValue() == null) {
+                            return "%s=null".formatted(o.getKey());
+                          }
                           String value =
                               switch (o.getValue()) {
                                 case Principal o2 -> o2.getName();
