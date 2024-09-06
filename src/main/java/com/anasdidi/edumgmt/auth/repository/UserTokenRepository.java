@@ -12,5 +12,5 @@ public interface UserTokenRepository extends CrudRepository<UserToken, UUID> {
 
   Optional<UserToken> findByToken(String token);
 
-  Number updateByUserId(String userId, Boolean isDeleted);
+  Number updateByUserIdAndIsDeleted(String userId, Boolean oldIsDeleted, Boolean isDeleted);
 }

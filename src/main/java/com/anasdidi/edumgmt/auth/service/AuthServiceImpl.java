@@ -18,6 +18,6 @@ class AuthServiceImpl implements AuthService {
 
   @Override
   public Number logout(Principal principal) {
-    return userTokenRepository.updateByUserId(principal.getName(), true);
+    return userTokenRepository.updateByUserIdAndIsDeleted(principal.getName(), false, true);
   }
 }
