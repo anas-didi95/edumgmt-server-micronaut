@@ -5,7 +5,7 @@
 ## 1. **Project Overview**
 The **edumgmt** API is an education management system designed to manage students, attendance records, and users within an educational institution. The API is built using the OpenAPI v3 specification and supports JWT authentication.
 
-- **Version**: 0.1.0
+- **Version**: v1.0.0
 - **Contact**:
   - **Name**: Anas Juwaidi Bin Mohd Jeffry
   - **Email**: anas.didi95@gmail.com
