@@ -139,10 +139,10 @@ public class AttendanceControllerTest extends BaseControllerTest {
     assertEquals(HttpStatus.OK, response.status());
 
     SearchAttendanceDTO resBody = response.body();
-    assertEquals(1, resBody.page());
-    assertEquals(2, resBody.totalPages());
-    assertEquals(1, resBody.recordsPerPage());
-    assertEquals(2, resBody.totalRecords());
+    assertEquals(1, resBody.pagination().page());
+    assertEquals(2, resBody.pagination().totalPages());
+    assertEquals(1, resBody.pagination().recordsPerPage());
+    assertEquals(2, resBody.pagination().totalRecords());
     assertEquals(1, resBody.resultList().size());
   }
 
@@ -186,10 +186,10 @@ public class AttendanceControllerTest extends BaseControllerTest {
     assertEquals(HttpStatus.OK, response.status());
 
     SearchAttendanceStudentDTO resBody = response.body();
-    assertEquals(1, resBody.page());
-    assertEquals(2, resBody.totalPages());
-    assertEquals(1, resBody.recordsPerPage());
-    assertEquals(2, resBody.totalRecords());
+    assertEquals(1, resBody.pagination().page());
+    assertEquals(2, resBody.pagination().totalPages());
+    assertEquals(1, resBody.pagination().recordsPerPage());
+    assertEquals(2, resBody.pagination().totalRecords());
     assertEquals(1, resBody.resultList().size());
   }
 }

@@ -12,6 +12,7 @@ import com.anasdidi.edumgmt.attendance.entity.AttendanceStudent;
 import com.anasdidi.edumgmt.attendance.mapper.AttendanceMapper;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceRepository;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceStudentRepository;
+import com.anasdidi.edumgmt.common.dto.PaginationDTO;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.student.repository.StudentRepository;
 import io.micronaut.data.model.Page;
@@ -92,10 +93,7 @@ class AttendanceServiceImpl implements AttendanceService {
     Page<Attendance> search = attendanceRepository.findAll(pageable);
     return new SearchAttendanceDTO(
         search.getContent().stream().map(attendanceMapper::toResultDTO).toList(),
-        search.getPageNumber(),
-        search.getTotalPages(),
-        search.getSize(),
-        search.getTotalSize());
+        new PaginationDTO(search));
   }
 
   @Override
@@ -104,9 +102,6 @@ class AttendanceServiceImpl implements AttendanceService {
         attendanceStudentRepository.searchByAttendanceId(attendanceId, pageable);
     return new SearchAttendanceStudentDTO(
         search.getContent().stream().map(attendanceMapper::toResultDTO).toList(),
-        search.getPageNumber(),
-        search.getTotalPages(),
-        search.getSize(),
-        search.getTotalSize());
+        new PaginationDTO(search));
   }
 }
