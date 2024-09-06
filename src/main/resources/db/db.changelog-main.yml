@@ -9,3 +9,9 @@ databaseChangeLog:
       file: classpath:/db/changelog/db.changelog-4.t_user-1.yml
   - include:
       file: classpath:/db/changelog/db.changelog-5.t_user_token-1.yml
+  - changeSet:
+      id: db.changelog-main.v1.0.0
+      author: anas
+      changes:
+        - tagDatabase:
+            tag: v1.0.0
