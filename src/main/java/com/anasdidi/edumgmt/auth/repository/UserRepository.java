@@ -31,12 +31,14 @@ public interface UserRepository
 
   class Spec {
     public static final QuerySpecification<User> userIdLike(String userId) {
-      return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("userId"), userId);
+      return (root, query, criteriaBuilder) ->
+          criteriaBuilder.like(root.get("userId"), "%" + userId + "%");
     }
 
     public static final QuerySpecification<User> nameLike(String name) {
       return (root, query, criteriaBuilder) ->
-          criteriaBuilder.like(criteriaBuilder.upper(root.get("name")), name.toUpperCase());
+          criteriaBuilder.like(
+              criteriaBuilder.upper(root.get("name")), "%" + name.toUpperCase() + "%");
     }
   }
 }

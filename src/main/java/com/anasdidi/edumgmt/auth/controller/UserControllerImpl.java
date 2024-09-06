@@ -8,7 +8,7 @@ import com.anasdidi.edumgmt.auth.dto.UpdateUserDTO;
 import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.service.UserService;
 import com.anasdidi.edumgmt.common.util.CommonConstants;
-import io.micronaut.data.model.Pageable;
+import com.anasdidi.edumgmt.common.util.CommonUtils;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -61,9 +61,7 @@ class UserControllerImpl implements UserController {
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchUserDTO resBody =
         userService.searchUser(
-            userId.orElse(""),
-            name.orElse(""),
-            Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
+            userId.orElse(null), name.orElse(null), CommonUtils.preparePagable(page, size));
     return HttpResponse.ok(resBody);
   }
 }
