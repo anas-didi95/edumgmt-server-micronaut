@@ -34,6 +34,10 @@ public class AuthClientTest {
   @Client("/edumgmt/auth")
   private HttpClient httpClient;
 
+  @Inject
+  @Client("/edumgmt")
+  private HttpClient httpClient2;
+
   @Inject private CommonProps commonProps;
   @Inject private AuthClient authClient;
   @Inject private UserTokenRepository userTokenRepository;
@@ -110,5 +114,28 @@ public class AuthClientTest {
 
     SignOutDTO resBody2 = response2.body();
     assertEquals(1, resBody2.totalRevokedToken());
+  }
+
+  @Test
+  void testLogout_Success() {
+    userTokenRepository.deleteAll();
+    long oldCount = userTokenRepository.count();
+    UsernamePasswordCredentials creds1 =
+        new UsernamePasswordCredentials(
+            UserConstants.SuperAdmin.ID, commonProps.getSuperAdmin().password());
+    authClient.login(creds1);
+
+    UsernamePasswordCredentials creds =
+        new UsernamePasswordCredentials(
+            commonProps.getTestUser().username(), commonProps.getTestUser().password());
+    HttpResponse<BearerAccessRefreshToken> response = authClient.login(creds);
+    assertEquals(oldCount + 2, userTokenRepository.count());
+
+    BearerAccessRefreshToken resBody = response.body();
+    HttpResponse<Void> response2 =
+        httpClient2
+            .toBlocking()
+            .exchange(HttpRequest.POST("/logout", null).bearerAuth(resBody.getAccessToken()));
+    assertEquals(HttpStatus.OK, response2.status());
   }
 }
