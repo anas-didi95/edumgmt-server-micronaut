@@ -17,7 +17,7 @@ class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public void logout(Principal principal) {
-    userTokenRepository.updateByUserId(principal.getName(), true);
+  public Number logout(Principal principal) {
+    return userTokenRepository.updateByUserId(principal.getName(), true);
   }
 }

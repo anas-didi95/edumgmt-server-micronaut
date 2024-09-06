@@ -16,12 +16,15 @@ import jakarta.inject.Singleton;
 import java.util.Map;
 import java.util.Optional;
 import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
 @Singleton
 class AuthTokenHandler implements RefreshTokenPersistence {
 
+  private static final Logger logger = LoggerFactory.getLogger(AuthTokenHandler.class);
   private final UserTokenRepository userTokenRepository;
   private final UserRepository userRepository;
   private final CommonProps commonProps;
@@ -68,6 +71,9 @@ class AuthTokenHandler implements RefreshTokenPersistence {
                         Map.of(Claims.ISSUER, commonProps.getJwt().issuer());
                     emitter.next(
                         Authentication.build(user.getUserId(), user.getRoles(), attributeMap));
+
+                    logger.debug("[refreshToken] userId={}", user.getUserId());
+
                     emitter.complete();
                   },
                   () ->

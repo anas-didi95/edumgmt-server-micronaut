@@ -10,10 +10,13 @@ import io.micronaut.security.authentication.AuthenticationResponse;
 import io.micronaut.security.handlers.LogoutHandler;
 import jakarta.inject.Singleton;
 import java.security.Principal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 class AuthLogoutHandler implements LogoutHandler<HttpRequest<?>, MutableHttpResponse<?>> {
 
+  private static final Logger logger = LoggerFactory.getLogger(AuthLogoutHandler.class);
   private final AuthService authService;
 
   AuthLogoutHandler(AuthService authService) {
@@ -27,7 +30,11 @@ class AuthLogoutHandler implements LogoutHandler<HttpRequest<?>, MutableHttpResp
             .getUserPrincipal()
             .orElseThrow(
                 () -> AuthenticationResponse.exception(AuthenticationFailureReason.UNKNOWN));
-    authService.logout(principal);
+    Number totalTokenRevoked = authService.logout(principal);
+
+    logger.debug(
+        "[logout] userId={}, totalTokenRevoked={}", principal.getName(), totalTokenRevoked);
+
     return HttpResponse.ok();
   }
 }

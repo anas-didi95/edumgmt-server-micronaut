@@ -7,5 +7,5 @@ import java.security.Principal;
 @TraceLog
 public interface AuthService {
 
-  void logout(Principal principal);
+  Number logout(Principal principal);
 }

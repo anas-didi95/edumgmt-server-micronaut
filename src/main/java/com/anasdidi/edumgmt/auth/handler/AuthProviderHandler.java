@@ -18,11 +18,14 @@ import jakarta.inject.Singleton;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Singleton
 class AuthProviderHandler implements HttpRequestAuthenticationProvider<Object> {
 
+  private static final Logger logger = LoggerFactory.getLogger(AuthProviderHandler.class);
   private final CommonProps commonProps;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
@@ -57,8 +60,14 @@ class AuthProviderHandler implements HttpRequestAuthenticationProvider<Object> {
 
     User user = result.get();
     Map<String, Object> attributeMap = Map.of(Claims.ISSUER, commonProps.getJwt().issuer());
-    return passwordEncoder.matches(authRequest.getSecret(), user.getPassword())
-        ? AuthenticationResponse.success(authRequest.getIdentity(), user.getRoles(), attributeMap)
-        : AuthenticationResponse.failure(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);
+    AuthenticationResponse res =
+        passwordEncoder.matches(authRequest.getSecret(), user.getPassword())
+            ? AuthenticationResponse.success(
+                authRequest.getIdentity(), user.getRoles(), attributeMap)
+            : AuthenticationResponse.failure(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);
+
+    logger.debug("[login] userId={}, isAuthenticated={}", user.getUserId(), res.isAuthenticated());
+
+    return res;
   }
 }
