@@ -2,13 +2,13 @@
 package com.anasdidi.edumgmt.student.controller;
 
 import com.anasdidi.edumgmt.common.util.CommonConstants;
+import com.anasdidi.edumgmt.common.util.CommonUtils;
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
 import com.anasdidi.edumgmt.student.dto.SearchStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.service.StudentService;
-import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -68,9 +68,7 @@ class StudentControllerImpl implements StudentController {
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchStudentDTO resBody =
         studentService.searchStudent(
-            idNo.orElse(""),
-            name.orElse(""),
-            Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
+            idNo.orElse(null), name.orElse(null), CommonUtils.preparePagable(page, size));
     return HttpResponse.ok(resBody);
   }
 }

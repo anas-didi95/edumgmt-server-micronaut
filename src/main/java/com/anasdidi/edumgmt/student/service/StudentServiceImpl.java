@@ -1,6 +1,7 @@
 /* (C) 2024 Anas Juwaidi Bin Mohd Jeffry. All rights reserved. */
 package com.anasdidi.edumgmt.student.service;
 
+import com.anasdidi.edumgmt.common.dto.PaginationDTO;
 import com.anasdidi.edumgmt.common.service.BaseService;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
@@ -90,9 +91,6 @@ class StudentServiceImpl extends BaseService implements StudentService {
     Page<Student> search = studentRepository.searchStudent(idNo, name, pageable);
     return new SearchStudentDTO(
         search.getContent().stream().map(studentMapper::toResultDTO).toList(),
-        search.getPageNumber(),
-        search.getTotalPages(),
-        search.getSize(),
-        search.getTotalSize());
+        new PaginationDTO(search));
   }
 }
