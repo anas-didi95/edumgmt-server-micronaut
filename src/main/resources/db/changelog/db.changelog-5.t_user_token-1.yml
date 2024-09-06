@@ -62,3 +62,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: TOKEN
+        - createIndex:
+            tableName: T_USER_TOKEN
+            columns:
+              - column:
+                  name: USER_ID
+              - column:
+                  name: IS_DEL

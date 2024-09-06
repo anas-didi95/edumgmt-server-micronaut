@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import com.anasdidi.edumgmt.common.BaseControllerTest;
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.DeleteStudentDTO;
+import com.anasdidi.edumgmt.student.dto.SearchStudentDTO;
 import com.anasdidi.edumgmt.student.dto.UpdateStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.entity.Student;
@@ -22,6 +23,7 @@ import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.io.InputStream;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -69,7 +71,7 @@ public class StudentControllerTest extends BaseControllerTest {
     assertEquals(0, resBody.version());
     assertEquals(false, resBody.isDeleted());
     assertEquals(reqBody.name().toUpperCase(), resBody.name());
-    assertEquals(reqBody.icNo(), resBody.icNo());
+    assertEquals(reqBody.idNo(), resBody.idNo());
   }
 
   @ParameterizedTest
@@ -107,8 +109,8 @@ public class StudentControllerTest extends BaseControllerTest {
     }
 
     String newName = "abc" + System.currentTimeMillis();
-    String newIcNo = "010203040506";
-    UpdateStudentDTO reqBody = new UpdateStudentDTO(entity.getId(), newIcNo, newName, 0);
+    String newIdNo = "010203040506";
+    UpdateStudentDTO reqBody = new UpdateStudentDTO(entity.getId(), newIdNo, newName, 0);
     HttpResponse<ViewStudentDTO> response =
         httpClient
             .toBlocking()
@@ -122,7 +124,7 @@ public class StudentControllerTest extends BaseControllerTest {
     assertTrue(resBody.updatedDate().compareTo(resBody.createdDate()) > 0);
     assertEquals(1, resBody.version());
     assertEquals(newName.toUpperCase(), resBody.name());
-    assertEquals(newIcNo, resBody.icNo());
+    assertEquals(newIdNo, resBody.idNo());
   }
 
   @ParameterizedTest
@@ -151,5 +153,36 @@ public class StudentControllerTest extends BaseControllerTest {
     assertTrue(entity.getUpdatedDate().compareTo(entity.getCreatedDate()) > 0);
     assertEquals(1, entity.getVersion());
     assertEquals(true, entity.getIsDeleted());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createStudent-input.json,createStudent-input2.json"})
+  void testSearchStudent_Success(String f1, String f2) {
+    Arrays.asList(f1, f2).stream()
+        .forEach(
+            f -> {
+              Student entity = null;
+              try (InputStream is = getFile(f)) {
+                entity = jsonMapper.readValue(is, Student.class);
+                entity = studentRepository.save(entity);
+              } catch (Exception e) {
+                fail(e);
+              }
+            });
+
+    HttpResponse<SearchStudentDTO> response =
+        httpClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.GET("?page=1&size=1").bearerAuth(getAccessToken()),
+                SearchStudentDTO.class);
+    assertEquals(HttpStatus.OK, response.status());
+
+    SearchStudentDTO resBody = response.body();
+    assertEquals(1, resBody.page());
+    assertEquals(2, resBody.totalPages());
+    assertEquals(1, resBody.recordsPerPage());
+    assertEquals(2, resBody.totalRecords());
+    assertEquals(1, resBody.resultList().size());
   }
 }

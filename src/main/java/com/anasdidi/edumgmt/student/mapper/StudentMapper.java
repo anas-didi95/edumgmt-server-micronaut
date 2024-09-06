@@ -2,6 +2,7 @@
 package com.anasdidi.edumgmt.student.mapper;
 
 import com.anasdidi.edumgmt.student.dto.CreateStudentDTO;
+import com.anasdidi.edumgmt.student.dto.SearchStudentDTO;
 import com.anasdidi.edumgmt.student.dto.ViewStudentDTO;
 import com.anasdidi.edumgmt.student.entity.Student;
 import io.micronaut.context.annotation.Mapper;
@@ -15,4 +16,7 @@ public interface StudentMapper {
 
   @Mapper
   ViewStudentDTO toDTO(Student entity);
+
+  @Mapper
+  SearchStudentDTO.ResultDTO toResultDTO(Student entity);
 }

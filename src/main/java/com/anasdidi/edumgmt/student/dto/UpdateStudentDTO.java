@@ -5,5 +5,5 @@ import io.micronaut.serde.annotation.Serdeable;
 import java.util.UUID;
 
 @Serdeable
-public record UpdateStudentDTO(UUID id, String icNo, String name, Integer version)
+public record UpdateStudentDTO(UUID id, String idNo, String name, Integer version)
     implements IStudentDTO {}

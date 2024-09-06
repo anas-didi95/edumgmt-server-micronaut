@@ -3,6 +3,8 @@ package com.anasdidi.edumgmt.attendance.service;
 
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.CreateAttendanceStudentDTO;
+import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceDTO;
+import com.anasdidi.edumgmt.attendance.dto.SearchAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.entity.Attendance;
@@ -12,6 +14,8 @@ import com.anasdidi.edumgmt.attendance.repository.AttendanceRepository;
 import com.anasdidi.edumgmt.attendance.repository.AttendanceStudentRepository;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.student.repository.StudentRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -81,5 +85,28 @@ class AttendanceServiceImpl implements AttendanceService {
       throw new RecordNotFoundError(Map.of("attendanceStudentId", attendanceStudentId));
     }
     return result.get();
+  }
+
+  @Override
+  public SearchAttendanceDTO searchAttendance(Pageable pageable) {
+    Page<Attendance> search = attendanceRepository.findAll(pageable);
+    return new SearchAttendanceDTO(
+        search.getContent().stream().map(attendanceMapper::toResultDTO).toList(),
+        search.getPageNumber(),
+        search.getTotalPages(),
+        search.getSize(),
+        search.getTotalSize());
+  }
+
+  @Override
+  public SearchAttendanceStudentDTO searchAttendanceStudent(UUID attendanceId, Pageable pageable) {
+    Page<AttendanceStudent> search =
+        attendanceStudentRepository.searchByAttendanceId(attendanceId, pageable);
+    return new SearchAttendanceStudentDTO(
+        search.getContent().stream().map(attendanceMapper::toResultDTO).toList(),
+        search.getPageNumber(),
+        search.getTotalPages(),
+        search.getSize(),
+        search.getTotalSize());
   }
 }

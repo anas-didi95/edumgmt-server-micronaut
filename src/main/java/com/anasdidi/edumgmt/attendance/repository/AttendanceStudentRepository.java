@@ -5,12 +5,14 @@ import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.entity.AttendanceStudent;
 import io.micronaut.data.annotation.Query;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
+import io.micronaut.data.repository.PageableRepository;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface AttendanceStudentRepository extends CrudRepository<AttendanceStudent, UUID> {
+public interface AttendanceStudentRepository extends PageableRepository<AttendanceStudent, UUID> {
 
   @Query(
       """
@@ -21,4 +23,6 @@ public interface AttendanceStudentRepository extends CrudRepository<AttendanceSt
       WHERE a.id = :attendanceStudentId
       """)
   Optional<ViewAttendanceStudentDTO> viewAttendanceStudent(UUID attendanceStudentId);
+
+  Page<AttendanceStudent> searchByAttendanceId(UUID attendanceId, Pageable pageable);
 }

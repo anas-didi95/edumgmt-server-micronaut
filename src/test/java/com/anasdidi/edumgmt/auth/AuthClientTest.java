@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.anasdidi.edumgmt.auth.client.AuthClient;
-import com.anasdidi.edumgmt.auth.dto.LogoutUserDTO;
 import com.anasdidi.edumgmt.auth.repository.UserTokenRepository;
 import com.anasdidi.edumgmt.auth.util.UserConstants;
 import com.anasdidi.edumgmt.common.factory.CommonProps;
@@ -31,8 +30,8 @@ import org.junit.jupiter.api.Test;
 public class AuthClientTest {
 
   @Inject
-  @Client("/edumgmt/auth/logout")
-  private HttpClient logoutClient;
+  @Client("/edumgmt")
+  private HttpClient httpClient;
 
   @Inject private CommonProps commonProps;
   @Inject private AuthClient authClient;
@@ -78,13 +77,14 @@ public class AuthClientTest {
     AccessRefreshToken resBody2 = response2.body();
     assertNotNull(resBody2.getAccessToken());
     assertNotEquals(resBody.getAccessToken(), resBody2.getAccessToken());
+    assertEquals(resBody.getRefreshToken(), resBody2.getRefreshToken());
 
     Thread.sleep(3000);
     assertEquals(oldCount + 1, userTokenRepository.count());
   }
 
   @Test
-  void testLogout_Success() throws InterruptedException {
+  void testLogout_Success() {
     userTokenRepository.deleteAll();
     long oldCount = userTokenRepository.count();
     UsernamePasswordCredentials creds1 =
@@ -99,15 +99,10 @@ public class AuthClientTest {
     assertEquals(oldCount + 2, userTokenRepository.count());
 
     BearerAccessRefreshToken resBody = response.body();
-    HttpResponse<LogoutUserDTO> response2 =
-        logoutClient
+    HttpResponse<Void> response2 =
+        httpClient
             .toBlocking()
-            .exchange(
-                HttpRequest.POST("", null).bearerAuth(resBody.getAccessToken()),
-                LogoutUserDTO.class);
+            .exchange(HttpRequest.POST("/logout", null).bearerAuth(resBody.getAccessToken()));
     assertEquals(HttpStatus.OK, response2.status());
-
-    LogoutUserDTO resBody2 = response2.body();
-    assertEquals(1, resBody2.totalRevokedToken());
   }
 }
