@@ -9,7 +9,8 @@ import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceDTO;
 import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.service.AttendanceService;
 import com.anasdidi.edumgmt.common.util.CommonConstants;
-import io.micronaut.data.model.Pageable;
+import com.anasdidi.edumgmt.common.util.CommonUtils;
+import io.micronaut.data.model.Sort;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -53,8 +54,7 @@ class AttendanceControllerImpl implements AttendanceController {
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_PAGE) Integer page,
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchAttendanceDTO resBody =
-        attendanceService.searchAttendance(
-            Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
+        attendanceService.searchAttendance(CommonUtils.preparePagable(page, size));
     return HttpResponse.ok(resBody);
   }
 
@@ -66,7 +66,7 @@ class AttendanceControllerImpl implements AttendanceController {
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchAttendanceStudentDTO resBody =
         attendanceService.searchAttendanceStudent(
-            attendanceId, Pageable.from(page, size, CommonConstants.SEARCH_DEFAULT_SORT));
+            attendanceId, CommonUtils.preparePagable(page, size, Sort.UNSORTED));
     return HttpResponse.ok(resBody);
   }
 }

@@ -18,6 +18,12 @@ datasources:
     username: sa
     password: sa
 
+jpa:
+  default:
+    properties:
+      hibernate:
+        show_sql: true
+
 logger:
   levels:
     com.anasdidi.edumgmt: TRACE

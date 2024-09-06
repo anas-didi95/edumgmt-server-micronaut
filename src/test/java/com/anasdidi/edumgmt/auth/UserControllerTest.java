@@ -167,10 +167,10 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(HttpStatus.OK, response.status());
 
     SearchUserDTO resBody = response.body();
-    assertEquals(1, resBody.page());
-    assertEquals(3, resBody.totalPages());
-    assertEquals(1, resBody.recordsPerPage());
-    assertEquals(3, resBody.totalRecords());
+    assertEquals(1, resBody.pagination().page());
+    assertEquals(3, resBody.pagination().totalPages());
+    assertEquals(1, resBody.pagination().recordsPerPage());
+    assertEquals(3, resBody.pagination().totalRecords());
     assertEquals(1, resBody.resultList().size());
   }
 }

@@ -18,6 +18,12 @@ datasources:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+jpa:
+  default:
+    properties:
+      hibernate:
+        show_sql: false
+
 logger:
   levels:
     com.anasdidi.edumgmt: DEBUG

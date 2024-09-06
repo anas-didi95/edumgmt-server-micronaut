@@ -28,12 +28,14 @@ public interface StudentRepository
 
   class Spec {
     public static final QuerySpecification<Student> idNoLike(String idNo) {
-      return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("idNo"), idNo);
+      return (root, query, criteriaBuilder) ->
+          criteriaBuilder.like(root.get("idNo"), "%" + idNo + "%");
     }
 
     public static final QuerySpecification<Student> nameLike(String name) {
       return (root, query, criteriaBuilder) ->
-          criteriaBuilder.like(criteriaBuilder.upper(root.get("name")), name.toUpperCase());
+          criteriaBuilder.like(
+              criteriaBuilder.upper(root.get("name")), "%" + name.toUpperCase() + "%");
     }
   }
 }

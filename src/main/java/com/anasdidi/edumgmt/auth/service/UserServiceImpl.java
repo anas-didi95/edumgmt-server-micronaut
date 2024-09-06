@@ -9,6 +9,7 @@ import com.anasdidi.edumgmt.auth.dto.ViewUserDTO;
 import com.anasdidi.edumgmt.auth.entity.User;
 import com.anasdidi.edumgmt.auth.mapper.UserMapper;
 import com.anasdidi.edumgmt.auth.repository.UserRepository;
+import com.anasdidi.edumgmt.common.dto.PaginationDTO;
 import com.anasdidi.edumgmt.common.service.BaseService;
 import com.anasdidi.edumgmt.exception.error.RecordNotFoundError;
 import com.anasdidi.edumgmt.exception.error.RecordNotMatchedError;
@@ -93,9 +94,6 @@ class UserServiceImpl extends BaseService implements UserService {
     Page<User> search = userRepository.searchUser(userId, name, pageable);
     return new SearchUserDTO(
         search.getContent().stream().map(userMapper::toResultDTO).toList(),
-        search.getPageNumber(),
-        search.getTotalPages(),
-        search.getSize(),
-        search.getTotalSize());
+        new PaginationDTO(search));
   }
 }
