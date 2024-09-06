@@ -30,10 +30,6 @@ micronaut:
         access: ROLE_SUPERADMIN
       - pattern: /auth/signOut
         access: isAuthenticated()
-      - pattern: /auth/signIn
-        access: isAnonymous()
-      - pattern: /auth/refreshAccess
-        access: isAnonymous()
 
 jpa:
   default:

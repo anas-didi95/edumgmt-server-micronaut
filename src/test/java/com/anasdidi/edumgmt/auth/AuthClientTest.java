@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.anasdidi.edumgmt.auth.client.AuthClient;
-import com.anasdidi.edumgmt.auth.dto.RefreshAccessDTO;
-import com.anasdidi.edumgmt.auth.dto.SignInDTO;
 import com.anasdidi.edumgmt.auth.dto.SignOutDTO;
 import com.anasdidi.edumgmt.auth.repository.UserTokenRepository;
 import com.anasdidi.edumgmt.auth.util.UserConstants;
@@ -112,47 +110,5 @@ public class AuthClientTest {
 
     SignOutDTO resBody2 = response2.body();
     assertEquals(1, resBody2.totalRevokedToken());
-  }
-
-  @Test
-  void testSignIn_Success() throws ParseException {
-    SignInDTO reqBody =
-        new SignInDTO(commonProps.getTestUser().username(), commonProps.getTestUser().password());
-    HttpResponse<BearerAccessRefreshToken> response =
-        httpClient
-            .toBlocking()
-            .exchange(HttpRequest.POST("/signIn", reqBody), BearerAccessRefreshToken.class);
-    assertEquals(HttpStatus.OK, response.status());
-
-    BearerAccessRefreshToken resBody = response.body();
-    assertEquals(reqBody.userId(), resBody.getUsername());
-    assertNotNull(resBody.getAccessToken());
-    assertNotNull(resBody.getRefreshToken());
-    assertTrue(JWTParser.parse(resBody.getAccessToken()) instanceof SignedJWT);
-  }
-
-  @Test
-  void testRefreshAccess_Success() throws InterruptedException {
-    UsernamePasswordCredentials creds =
-        new UsernamePasswordCredentials(
-            commonProps.getTestUser().username(), commonProps.getTestUser().password());
-    HttpResponse<BearerAccessRefreshToken> response = authClient.login(creds);
-    BearerAccessRefreshToken resBody = response.body();
-
-    Thread.sleep(1000); // sleep for one second to give time for the issued at `iat` Claim to change
-    RefreshAccessDTO reqBody = new RefreshAccessDTO(resBody.getRefreshToken());
-    HttpResponse<AccessRefreshToken> response2 =
-        httpClient
-            .toBlocking()
-            .exchange(HttpRequest.POST("/refreshAccess", reqBody), AccessRefreshToken.class);
-    // authClient.refresh(
-    //    new TokenRefreshRequest(
-    //        TokenRefreshRequest.GRANT_TYPE_REFRESH_TOKEN, resBody.getRefreshToken()));
-    assertEquals(HttpStatus.OK, response2.status());
-
-    AccessRefreshToken resBody2 = response2.body();
-    assertNotNull(resBody2.getAccessToken());
-    assertNotEquals(resBody.getAccessToken(), resBody2.getAccessToken());
-    assertEquals(resBody.getRefreshToken(), resBody2.getRefreshToken());
   }
 }
