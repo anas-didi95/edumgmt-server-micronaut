@@ -71,8 +71,34 @@ The **edumgmt** API is an education management system designed to manage student
 Once the server is running, access the API at `http://localhost:8080/edumgmt`.
 - You can access the API documentation by opening [Swagger UI](http://localhost:8080/edumgmt/swagger-ui/index.html) in your browser.
 
-## 6. References
+## 6. **Environment Variables**
+
+The **edumgmt** API requires the following environment variables to be set for proper configuration:
+
+### **Basic Authentication**
+- `BASIC_AUTH_USERNAME`: The username used for basic authentication. Default: `anas`.
+- `BASIC_AUTH_PASSWORD`: The password used for basic authentication. Default: `password`.
+
+### **Database Configuration**
+- `DB_URL`: The JDBC URL for the database connection. Default: `jdbc:h2:./.h2/edumgmt;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090`.
+- `DB_USERNAME`: The database username. Default: `sa`.
+- `DB_PASSWORD`: The database password. Default: `sa`.
+
+### **JWT Authentication**
+- `JWT_ACCESS_TOKEN_SECRET`: The secret key used to sign JWT access tokens. **Important: Change this to a secure, random value in production.**
+- `JWT_REFRESH_TOKEN_SECRET`: The secret key used to sign JWT refresh tokens. **Important: Change this to a secure, random value in production.**
+
+### **Micronaut Environment**
+- `MICRONAUT_ENVIRONMENTS`: Defines the active environments in the Micronaut application. Default: `dev`.
+
+### **Super Admin Passwords**
+- `SUPER_ADMIN_PASSWORD_1`: The first part of the super admin password. Default: `pre`.
+- `SUPER_ADMIN_PASSWORD_2`: The second part of the super admin password. Default: `post`.
+
+Ensure these environment variables are set before starting the server to configure the application correctly.
+
+## 7. **References**
 - [Micronaut References](./REFERENCES.md)
 
-## 7. Contact
+## 8. **Contact**
 Developed by [Anas Juwaidi Bin Mohd Jeffry](mailto:anas.didi95@gmail.com)
