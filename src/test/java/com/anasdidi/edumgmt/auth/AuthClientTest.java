@@ -30,12 +30,8 @@ import org.junit.jupiter.api.Test;
 public class AuthClientTest {
 
   @Inject
-  @Client("/edumgmt/auth")
-  private HttpClient httpClient;
-
-  @Inject
   @Client("/edumgmt")
-  private HttpClient httpClient2;
+  private HttpClient httpClient;
 
   @Inject private CommonProps commonProps;
   @Inject private AuthClient authClient;
@@ -104,7 +100,7 @@ public class AuthClientTest {
 
     BearerAccessRefreshToken resBody = response.body();
     HttpResponse<Void> response2 =
-        httpClient2
+        httpClient
             .toBlocking()
             .exchange(HttpRequest.POST("/logout", null).bearerAuth(resBody.getAccessToken()));
     assertEquals(HttpStatus.OK, response2.status());
