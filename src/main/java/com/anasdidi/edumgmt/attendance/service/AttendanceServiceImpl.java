@@ -98,10 +98,8 @@ class AttendanceServiceImpl implements AttendanceService {
 
   @Override
   public SearchAttendanceStudentDTO searchAttendanceStudent(UUID attendanceId, Pageable pageable) {
-    Page<AttendanceStudent> search =
-        attendanceStudentRepository.searchByAttendanceId(attendanceId, pageable);
-    return new SearchAttendanceStudentDTO(
-        search.getContent().stream().map(attendanceMapper::toResultDTO).toList(),
-        new PaginationDTO(search));
+    Page<ViewAttendanceStudentDTO> search =
+        attendanceStudentRepository.searchAttendanceStudent(attendanceId, pageable);
+    return new SearchAttendanceStudentDTO(search.getContent(), new PaginationDTO(search));
   }
 }

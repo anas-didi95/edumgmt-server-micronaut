@@ -16,7 +16,7 @@ public interface AttendanceStudentRepository extends PageableRepository<Attendan
 
   @Query(
       """
-      SELECT new ViewAttendanceStudentDTO(b.date, c.name)
+      SELECT new ViewAttendanceStudentDTO(a.id, b.date, c.name)
       FROM AttendanceStudent a
       INNER JOIN Attendance b on b.id = a.attendanceId
       INNER JOIN Student c on c.id = a.studentId
@@ -24,5 +24,22 @@ public interface AttendanceStudentRepository extends PageableRepository<Attendan
       """)
   Optional<ViewAttendanceStudentDTO> viewAttendanceStudent(UUID attendanceStudentId);
 
-  Page<AttendanceStudent> searchByAttendanceId(UUID attendanceId, Pageable pageable);
+  @Query(
+      value =
+          """
+          SELECT new ViewAttendanceStudentDTO(a.id, b.date, c.name)
+          FROM AttendanceStudent a
+          INNER JOIN Attendance b on b.id = a.attendanceId
+          INNER JOIN Student c on c.id = a.studentId
+          WHERE a.attendanceId = :attendanceId
+          """,
+      countQuery =
+          """
+          SELECT count(1)
+          FROM AttendanceStudent a
+          INNER JOIN Attendance b on b.id = a.attendanceId
+          INNER JOIN Student c on c.id = a.studentId
+          WHERE a.attendanceId = :attendanceId
+          """)
+  Page<ViewAttendanceStudentDTO> searchAttendanceStudent(UUID attendanceId, Pageable pageable);
 }

@@ -10,6 +10,7 @@ import com.anasdidi.edumgmt.attendance.dto.ViewAttendanceStudentDTO;
 import com.anasdidi.edumgmt.attendance.service.AttendanceService;
 import com.anasdidi.edumgmt.common.util.CommonConstants;
 import com.anasdidi.edumgmt.common.util.CommonUtils;
+import io.micronaut.data.model.Sort;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -65,7 +66,7 @@ class AttendanceControllerImpl implements AttendanceController {
       @QueryValue(defaultValue = CommonConstants.SEARCH_DEFAULT_SIZE) Integer size) {
     SearchAttendanceStudentDTO resBody =
         attendanceService.searchAttendanceStudent(
-            attendanceId, CommonUtils.preparePagable(page, size));
+            attendanceId, CommonUtils.preparePagable(page, size, Sort.UNSORTED));
     return HttpResponse.ok(resBody);
   }
 }
