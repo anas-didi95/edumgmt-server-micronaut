@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
     info =
         @Info(
             title = "edumgmt",
-            version = "0.1.0",
+            version = "v1.0.0",
             description = "Education Management System",
             contact =
                 @Contact(name = "Anas Juwaidi Bin Mohd Jeffry", email = "anas.didi95@gmail.com")),
