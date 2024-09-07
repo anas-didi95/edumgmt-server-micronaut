@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  graalvm:
+    build:
+      context: build/docker/native-main/
+      dockerfile: DockerfileNative
+    logging:
+      driver: local
+    env_file:
+      - .env
+    ports:
+      - "8081:8080"

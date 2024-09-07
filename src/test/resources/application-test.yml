@@ -1,0 +1,40 @@
+micronaut:
+  security:
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: pleaseChangeThisSecretForANewOne
+        generator:
+          refresh-token:
+            secret: pleaseChangeThisSecretForANewOne
+        claims-validators:
+          issuer: jwt-issuer
+
+datasources:
+  default:
+    url: jdbc:h2:mem:testDb
+    username: sa
+    password: sa
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        show_sql: true
+
+logger:
+  levels:
+    com.anasdidi.edumgmt: TRACE
+
+edumgmt:
+  basic-auth:
+    username: testUsername
+    password: testPassword
+  super-admin:
+    password: ${random.shortuuid}
+  test-user:
+    username: unittest
+    password: p@ssw0rd
+    roles: ROLE_TEACHER

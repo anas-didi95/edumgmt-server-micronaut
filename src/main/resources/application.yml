@@ -1,6 +1,10 @@
 micronaut:
   application:
     name: edumgmt
+  server:
+    context-path: /${micronaut.application.name}
+    cors:
+      enabled: true
   router:
     static-resources:
       swagger:
@@ -9,3 +13,35 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
+  security:
+    authentication: bearer
+    intercept-url-map:
+      - pattern: /exception/**
+        access: isAuthenticated()
+      - pattern: /swagger/**
+        access: ROLE_SWAGGER
+      - pattern: /swagger-ui/**
+        access: ROLE_SWAGGER
+      - pattern: /student/**
+        access: ROLE_SUPERADMIN,ROLE_TEACHER
+      - pattern: /attendance/**
+        access: ROLE_SUPERADMIN,ROLE_TEACHER
+      - pattern: /user/**
+        access: ROLE_SUPERADMIN
+
+jpa:
+  default:
+    compile-time-hibernate-proxies: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: validate
+
+liquibase:
+  datasources:
+    default:
+      change-log: classpath:/db/db.changelog-main.yml
+
+edumgmt:
+  jwt:
+    issuer: ${micronaut.security.token.jwt.claims-validators.issuer}

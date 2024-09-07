@@ -1,11 +1,11 @@
 plugins {
 	id("com.github.johnrengelman.shadow") version "8.1.1"
-	id("io.micronaut.application") version "4.4.0"
-	id("io.micronaut.aot") version "4.4.0"
+	id("io.micronaut.application") version "4.4.2"
+	id("io.micronaut.aot") version "4.4.2"
 	id("com.diffplug.spotless") version '6.25.0'
 }
 
-version = "0.1.0"
+version = "v1.0.0"
 group = "com.anasdidi.edumgmt"
 
 repositories {
@@ -13,15 +13,31 @@ repositories {
 }
 
 dependencies {
+	annotationProcessor("io.micronaut.data:micronaut-data-processor")
 	annotationProcessor("io.micronaut:micronaut-http-validation")
 	annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+	annotationProcessor("io.micronaut.security:micronaut-security-annotations")
 	annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+	implementation("io.micrometer:context-propagation")
+	implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+	implementation("io.micronaut.liquibase:micronaut-liquibase")
+	implementation("io.micronaut.reactor:micronaut-reactor")
+	implementation("io.micronaut.security:micronaut-security")
+	implementation("io.micronaut.security:micronaut-security-jwt")
 	implementation("io.micronaut.serde:micronaut-serde-jackson")
+	implementation("io.micronaut.sql:micronaut-jdbc-hikari")
 	compileOnly("io.micronaut:micronaut-http-client")
 	compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
 	runtimeOnly("ch.qos.logback:logback-classic")
+	runtimeOnly("com.h2database:h2")
 	runtimeOnly("org.yaml:snakeyaml")
 	testImplementation("io.micronaut:micronaut-http-client")
+	testImplementation("org.junit.jupiter:junit-jupiter-params")
+	aotPlugins platform("io.micronaut.platform:micronaut-platform:4.5.1")
+	aotPlugins("io.micronaut.security:micronaut-security-aot")
+
+	implementation("org.springframework.security:spring-security-crypto:6.2.0")
+	implementation("org.slf4j:jcl-over-slf4j")
 }
 
 
@@ -35,6 +51,7 @@ java {
 
 
 graalvmNative.toolchainDetection = false
+
 micronaut {
 	runtime("netty")
 	testRuntime("junit5")
@@ -53,6 +70,7 @@ micronaut {
 		deduceEnvironment = true
 		optimizeNetty = true
 		replaceLogbackXml = true
+		configurationProperties.put("micronaut.security.jwks.enabled","false")
 	}
 }
 
@@ -79,5 +97,18 @@ spotless {
 	groovyGradle {
 		target '*.gradle' // default target of groovyGradle
 		greclipse()
+	}
+}
+
+test {
+	testLogging {
+		events "passed", "skipped", "failed" //, "standardOut", "standardError"
+
+		showExceptions true
+		exceptionFormat "full"
+		showCauses true
+		showStackTraces true
+
+		showStandardStreams = false
 	}
 }
