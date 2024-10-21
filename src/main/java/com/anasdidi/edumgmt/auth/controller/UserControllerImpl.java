@@ -65,4 +65,11 @@ class UserControllerImpl implements UserController {
             userId.orElse(null), name.orElse(null), CommonUtils.preparePagable(page, size));
     return HttpResponse.ok(resBody);
   }
+
+  @Override
+  @Get("/{id}")
+  public HttpResponse<ViewUserDTO> viewUser(UUID id) {
+    ViewUserDTO resBody = userService.viewUser(id);
+    return HttpResponse.ok(resBody);
+  }
 }
