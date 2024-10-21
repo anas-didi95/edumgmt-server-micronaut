@@ -16,6 +16,7 @@ import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,7 +39,7 @@ class UserControllerImpl implements UserController {
   }
 
   @Override
-  @Post("/{id}")
+  @Put("/{id}")
   public HttpResponse<ViewUserDTO> updateUser(@PathVariable UUID id, @Body UpdateUserDTO reqBody) {
     UUID updateId = userService.updateUser(id, reqBody);
     ViewUserDTO resBody = userService.viewUser(updateId);

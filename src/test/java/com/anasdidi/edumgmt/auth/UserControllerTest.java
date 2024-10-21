@@ -106,7 +106,7 @@ class UserControllerTest extends BaseControllerTest {
         userClient
             .toBlocking()
             .exchange(
-                HttpRequest.POST("/" + entity.getId(), reqBody).bearerAuth(getAccessToken(true)),
+                HttpRequest.PUT("/" + entity.getId(), reqBody).bearerAuth(getAccessToken(true)),
                 ViewUserDTO.class);
     assertEquals(HttpStatus.OK, response.status());
 
