@@ -29,4 +29,7 @@ public interface UserController {
   @Operation(summary = "Search user record")
   HttpResponse<SearchUserDTO> searchUser(
       Optional<String> userId, Optional<String> name, Integer page, Integer size);
+
+  @Operation(summary = "Get current user record")
+  HttpResponse<ViewUserDTO> viewUser(UUID id);
 }
