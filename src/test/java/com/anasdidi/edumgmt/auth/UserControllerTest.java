@@ -106,7 +106,7 @@ class UserControllerTest extends BaseControllerTest {
         userClient
             .toBlocking()
             .exchange(
-                HttpRequest.POST("/" + entity.getId(), reqBody).bearerAuth(getAccessToken(true)),
+                HttpRequest.PUT("/" + entity.getId(), reqBody).bearerAuth(getAccessToken(true)),
                 ViewUserDTO.class);
     assertEquals(HttpStatus.OK, response.status());
 
@@ -172,5 +172,30 @@ class UserControllerTest extends BaseControllerTest {
     assertEquals(1, resBody.pagination().recordsPerPage());
     assertEquals(3, resBody.pagination().totalRecords());
     assertEquals(1, resBody.resultList().size());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"createUser-input.json"})
+  void testViewUser_Success(String input) {
+    User entity = null;
+
+    try (InputStream is = getFile(input)) {
+      entity = userRepository.save(jsonMapper.readValue(is, User.class));
+    } catch (Exception e) {
+      fail(e);
+    }
+
+    HttpResponse<ViewUserDTO> response =
+        userClient
+            .toBlocking()
+            .exchange(
+                HttpRequest.GET("/" + entity.getId()).bearerAuth(getAccessToken(true)),
+                ViewUserDTO.class);
+    assertEquals(HttpStatus.OK, response.status());
+
+    ViewUserDTO resBody = response.body();
+    assertEquals(entity.getId(), resBody.id());
+    assertEquals(entity.getUserId(), resBody.userId());
+    assertEquals(entity.getVersion(), resBody.version());
   }
 }

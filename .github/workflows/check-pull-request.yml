@@ -1,6 +1,7 @@
 # Reference: https://stackoverflow.com/questions/75651172/in-github-is-there-a-way-to-prevent-pull-requests-to-main-from-any-other-branch
 name: Check pull request source branch
 on:
+  workflow_call:
   pull_request_target:
     types:
       - opened
