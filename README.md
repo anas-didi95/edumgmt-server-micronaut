@@ -24,6 +24,21 @@ The **edumgmt** API is an education management system designed to manage student
 - The API uses JWT tokens for authentication.
 - Security scheme: `Bearer` tokens (JWT)
 
+### **Security**
+- All API requests that modify data require a valid JWT.
+- Use the `/login` endpoint to obtain the access token, and include it in the `Authorization` header in the following format:
+  ```bash
+  Authorization: Bearer <access_token>
+  ```
+
+### **Responses**
+- **200 OK**: The request was successful.
+- **400 Bad Request**: There was an issue with the request data.
+- **401 Unauthorized**: The request was missing a valid JWT token.
+- **403 Forbidden**: The client doesn't have permission to access the requested resource.
+- **404 Not Found**: The requested resource was not found.
+- **500 Internal Server Error**: An error occurred on the server.
+
 ## 3. **API Endpoints**
 
 ### **Attendance**
@@ -46,7 +61,8 @@ The **edumgmt** API is an education management system designed to manage student
 ### **User**
 - **GET /edumgmt/user**: Search user records
 - **POST /edumgmt/user**: Add a new user record
-- **POST /edumgmt/user/{id}**: Update an existing user record
+- **GET /edumgmt/user/{id}**: Retrieve a specific user record
+- **PUT /edumgmt/user/{id}**: Update an existing user record
 - **DELETE /edumgmt/user/{id}**: Delete a user record
 
 ## 4. **Installation**
