@@ -24,7 +24,7 @@ env:
 
 jobs:
   check-branches:
-    uses: .github/workflows/check-pull-request.yml
+    uses: ./.github/workflows/check-pull-request.yml
 
   build:
     needs: check-branches
