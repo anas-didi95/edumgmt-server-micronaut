@@ -23,11 +23,7 @@ env:
   JAVA_DIST: temurin
 
 jobs:
-  check-branches:
-    uses: ./.github/workflows/check-pull-request.yml
-
   build:
-    needs: check-branches
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -119,7 +115,6 @@ jobs:
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
   dependency-submission:
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
