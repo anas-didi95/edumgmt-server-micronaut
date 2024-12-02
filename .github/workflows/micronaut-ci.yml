@@ -12,6 +12,12 @@ on:
     tags: ["v*.*.*"]
   pull_request:
     branches: ["main", "dev"]
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
 
 env:
   # Use docker.io for Docker Hub if empty
